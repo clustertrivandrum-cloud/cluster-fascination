@@ -110,7 +110,6 @@ import React, { useState } from 'react';
 import axiosInstance from '../axios';
 import { useNavigate } from 'react-router-dom';
 import { Col, Row, Alert } from 'react-bootstrap';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
@@ -383,11 +382,16 @@ function Register() {
               )}
               
               <Form onSubmit={handleSubmit}>
-                <FloatingLabel
-                  controlId="floatingname"
-                  label="Username"
-                  className="mb-2"
-                >
+                <Form.Group className="mb-3">
+                  <Form.Label style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                    color: 'var(--text-dark)',
+                    marginBottom: '8px'
+                  }}>
+                    Username
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Username"
@@ -404,17 +408,22 @@ function Register() {
                     onFocus={(e) => e.target.style.borderColor = errors.username ? 'var(--accent-pink)' : 'var(--primary-mint)'}
                     onBlur={(e) => e.target.style.borderColor = errors.username ? 'var(--accent-pink)' : 'var(--soft-mint)'}
                   />
-                </FloatingLabel>
+                </Form.Group>
                 {errors.username && (
                   <div className="text-danger small mb-3" style={{fontSize: '0.85rem'}}>
                     {errors.username}
                   </div>
                 )}
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Email address"
-                  className="mb-2"
-                >
+                <Form.Group className="mb-3">
+                  <Form.Label style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                    color: 'var(--text-dark)',
+                    marginBottom: '8px'
+                  }}>
+                    Email address
+                  </Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="name@example.com"
@@ -431,17 +440,22 @@ function Register() {
                     onFocus={(e) => e.target.style.borderColor = errors.email ? 'var(--accent-pink)' : 'var(--primary-mint)'}
                     onBlur={(e) => e.target.style.borderColor = errors.email ? 'var(--accent-pink)' : 'var(--soft-mint)'}
                   />
-                </FloatingLabel>
+                </Form.Group>
                 {errors.email && (
                   <div className="text-danger small mb-3" style={{fontSize: '0.85rem'}}>
                     {errors.email}
                   </div>
                 )}
-                <FloatingLabel
-                  controlId="floatingPhone"
-                  label="Phone number"
-                  className="mb-2"
-                >
+                <Form.Group className="mb-3">
+                  <Form.Label style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                    color: 'var(--text-dark)',
+                    marginBottom: '8px'
+                  }}>
+                    Phone number
+                  </Form.Label>
                   <Form.Control
                     type="tel"
                     placeholder="123-456-7890"
@@ -458,17 +472,22 @@ function Register() {
                     onFocus={(e) => e.target.style.borderColor = errors.phone ? 'var(--accent-pink)' : 'var(--primary-mint)'}
                     onBlur={(e) => e.target.style.borderColor = errors.phone ? 'var(--accent-pink)' : 'var(--soft-mint)'}
                   />
-                </FloatingLabel>
+                </Form.Group>
                 {errors.phone && (
                   <div className="text-danger small mb-3" style={{fontSize: '0.85rem'}}>
                     {errors.phone}
                   </div>
                 )}
-                <FloatingLabel
-                  controlId="floatingPassword"
-                  label="Password"
-                  className="position-relative mb-2"
-                >
+                <Form.Group className="mb-3 position-relative">
+                  <Form.Label style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                    color: 'var(--text-dark)',
+                    marginBottom: '8px'
+                  }}>
+                    Password
+                  </Form.Label>
                   <Form.Control
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
@@ -496,7 +515,7 @@ function Register() {
                   >
                     {showPassword ? '👁' : '👁‍🗨'}
                   </span>
-                </FloatingLabel>
+                </Form.Group>
                 {errors.password && (
                   <div className="text-danger small mb-3" style={{fontSize: '0.85rem'}}>
                     {errors.password}

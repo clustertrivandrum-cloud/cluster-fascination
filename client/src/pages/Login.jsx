@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import TokenManager from '../utils/tokenManager';
 
 import { Col, Row, Alert } from 'react-bootstrap';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
@@ -262,11 +261,16 @@ const Login = () => {
               <Form onSubmit={handleSubmit}>
                 <div>
                   {/* Email Input with Theme Styling */}
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Email address"
-                    className="mb-2"
-                  >
+                  <Form.Group className="mb-3">
+                    <Form.Label style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: 'var(--text-dark)',
+                      marginBottom: '8px'
+                    }}>
+                      Email address
+                    </Form.Label>
                     <Form.Control 
                       type="email"
                       name="email"
@@ -284,7 +288,7 @@ const Login = () => {
                       onFocus={(e) => e.target.style.borderColor = errors.email ? 'var(--accent-pink)' : 'var(--primary-mint)'}
                       onBlur={(e) => e.target.style.borderColor = errors.email ? 'var(--accent-pink)' : 'var(--soft-mint)'}
                     />
-                  </FloatingLabel>
+                  </Form.Group>
                   {errors.email && (
                     <div className="text-danger small mb-3" style={{fontSize: '0.85rem'}}>
                       {errors.email}
@@ -292,11 +296,16 @@ const Login = () => {
                   )}
 
                   {/* Password Input with Theme Styling */}
-                  <FloatingLabel
-                    controlId="floatingPassword"
-                    label="Password"
-                    className="position-relative mb-2"
-                  >
+                  <Form.Group className="mb-3 position-relative">
+                    <Form.Label style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: 'var(--text-dark)',
+                      marginBottom: '8px'
+                    }}>
+                      Password
+                    </Form.Label>
                     <Form.Control
                       type={showPassword ? "text" : "password"}
                       placeholder="Password"
@@ -325,7 +334,7 @@ const Login = () => {
                     >
                       {showPassword ? '👁' : '👁‍🗨'}
                     </span>
-                  </FloatingLabel>
+                  </Form.Group>
                   {errors.password && (
                     <div className="text-danger small mb-3" style={{fontSize: '0.85rem'}}>
                       {errors.password}
