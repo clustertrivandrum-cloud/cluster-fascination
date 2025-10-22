@@ -1,0 +1,76 @@
+:root {
+  /* Cluster Fascination Theme Colors */
+  --primary-mint: #B9EAD8;
+  --soft-mint: #D4F1E8;
+  --light-mint: #E8F8F3;
+  --dark-mint: #8FD4BB;
+  --accent-beige: #E8DCC9;
+  --accent-pink: #F5D5D8;
+  --soft-pink: #FADDE1;
+  --text-dark: #2C3E50;
+  --text-muted: #6C757D;
+  --wreath-black: #1A1A1A;
+  --cream-white: #FFF9F5;
+  --success-green: #7BC8A4;
+  
+  /* Typography */
+  --font-script: 'Pacifico', cursive;
+  --font-elegant-script: 'Dancing Script', cursive;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-signature: 'Great Vibes', cursive;
+  
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--cream-white);
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* Watercolor Background Effects */
+.watercolor-bg {
+  position: relative;
+  background: linear-gradient(135deg, var(--cream-white) 0%, var(--light-mint) 100%);
+}
+
+.watercolor-bg::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--primary-mint) 0%, transparent 70%);
+  opacity: 0.3;
+  filter: blur(60px);
+  z-index: -1;
+}
+
+.watercolor-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -50px;
+  left: -50px;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--accent-pink) 0%, transparent 70%);
+  opacity: 0.2;
+  filter: blur(50px);
+  z-index: -1;
+}
+

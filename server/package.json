@@ -1,0 +1,38 @@
+{
+  "name": "cluster-fascination-server",
+  "version": "1.0.0",
+  "description": "Cluster Fascination server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acmeflaretec/40xleaves.git"
+  },
+  "author": "Abhijith",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Acmeflaretec/40xleaves/issues"
+  },
+  "homepage": "https://github.com/Acmeflaretec/40xleaves#readme",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.3.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.1",
+    "sanitize-html": "^2.17.0",
+    "validator": "^13.15.15"
+  }
+}
