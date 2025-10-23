@@ -18,7 +18,7 @@ root.render(
       <QueryClientProvider client={queryClient}>
         <PerfectScrollbar>
           <CustomToaster />
-          <App />
+          <App /> 
         </PerfectScrollbar>
       </QueryClientProvider>
     </AdminControllerProvider>
