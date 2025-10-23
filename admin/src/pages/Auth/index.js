@@ -30,7 +30,7 @@ const Login = () => {
             title="Sign In"
             description="Enter your email and password to sign in"
             illustration={{
-                title: "40XLEAVES",
+                title: "40XLEAVES",     
                 description:
                     "Admin Management Console",
                 image
