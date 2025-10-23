@@ -21,6 +21,7 @@ const allowedOrigins = [
   process.env.CLIENT_PORT_LOCAL,
   process.env.ADMIN_PORT_LOCAL,
   process.env.CLIENT_URL,
+  process.env.CLIENT_URL_NO_WWW,  // Support both www and non-www
   process.env.ADMIN_URL,
 ].filter(Boolean); // Remove undefined/null values
 
