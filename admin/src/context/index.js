@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useMemo } from "react";
+import { createContext, useContext, useReducer, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const Admin = createContext(null);
@@ -43,6 +43,17 @@ function reducer(state, action) {
 }
 
 function AdminControllerProvider({ children }) {
+  // Check localStorage for auth state
+  const getInitialAuthState = () => {
+    try {
+      const storedAuth = localStorage.getItem("adminAuth");
+      return storedAuth ? JSON.parse(storedAuth) : false;
+    } catch (error) {
+      console.error("Error reading auth from localStorage:", error);
+      return false;
+    }
+  };
+
   const initialState = {
     miniSidenav: false,
     darkSidenav: false,
@@ -53,10 +64,19 @@ function AdminControllerProvider({ children }) {
     direction: "ltr",
     layout: "dashboard",
     darkMode: false,
-    auth:false
+    auth: getInitialAuthState(),
   };
 
   const [controller, dispatch] = useReducer(reducer, initialState);
+
+  // Persist auth state to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem("adminAuth", JSON.stringify(controller.auth));
+    } catch (error) {
+      console.error("Error saving auth to localStorage:", error);
+    }
+  }, [controller.auth]);
 
   const value = useMemo(() => [controller, dispatch], [controller, dispatch]);
 
@@ -102,5 +122,5 @@ export {
   setDirection,
   setLayout,
   setDarkMode,
-  setAuth
+  setAuth,
 };

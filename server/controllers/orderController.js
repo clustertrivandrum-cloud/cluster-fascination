@@ -3,12 +3,25 @@ const User = require('../models/user');
 const Product = require('../models/product');
 const Address = require('../models/address');
 const crypto = require('crypto');
-const axios = require('axios');
+const Razorpay = require('razorpay');
 require("dotenv").config();
 
+// Initialize Razorpay instance with validation
+let razorpay = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET && 
+    process.env.RAZORPAY_KEY_ID !== 'rzp_test_xxxxxxxxxxxx' && 
+    process.env.RAZORPAY_KEY_SECRET !== 'your_secret_key_here') {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+  });
+  console.log('✅ Razorpay initialized successfully');
+} else {
+  console.warn('⚠️  Razorpay credentials not configured. Online payments will not work.');
+  console.warn('   Please add valid RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to .env file');
+  console.warn('   Get your keys from: https://dashboard.razorpay.com/app/keys');
+}
 
-let salt_key = process.env.SALT_KEY
-let merchant_id = process.env.MERCHANT_ID
 let orderDetails = {}
 
 
@@ -139,99 +152,93 @@ const updateOrderStatus = async (req, res) => {
 };
 
 
-const phonepeIntagretion = async (req, res) => {
-
+// Create Razorpay Order
+const createRazorpayOrder = async (req, res) => {
   try {
-    console.log(req.body)
-    const { _id } = req?.decoded
-    const { data, orderData } = req?.body
-    orderDetails = { ...orderData, _id }
-    const merchantTransactionId = data?.transactionId;
-    const details = {
-      merchantId: merchant_id,
-      merchantTransactionId: merchantTransactionId,
-      merchantUserId: data?.MUID,
-      name: data?.name,
-      amount: data?.amount * 100,
-      redirectUrl: `${process.env.SERVER_PORT_LOCAL}/api/v1/orders/status/?id=${merchantTransactionId}`,
-      redirectMode: 'POST',
-      mobileNumber: data?.number,
-      paymentInstrument: {
-        type: 'PAY_PAGE'
-      }
-    };
-    const payload = JSON.stringify(details);
-    const payloadMain = Buffer.from(payload).toString('base64');
-    const keyIndex = 1;
-    const string = payloadMain + '/pg/v1/pay' + salt_key;
-    const sha256 = crypto.createHash('sha256').update(string).digest('hex');
-    const checksum = sha256 + '###' + keyIndex;
-
-    const prod_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay"
-    // const prod_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay"
-
-    const options = {   
-      method: 'POST',
-      url: prod_URL,
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-VERIFY': checksum
-      },
-      data: {    
-        request: payloadMain
-      }
-    };
-
-    axios.request(options).then(function (response) {
-      console.log('response12', response.data)
-
-      return res.json(response.data)
-    })
-      .catch(function (error) {
-        console.error(error);
+    // Check if Razorpay is initialized
+    if (!razorpay) {
+      return res.status(503).json({
+        success: false,
+        message: 'Razorpay payment gateway is not configured. Please contact administrator.'
       });
+    }
 
+    console.log('Creating Razorpay order:', req.body);
+    const { _id } = req?.decoded;
+    const { orderData } = req?.body;
+    
+    // Store order details temporarily for verification
+    orderDetails = { ...orderData, _id };
+    
+    // Razorpay expects amount in paise (smallest currency unit)
+    const options = {
+      amount: orderData.amount * 100, // amount in paise
+      currency: 'INR',
+      receipt: `receipt_${Date.now()}`,
+      notes: {
+        userId: _id,
+        addressId: orderData.address,
+        payment_mode: orderData.payment_mode
+      }
+    };
+
+    const order = await razorpay.orders.create(options);
+    console.log('Razorpay order created:', order);
+    
+    res.status(200).json({
+      success: true,
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      keyId: process.env.RAZORPAY_KEY_ID
+    });
   } catch (error) {
-    res.status(500).send({
-      message: error.message,
-      success: false
-    })
+    console.error('Razorpay order creation error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create Razorpay order'
+    });
   }
 }
-const phonepeStatus = async (req, res) => {   
+// Verify Razorpay Payment
+const verifyRazorpayPayment = async (req, res) => {
+  try {
+    console.log('Verifying Razorpay payment:', req.body);
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderData } = req.body;
+    const { _id } = req?.decoded;
 
-  console.log('phonepeStatus');
-  const merchantTransactionId = req.query.id
-  const merchantId = merchant_id
+    // Verify signature
+    const body = razorpay_order_id + '|' + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest('hex');
 
-  const keyIndex = 1;
-  const string = `/pg/v1/status/${merchantId}/${merchantTransactionId}` + salt_key;
-  const sha256 = crypto.createHash('sha256').update(string).digest('hex');
-  const checksum = sha256 + "###" + keyIndex;
+    const isAuthentic = expectedSignature === razorpay_signature;
 
-  const options = {
-    method: 'GET',
-    // url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`,
-    url: `https://api.phonepe.com/apis/hermes/pg/v1/status/${merchantId}/${merchantTransactionId}`,
-    headers: {
-      accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-VERIFY': checksum,
-      'X-MERCHANT-ID': `${merchantId}`
-    }
-  };
-
-  // CHECK PAYMENT STATUS
-  axios.request(options).then(async (response) => {
-    if (response.data.success === true) {
-      const { payment_mode, amount, address, products, _id } = orderDetails
+    if (isAuthentic) {
+      // Payment is verified, create order
+      const { payment_mode, amount, address, products } = orderData;
+      
       try {
-        const data = await Order.create({ userId: _id, payment_mode, amount, address, products })
+        const data = await Order.create({ 
+          userId: _id, 
+          payment_mode, 
+          amount, 
+          address, 
+          products,
+          razorpay_order_id,
+          razorpay_payment_id,
+          razorpay_signature
+        });
+        
+        // Clear user cart
         const user = await User.findById(_id);
         user.cart.item = [];
         user.cart.totalPrice = 0;
         await user.save();
+        
+        // Update product stock
         for (const item of products.item) {
           const product = await Product.findById(item.product_id);
           if (product) {
@@ -239,18 +246,32 @@ const phonepeStatus = async (req, res) => {
             await product.save();
           }
         }
-        return res.redirect(process.env.CLIENT_PORT_LOCAL)
+        
+        res.status(200).json({
+          success: true,
+          message: 'Payment verified and order created successfully',
+          orderId: data._id
+        });
       } catch (err) {
-        console.log(err);
-        return res.status(500).json({ message: err?.message ?? 'Something went wrong' })
+        console.log('Order creation error:', err);
+        return res.status(500).json({ 
+          success: false,
+          message: err?.message ?? 'Something went wrong while creating order' 
+        });
       }
     } else {
-      return res.redirect(process.env.CLIENT_PORT_LOCAL)
+      res.status(400).json({
+        success: false,
+        message: 'Invalid payment signature'
+      });
     }
-  })
-    .catch((error) => {
-      console.error(error);
+  } catch (error) {
+    console.error('Payment verification error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Payment verification failed'
     });
+  }
 }
 module.exports = {
   getOrders,
@@ -261,6 +282,6 @@ module.exports = {
   getReviewOrders,
   getAdminOrders,
   updateOrderStatus,
-  phonepeIntagretion,
-  phonepeStatus
+  createRazorpayOrder,
+  verifyRazorpayPayment
 }

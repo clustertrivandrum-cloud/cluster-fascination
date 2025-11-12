@@ -1,0 +1,145 @@
+/* Cluster Fascination Checkout Theme Styles */
+
+:root {
+  /* Mint Greens */
+  --primary-mint: #B9EAD8;
+  --soft-mint: #D4F1E8;
+  --light-mint: #E8F8F3;
+  --dark-mint: #8FD4BB;
+  --success-green: #7BC8A4;
+
+  /* Accents */
+  --accent-beige: #E8DCC9;
+  --accent-pink: #F5D5D8;
+  --soft-pink: #FADDE1;
+
+  /* Neutrals */
+  --text-dark: #2C3E50;
+  --text-muted: #6C757D;
+  --wreath-black: #1A1A1A;
+  --cream-white: #FFF9F5;
+}
+
+/* Elegant Script Font for Headings */
+.elegant-script {
+  font-family: 'Dancing Script', cursive;
+}
+
+/* Smooth transitions for interactive elements */
+.checkout-card-hover {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.checkout-card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(185, 234, 216, 0.3);
+}
+
+/* Button hover effects */
+.btn-cluster {
+  background: linear-gradient(135deg, var(--primary-mint) 0%, var(--dark-mint) 100%);
+  border: none;
+  border-radius: 20px;
+  padding: 12px 30px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-cluster:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(185, 234, 216, 0.4);
+  color: white;
+}
+
+/* Floating animation for decorative elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.floating-element {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Watercolor background spots */
+.watercolor-spot {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.spot-mint {
+  background: var(--primary-mint);
+}
+
+.spot-pink {
+  background: var(--accent-pink);
+}
+
+.spot-beige {
+  background: var(--accent-beige);
+}
+
+/* Section divider */
+.section-divider {
+  width: 200px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary-mint), transparent);
+  margin: 20px auto;
+  border-radius: 2px;
+}
+
+/* Custom scrollbar for modal */
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: var(--light-mint);
+  border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--primary-mint);
+  border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-mint);
+}
+
+/* Form input focus states */
+.form-control:focus {
+  border-color: var(--primary-mint);
+  box-shadow: 0 0 0 0.2rem rgba(185, 234, 216, 0.25);
+}
+
+.form-check-input:checked {
+  background-color: var(--success-green);
+  border-color: var(--success-green);
+}
+
+.form-check-input:focus {
+  border-color: var(--primary-mint);
+  box-shadow: 0 0 0 0.2rem rgba(185, 234, 216, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .elegant-script {
+    font-size: 1.2rem !important;
+  }
+  
+  .btn-cluster {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}

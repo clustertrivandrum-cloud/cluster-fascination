@@ -47,6 +47,19 @@ const orderSchema = new mongoose.Schema({
     offer: {
         type: String,
         default: "None"
+    },
+    // Razorpay transaction details
+    razorpay_order_id: {
+        type: String,
+        default: null
+    },
+    razorpay_payment_id: {
+        type: String,
+        default: null
+    },
+    razorpay_signature: {
+        type: String,
+        default: null
     }
 },
     {

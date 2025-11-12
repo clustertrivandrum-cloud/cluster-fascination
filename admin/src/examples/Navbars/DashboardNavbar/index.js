@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Icon from "@mui/material/Icon";
 import Box from "components/Box";
 import Typography from "components/Typography";
 import Input from "components/Input";
 import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
+import toast from "react-hot-toast";
 
 // Custom styles for DashboardNavbar
 import {
@@ -27,6 +29,7 @@ import {
   setTransparentNavbar,
   setMiniSidenav,
   setOpenConfigurator,
+  setAuth,
 } from "context";
 
 // Images
@@ -38,7 +41,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [controller, dispatch] = useController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Setting the navbar type
@@ -53,8 +58,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
       setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
     }
 
-    /** 
-     The event listener that's calling the handleTransparentNavbar function when 
+    /**
+     The event listener that's calling the handleTransparentNavbar function when
      scrolling the window.
     */
     window.addEventListener("scroll", handleTransparentNavbar);
@@ -70,6 +75,19 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
+  const handleOpenUserMenu = (event) => setOpenUserMenu(event.currentTarget);
+  const handleCloseUserMenu = () => setOpenUserMenu(false);
+
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      setAuth(dispatch, false);
+      localStorage.removeItem("adminAuth");
+      localStorage.removeItem("Tokens");
+      toast.success("Logged out successfully");
+      handleCloseUserMenu();
+      navigate("/");
+    }
+  };
 
   // Render the notifications menu
   const renderMenu = () => (
@@ -145,24 +163,53 @@ function DashboardNavbar({ absolute, light, isMini }) {
               />
             </Box>
             <Box color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in/basic">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light && transparentNavbar ? white.main : dark.main,
-                    })}
-                  >
-                    account_circle
+              <IconButton sx={navbarIconButton} size="small" onClick={handleOpenUserMenu}>
+                <Icon
+                  sx={({ palette: { dark, white } }) => ({
+                    color: light && transparentNavbar ? white.main : dark.main,
+                  })}
+                >
+                  account_circle
+                </Icon>
+                <Typography
+                  variant="button"
+                  fontWeight="medium"
+                  color={light && transparentNavbar ? "white" : "dark"}
+                >
+                  Admin
+                </Typography>
+              </IconButton>
+              <Menu
+                anchorEl={openUserMenu}
+                anchorReference={null}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(openUserMenu)}
+                onClose={handleCloseUserMenu}
+                sx={{ mt: 2 }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    navigate("/settings");
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Icon sx={{ mr: 1 }}>settings</Icon>
+                  Settings
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <Icon sx={{ mr: 1 }} color="error">
+                    logout
                   </Icon>
-                  <Typography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light && transparentNavbar ? "white" : "dark"}
-                  >
-                    Sign in
-                  </Typography>
-                </IconButton>
-              </Link>
+                  <Typography color="error">Logout</Typography>
+                </MenuItem>
+              </Menu>
               <IconButton
                 size="small"
                 color={light && transparentNavbar ? "white" : "dark"}

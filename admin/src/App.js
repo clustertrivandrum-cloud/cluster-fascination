@@ -30,6 +30,8 @@ import AddBlog from "pages/Blogs/AddBlog";
 import EditBanner from "pages/Banner/EditBanner";
 import EditBlog from "pages/Blogs/EditBlog";
 import EditCategory from "pages/Category/EditCategory";
+import AddSubcategory from "pages/Subcategory/AddSubcategory";
+import EditSubcategory from "pages/Subcategory/EditSubcategory";
 
 export default function App() {
   const [controller, dispatch] = useController();
@@ -92,7 +94,9 @@ export default function App() {
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
         <CssBaseline />
-        {!auth ? <Login /> :
+        {!auth ? (
+          <Login />
+        ) : (
           <>
             <Sidenav
               color={sidenavColor}
@@ -108,6 +112,8 @@ export default function App() {
                 {getRoutes(routes)}
                 <Route path="/category/addCategory" element={<AddCategory />} />
                 <Route path="/category/editCategory/:id" element={<EditCategory />} />
+                <Route path="/subcategory/addSubcategory" element={<AddSubcategory />} />
+                <Route path="/subcategory/editSubcategory/:id" element={<EditSubcategory />} />
                 <Route path="/products/addProducts" element={<AddProduct />} />
                 <Route path="/products/editProduct/:id" element={<EditProduct />} />
                 <Route path="/orders/editOrder/:id" element={<EditOrder />} />
@@ -115,13 +121,16 @@ export default function App() {
               </Routes>
               <Footer />
             </DashboardLayout>
-          </>}
+          </>
+        )}
       </ThemeProvider>
     </CacheProvider>
   ) : (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
-      {!auth ? <Login /> :
+      {!auth ? (
+        <Login />
+      ) : (
         <>
           <Sidenav
             color={sidenavColor}
@@ -137,6 +146,8 @@ export default function App() {
               {getRoutes(routes)}
               <Route path="/category/addCategory" element={<AddCategory />} />
               <Route path="/category/editCategory/:id" element={<EditCategory />} />
+              <Route path="/subcategory/addSubcategory" element={<AddSubcategory />} />
+              <Route path="/subcategory/editSubcategory/:id" element={<EditSubcategory />} />
               <Route path="/products/addProducts" element={<AddProduct />} />
               <Route path="/banners/addBanner" element={<AddBanner />} />
               <Route path="/blogs/addBlog" element={<AddBlog />} />
@@ -149,7 +160,7 @@ export default function App() {
             <Footer />
           </DashboardLayout>
         </>
-      }
+      )}
     </ThemeProvider>
   );
 }

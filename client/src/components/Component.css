@@ -1,7 +1,105 @@
-Link:hover{
-  color: rgb(95, 179, 95);
+Link:hover {
+    color: rgb(95, 179, 95);
 }
 
-link:hover{
-  color: rgb(95, 179, 95);
+link:hover {
+    color: rgb(95, 179, 95);
+}
+
+/* Categories Dropdown Styles */
+.nav-categories-dropdown {
+    position: relative;
+}
+
+.nav-categories-dropdown .dropdown-menu-custom {
+    animation: fadeInDown 0.3s ease-in-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Mobile responsiveness for categories dropdown */
+@media (max-width: 991px) {
+    .nav-categories-dropdown {
+        width: 100%;
+    }
+
+    .nav-categories-dropdown > span {
+        display: block;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--soft-mint);
+    }
+
+    .nav-categories-dropdown > div {
+        position: static !important;
+        transform: none !important;
+        margin-top: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .nav-categories-dropdown > div > div {
+        border-radius: 0 !important;
+    }
+}
+
+/* Smooth hover transitions */
+.nav-link-cluster {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link-cluster::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-mint);
+    transition: width 0.3s ease;
+}
+
+.nav-link-cluster:hover::after {
+    width: 100%;
+}
+
+.nav-link-cluster:hover {
+    color: var(--primary-mint) !important;
+}
+
+/* Dropdown scrollbar styling */
+.nav-categories-dropdown > div {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.nav-categories-dropdown > div::-webkit-scrollbar {
+    width: 6px;
+}
+
+.nav-categories-dropdown > div::-webkit-scrollbar-track {
+    background: var(--light-mint);
+    border-radius: 10px;
+}
+
+.nav-categories-dropdown > div::-webkit-scrollbar-thumb {
+    background: var(--primary-mint);
+    border-radius: 10px;
+}
+
+.nav-categories-dropdown > div::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-pink);
 }

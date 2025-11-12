@@ -1,5 +1,6 @@
 import Dashboard from "pages/Dashboard";
 import Category from "pages/Category";
+import Subcategory from "pages/Subcategory";
 import Products from "pages/Products";
 import Orders from "pages/Orders";
 import Banner from "pages/Banner";
@@ -25,6 +26,14 @@ const routes = [
     route: "/category",
     icon: <Box component="i" color="info" fontSize="14px" className="ni ni-single-copy-04" />,
     component: <Category />,
+  },
+  {
+    type: "route",
+    name: "Subcategories",
+    key: "subcategory",
+    route: "/subcategory",
+    icon: <Box component="i" color="info" fontSize="14px" className="ni ni-collection" />,
+    component: <Subcategory />,
   },
   {
     type: "route",

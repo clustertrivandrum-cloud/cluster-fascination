@@ -52,8 +52,13 @@ const About = () => {
                 lineHeight: '1.8',
                 color: 'var(--text-dark)'
               }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus, diam eu laoreet consectetur, quam nisl convallis libero, sit amet pharetra mauris ex a ex. Vestibulum nec metus mi.
-              </p>
+About
+
+Welcome to clusterfascination
+
+Clusterfascination, founded in 2024 as an online store and expanded offline in 2025, is a passionate student start-up by Arya Suresh S, a young entrepreneur driven by her love for business and creativity. Located at Kazhakkoottam, Thiruvananthapuram, the brand aims to grow as a trusted destination for those who value both trend and affordability.
+
+At Clusterfascination, we believe jewelry is more than an accessory – it’s a reflection of your style and cherished moments. Our handpicked collections blend tradition with modern trends, offering timeless classics and statement pieces for both men and women. From everyday wear to festive occasions, each jewel is crafted to bring you elegance, confidence, and shine.              </p>
               <p style={{
                 fontFamily: 'var(--font-serif)',
                 fontSize: '1.05rem',

@@ -21,10 +21,12 @@ import MiddleNav from "../components/MiddleNav";
 import MainNav from "../components/MainNav";
 import Footer from "../components/Footer";
 import { ServerURL } from "../services/baseUrl";
+import { ProductContext } from "../components/WhatsAppButton";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 function Product() {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [productData, setProductData] = useState([]);
+  const [productData, setProductData] = useState({});
   const navigate = useNavigate();
   const { proId, catId } = useParams();
 
@@ -328,7 +330,7 @@ function Product() {
   };
 
   return (
-    <>
+    <ProductContext.Provider value={productData}>
       <TopNav />
       <MiddleNav notification={notif} />
       <MainNav />
@@ -533,61 +535,11 @@ function Product() {
 
     
       <Footer />
-    </>
+      <WhatsAppButton 
+        phoneNumber="+919876543210" 
+      />
+    </ProductContext.Provider>
   );
 }
 
 export default Product;
-
-
-  {/* <Row className="mb-4 container-fluid ">
-            <Col>
-              <h3 className="mb-4">Similar Products</h3>
-              <Slider {...settings}>
-                {products.map(item => (
-                  <div key={item._id} className="d-flex justify-content-center p-3">
-                    <div className="shadow p-3 bg-white rounded" style={{ width: "80%" }}>
-                      <Link  to={`/product/${item._id}/${item.category}`}   >
-                      <Image src={`http://localhost:5000/uploads/${item.image[0]}`} alt={item.name} fluid className="mx-auto mb-2"
-                       style={{ mixBlendMode: 'multiply' }}
-                       onClick={()=>{navigate()}} />
-                      </Link>
-                      <Link to={`/product/${item._id}/${item.category}`} className='text-muted fw-bold '><h6>{item.name}</h6></Link>
-                      <p className="fw-bold m-1">₹{item.sale_rate}</p>
-                      <span className='m-1 text-muted text-decoration-line-through'>₹{item.price}</span>
-                      <span className='text-success fw-bold bg-success-subtle p-1'>{item.discount}% off</span>
-                      <div className="d-flex justify-content-between mt-3 ">
-                       
-                      {
-! isInWishlist(item._id) ? (   
-
-  <button className='btn btn-success rounded-3' onClick={   ()=> addWishlist(item._id)} >
-    <i className="fa-solid fa-heart"></i>
- </button>
-
-):
-(    
-  <button className='btn btn-danger rounded-3' onClick={()=> removeWishlist(item._id)}>
-    <i className="fa-solid fa-heart"></i>
- </button>
- )
-
-}
-{
-  ! isInCart(item._id) ? (                      <button className='btn btn-success rounded-3' 
-    onClick={()=> addCart(item._id)}><i className="fas fa-shopping-cart"></i></button>
-  ) :
-  (
-      <button className='btn btn-danger rounded-3' onClick={()=> removeCart(item._id)}
-      ><i className="fas fa-shopping-cart"></i></button> 
-
-  )
-}
-                     
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-            </Col>
-          </Row> */}

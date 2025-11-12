@@ -1,15 +1,33 @@
 import request from "utils/request";
 
-const addCategory = async (data) => request(`/category`, 'POST', data)
-const editCategory = async (data) => request(`/category`, 'PATCH', data)
-const deleteCategory = async (data) => request(`/category/${data?._id}`, 'DELETE', data)
-const getCategoryById = async (data) => request(`/category/${data?.id}`, 'GET', data)
-const addProduct = async (data) => request(`/products`, 'POST', data)
-const updateProduct = async (data) => request(`/products`, 'PATCH', data)
-const deleteProduct = async (data) => request(`/products/${data?._id}`, 'DELETE', data)
-const getCategory = async (data) => request(`/category?page=${data?.pageNo}&perpageitems=${data?.pageCount}`, 'GET', data)
-const getProducts = async (data) => request(`/products?page=${data?.pageNo}&perpageitems=${data?.pageCount}`, 'GET', data)
-const getProductById = async (data) => request(`/products/${data?.id}`, 'GET', data)
+const addCategory = async (data) => request(`/category`, "POST", data);
+const editCategory = async (data) => request(`/category`, "PATCH", data);
+const deleteCategory = async (data) => request(`/category/${data?._id}`, "DELETE", data);
+const getCategoryById = async (data) => request(`/category/${data?.id}`, "GET", data);
+const addProduct = async (data) => request(`/products`, "POST", data);
+const updateProduct = async (data) => request(`/products`, "PATCH", data);
+const deleteProduct = async (data) => request(`/products/${data?._id}`, "DELETE", data);
+const getCategory = async (data) =>
+  request(`/category?page=${data?.pageNo}&perpageitems=${data?.pageCount}`, "GET", data);
+const getProducts = async (data) =>
+  request(`/products?page=${data?.pageNo}&perpageitems=${data?.pageCount}`, "GET", data);
+const getProductById = async (data) => request(`/products/${data?.id}`, "GET", data);
+
+// Subcategory API functions
+const addSubcategory = async (data) => request(`/subcategory`, "POST", data);
+const editSubcategory = async (data) => request(`/subcategory`, "PATCH", data);
+const deleteSubcategory = async (data) => request(`/subcategory/${data?._id}`, "DELETE", data);
+const getSubcategoryById = async (data) => request(`/subcategory/${data?.id}`, "GET", data);
+const getSubcategories = async (data) =>
+  request(
+    `/subcategory?page=${data?.pageNo}&perpageitems=${data?.pageCount}${
+      data?.categoryId ? `&categoryId=${data.categoryId}` : ""
+    }`,
+    "GET",
+    data
+  );
+const getSubcategoriesByCategory = async (data) =>
+  request(`/subcategory/category/${data?.categoryId}`, "GET", data);
 
 export {
   addCategory,
@@ -22,4 +40,10 @@ export {
   getCategoryById,
   editCategory,
   deleteCategory,
+  addSubcategory,
+  editSubcategory,
+  deleteSubcategory,
+  getSubcategoryById,
+  getSubcategories,
+  getSubcategoriesByCategory,
 };

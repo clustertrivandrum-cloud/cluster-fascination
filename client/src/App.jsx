@@ -24,7 +24,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndCondition from './pages/TermsAndCondition';
 import ShippingPolicy from './pages/ShippingPolicy';
 import RefundPolicy from './pages/RefundPolicy';
-
+import WhatsAppButton from './components/WhatsAppButton';
 
 function App() {
 
@@ -54,11 +54,8 @@ function App() {
       <Route path='/refund-policy' element={<RefundPolicy />}/>
       <Route path='*' element={<PageNotFound/>}/>
      </Routes>
- 
      </Provider>
     </>
-
-
   )
 }
 

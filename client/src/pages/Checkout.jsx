@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../axios";
-import { Form, Button, Modal } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { FaRegTrashAlt } from "react-icons/fa";
-import logo from "../assets/images/logo.png";
-import { ServerURL } from "../services/baseUrl";
+import {
+  CheckoutHeader,
+  OrderSummary,
+  AddressSection,
+  AddressModal,
+  CartItemsList,
+  PaymentOptions,
+} from "../components/checkout";
+import "../components/checkout/Checkout.css";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [deliveryAddress, setDeliveryAddress] = useState("");
-  const [paymentOption, setPaymentOption] = useState("phonepe");
+  const [paymentOption, setPaymentOption] = useState("cod"); // Changed default to COD since Razorpay not configured
   const [cartData, setCartData] = useState([]);
   const [salePriceTotal, setSalePriceTotal] = useState(0);
   const [proPriceTotal, setProPriceTotal] = useState(0);
@@ -24,22 +29,33 @@ const Checkout = () => {
     firstname: "",
     lastname: "",
     address_line_1: "",
-    address_line_2: "",
     city: "",
     state: "",
     zip: "",
     mobile: "",
     country: "",
   });
+  const [deliveryCharges, setDeliveryCharges] = useState(null);
+  const [isAddressConfirmed, setIsAddressConfirmed] = useState(false);
 
+  // Remove unused PhonePe data object
+  // data object is no longer needed for Razorpay
 
-  const data = {
-    name: orderAddress?.firstname,
-    amount: salePriceTotal,
-    number: orderAddress?.mobile,
-    MUID: "MUID" + Date.now(),
-    transactionId: 'T' + Date.now(),
-  }
+  // Calculate delivery charges based on state
+  const calculateDeliveryCharges = (state, totalAmount) => {
+    if (totalAmount >= 799) return 0;
+
+    const normalizedState = state?.toLowerCase().trim() || "";
+
+    if (normalizedState.includes("kerala")) return 49;
+    if (
+      normalizedState.includes("tamil nadu") ||
+      normalizedState.includes("karnataka") ||
+      normalizedState.includes("andhra pradesh")
+    )
+      return 49;
+    return 79;
+  };
 
   const fetchAddress = async (urlQ) => {
     try {
@@ -47,7 +63,7 @@ const Checkout = () => {
       setAddressDatas(response.data.data);
       console.log(response.data.data);
       const defAddress = response.data.data.filter(
-        (addr) => addr.primary == true
+        (addr) => addr.primary == true,
       );
       console.log("prim addr ", defAddress[0]);
       setOrderAddress(response?.data?.data?.[0]);
@@ -59,6 +75,9 @@ const Checkout = () => {
   useEffect(() => {
     fetchAddress("/api/v1/address");
   }, []);
+
+  // Don't auto-calculate delivery charges
+  // Calculate only when user explicitly confirms an address
 
   const handleAddressModalClose = () => setShowAddressModal(false);
   const handleAddressModalShow = () => setShowAddressModal(true);
@@ -76,14 +95,17 @@ const Checkout = () => {
     try {
       const response = await axiosInstance.post(
         "/api/v1/address",
-        newAddressFormData
+        newAddressFormData,
       );
       console.log("Address submitted: ", response.data);
+
+      // Store the newly added address data
+      const newlyAddedAddress = response.data.data || newAddressFormData;
+
       setNewAddressFormData({
         firstname: "",
         lastname: "",
         address_line_1: "",
-        address_line_2: "",
         city: "",
         state: "",
         zip: "",
@@ -92,6 +114,19 @@ const Checkout = () => {
       });
       handleAddressModalClose();
       await fetchAddress("/api/v1/address");
+
+      // Set the newly added address as the order address
+      setOrderAddress(newlyAddedAddress);
+      setIsAddressConfirmed(true);
+
+      // Recalculate delivery charges with the new address after confirmation
+      if (newlyAddedAddress.state && salePriceTotal > 0) {
+        const charges = calculateDeliveryCharges(
+          newlyAddedAddress.state,
+          salePriceTotal,
+        );
+        setDeliveryCharges(charges);
+      }
     } catch (error) {
       console.error("Error submitting address: ", error);
     }
@@ -167,11 +202,11 @@ const Checkout = () => {
     try {
       const response = await axiosInstance.patch(urlQuery);
       const updatedCartItems = cartData.item.filter(
-        (item) => item._id !== itemId
+        (item) => item._id !== itemId,
       );
       const updatedTotalPrice = updatedCartItems.reduce(
         (acc, item) => acc + item.price * item.qty,
-        0
+        0,
       );
 
       setProPriceTotal(null);
@@ -207,16 +242,7 @@ const Checkout = () => {
 
   //
 
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Radish Pink Microgreen Seeds",
-      image:
-        "https://t3.ftcdn.net/jpg/06/25/41/12/240_F_625411283_dlpdiRmZxoptmfMX1NNh6jmIv4t3pwK3.jpg",
-      price: 1999,
-      quantity: 1,
-    },
-  ]);
+  // Removed unused products state
   const handleQuantityChange = async (item, operation) => {
     let QtyApi = item.qty;
     if (operation === "increment") {
@@ -246,26 +272,23 @@ const Checkout = () => {
     fetchData();
   };
 
-  const calculateSubtotal = () => {
-    return products.reduce(
-      (total, product) => total + product.price * product.quantity,
-      0
-    );
-  };
-
-  const calculateTotalPrice = () => {
-    const subtotal = calculateSubtotal();
-    const deliveryFee = 100; // Exaggerated delivery fee
-    const tax = 0.1 * subtotal; // Exaggerated tax
-    return subtotal + deliveryFee + tax;
-  };
-
-  const removeProduct = (id) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product.id !== id)
-    );
-  };
+  // Removed unused calculation functions
   //
+
+  // Load Razorpay script
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
 
   const handlePaymentSuccess = async () => {
     const orderFormat = {};
@@ -281,7 +304,7 @@ const Checkout = () => {
     // Calculate the total price based on the cart items
     const totalPrice = mappedCartItems.reduce(
       (total, item) => total + item.qty * item.price,
-      0
+      0,
     );
 
     // Create the final 'products' object using the mapped cart items and total price
@@ -295,7 +318,7 @@ const Checkout = () => {
 
     const response = await axiosInstance.post(`/api/v1/orders`, {
       payment_mode: paymentOption,
-      amount: productsOrderData.totalPrice,
+      amount: productsOrderData.totalPrice + deliveryCharges,
       address: orderAddress._id,
       products: productsOrderData,
     });
@@ -310,11 +333,159 @@ const Checkout = () => {
     navigate("/");
   };
 
+  // Handle Razorpay payment
+  const handleRazorpayPayment = async (productsOrderData) => {
+    try {
+      // Load Razorpay script
+      const res = await loadRazorpayScript();
+
+      if (!res) {
+        Swal.fire({
+          title: "Error",
+          text: "Razorpay SDK failed to load. Please check your internet connection.",
+          icon: "error",
+        });
+        return;
+      }
+
+      const orderData = {
+        payment_mode: paymentOption,
+        amount: productsOrderData.totalPrice + deliveryCharges,
+        address: orderAddress._id,
+        products: productsOrderData,
+      };
+
+      // Create Razorpay order
+      const response = await axiosInstance.post(
+        "/api/v1/orders/create-razorpay-order",
+        {
+          orderData,
+        },
+      );
+
+      if (!response.data.success) {
+        Swal.fire({
+          title: "Error",
+          text: "Failed to create order. Please try again.",
+          icon: "error",
+        });
+        return;
+      }
+
+      const { orderId, amount, currency, keyId } = response.data;
+
+      // Razorpay checkout options
+      const options = {
+        key: keyId,
+        amount: amount,
+        currency: currency,
+        name: "Cluster Fascination",
+        description: "Fashion Jewellery & Accessories",
+        order_id: orderId,
+        handler: async function (response) {
+          try {
+            // Verify payment
+            const verifyResponse = await axiosInstance.post(
+              "/api/v1/orders/verify-payment",
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                orderData,
+              },
+            );
+
+            if (verifyResponse.data.success) {
+              Swal.fire({
+                title: "Success",
+                text: "Your payment was successful and order has been placed!",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 3000,
+              });
+              navigate("/");
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Payment verification failed. Please contact support.",
+                icon: "error",
+              });
+            }
+          } catch (error) {
+            console.error("Payment verification error:", error);
+            Swal.fire({
+              title: "Error",
+              text: "Payment verification failed. Please contact support.",
+              icon: "error",
+            });
+          }
+        },
+        prefill: {
+          name: `${orderAddress?.firstname} ${orderAddress?.lastname}`,
+          email: "", // Add email if available
+          contact: orderAddress?.mobile,
+        },
+        notes: {
+          address: `${orderAddress?.address_line_1}, ${orderAddress?.city}`,
+        },
+        theme: {
+          color: "#28a745",
+        },
+        modal: {
+          ondismiss: function () {
+            Swal.fire({
+              title: "Payment Cancelled",
+              text: "You cancelled the payment process.",
+              icon: "warning",
+            });
+          },
+        },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      console.error("Razorpay payment error:", error);
+
+      // Check if it's a 503 error (Razorpay not configured)
+      if (error.response && error.response.status === 503) {
+        Swal.fire({
+          title: "Payment Gateway Unavailable",
+          html: `
+            <p>Online payment is currently unavailable.</p>
+            <p><strong>Please use Cash on Delivery option instead.</strong></p>
+            <p style="font-size: 0.9em; color: #666; margin-top: 15px;">
+              (Administrator: Razorpay credentials need to be configured)
+            </p>
+          `,
+          icon: "warning",
+          confirmButtonText: "Use COD Instead",
+          confirmButtonColor: "#28a745",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Automatically switch to COD
+            setPaymentOption("cod");
+            setCurrentStep(3); // Stay on payment selection step
+          }
+        });
+      } else {
+        // Other errors
+        Swal.fire({
+          title: "Error",
+          text:
+            error.response?.data?.message ||
+            "Failed to initiate payment. Please try again.",
+          icon: "error",
+        });
+      }
+    }
+  };
+
   const placeOrder = async () => {
     console.log("payment ", paymentOption);
     if (paymentOption === "cod") {
       handlePaymentSuccess();
-    } else if (paymentOption === "phonepe") {
+    } else if (paymentOption === "razorpay") {
       const mappedCartItems = await cartData?.item.map((item) => ({
         product_id: item.productId._id,
         qty: item.qty,
@@ -323,7 +494,7 @@ const Checkout = () => {
 
       const totalPrice = mappedCartItems.reduce(
         (total, item) => total + item.qty * item.price,
-        0
+        0,
       );
 
       const productsOrderData = {
@@ -331,23 +502,7 @@ const Checkout = () => {
         totalPrice,
       };
 
-      const orderData = {
-        payment_mode: paymentOption,
-        amount: productsOrderData.totalPrice,
-        address: orderAddress._id,
-        products: productsOrderData,
-      }
-      console.log(orderAddress);
-      await axiosInstance.post('/api/v1/orders/initiate-payment', { data, orderData }).then(res => {
-
-        console.log('1', res.data)
-        if (res.data && res.data.data.instrumentResponse.redirectInfo.url) {
-          window.location.href = res.data.data.instrumentResponse.redirectInfo.url;
-        }
-      })
-        .catch(error => {
-          console.error(error);
-        });
+      handleRazorpayPayment(productsOrderData);
     }
   };
 
@@ -357,378 +512,85 @@ const Checkout = () => {
 
   const handleRadioChange = (addr) => {
     setSelectedAddress(addr);
+    // Don't calculate delivery charges yet - wait for confirmation
   };
 
   const handleChangeAddress = () => {
     if (selectedAddress) {
       setOrderAddress(selectedAddress);
+      setIsAddressConfirmed(true);
+      // Recalculate delivery charges after address confirmation
+      if (selectedAddress.state && salePriceTotal > 0) {
+        const charges = calculateDeliveryCharges(
+          selectedAddress.state,
+          salePriceTotal,
+        );
+        setDeliveryCharges(charges);
+      }
     }
+  };
+
+  const handleNext = () => {
+    // Confirm current address and calculate delivery charges before moving to next step
+    if (orderAddress?.state && salePriceTotal > 0) {
+      setIsAddressConfirmed(true);
+      const charges = calculateDeliveryCharges(
+        orderAddress.state,
+        salePriceTotal,
+      );
+      setDeliveryCharges(charges);
+    }
+    setCurrentStep(2);
   };
 
   return (
     <>
-      <div className="bg-success-subtle">
-        <div className="container p-3">
-          <div className="d-flex justify-content-between align-items-center">
-            <Link to={"/"}>
-              <div>
-                <img src={logo} className="img-fluid" width={150} alt="" />
-              </div>
-            </Link>
-            <div>
-              <p className="d-none d-md-block fw-bold">
-                Curating fashion jewellery & accessories experiences     {/* changed from boutique wellness experiences to fashion jewellery & accessories experiences */}  
-              </p>
-            </div>
-            <div>
-              <div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="container mt-5">
+      <CheckoutHeader />
+      <div className="container mt-5" style={{ marginBottom: "60px" }}>
         <div className="row justify-content-center">
           <div className="col-lg-8">
-            <div className="card mb-4">
-              <div className="card-header bg-success text-white">
-                <h5 className="mb-0">Order Summary</h5>
-              </div>
-              <div className="card-body">
-                <div className="d-flex justify-content-between mb-2">
-                  <span className="font-weight-bold">Subtotal:</span>
-                  <span>₹{salePriceTotal}</span>
-                </div>
-                <div className="d-flex justify-content-between mb-2">
-                  <span className="font-weight-bold">Delivery Fee:</span>
-                  <span>0</span>
-                </div>
-                <div className="d-flex justify-content-between mb-2">
-                  <span className="font-weight-bold">Tax:</span>0
-                  {/* <span>₹{(0.1 * calculateSubtotal()).toFixed(2)}</span> */}
-                </div>
-                <hr />
-                <div className="d-flex justify-content-between">
-                  <span className="font-weight-bold">Total:</span>
-                  <span className="font-weight-bold">₹{salePriceTotal}</span>
-                </div>
-              </div>
-            </div>
-            {/* <div className="progress mb-4">
-              <div className="progress-bar bg-success" role="progressbar" style={{ width: `${progressPercentage}%` }} aria-valuenow={progressPercentage} aria-valuemin="0" aria-valuemax="100"></div>
-            </div> */}
-            {currentStep === 1 && (
-              <div className="card mb-4">
-                <div className="card-header bg-success text-white">
-                  <h5 className="mb-0">Step 1: Shipping Address</h5>
-                </div>
-                <div className="card-body">
-                  {orderAddress?.address_line_1 ? (
-                    <div className="row">
-                      <div className="address-box border p-3  col-md-6 ">
-                        <p className="card-text">
-                          {" "}
-                          {`${orderAddress?.address_line_1}.`} <br />{" "}
-                          {`${orderAddress?.address_line_2}.`}
-                          <br /> {`${orderAddress?.city},`}
-                          <br /> {`${orderAddress?.state},`}
-                          <br /> {`${orderAddress?.country},`}
-                          <br /> {`${orderAddress?.zip}.`}
-                        </p>
+            <OrderSummary
+              salePriceTotal={salePriceTotal}
+              deliveryCharges={deliveryCharges}
+            />
 
-                      </div>
-                      <div className="address-box border p-3 d-flex flex-column col-md-6">
-                        <Form>
-                          {addressDatas.map((addr) => (
-                            <div key={addr._id}>
-                              <Form.Check
-                                type="radio"
-                                label={addr.address_line_1}
-                                name="group1"
-                                id={addr._id}
-                                onChange={() => handleRadioChange(addr)}
-                              />
-                            </div>
-                          ))}
-                        </Form>
-                        <Button
-                          className="btn btn-success mt-3"
-                          onClick={handleChangeAddress}
-                        >
-                          Change Address
-                        </Button>
-                      </div>
-                      <button
-                        className="btn btn-outline-success change-address-btn mt-2"
-                        onClick={() => setCurrentStep(2)}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <p>You haven't added any addresses yet.</p>
-                      <Button
-                        variant="success"
-                        onClick={handleAddressModalShow}
-                      >
-                        Add New Address
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
+            {currentStep === 1 && (
+              <AddressSection
+                orderAddress={orderAddress}
+                addressDatas={addressDatas}
+                selectedAddress={selectedAddress}
+                onRadioChange={handleRadioChange}
+                onChangeAddress={handleChangeAddress}
+                onNext={handleNext}
+                onAddNewAddress={handleAddressModalShow}
+              />
             )}
 
-            {/* New Address Modal */}
-            <Modal show={showAddressModal} onHide={handleAddressModalClose}>
-              <Modal.Header closeButton>
-                <Modal.Title>Add New Address</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Form onSubmit={handleNewAddressSubmit}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>First Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="firstname"
-                      value={newAddressFormData.firstname}
-                      onChange={handleNewAddressChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Last Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="lastname"
-                      value={newAddressFormData.lastname}
-                      onChange={handleNewAddressChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Address Line 1</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="address_line_1"
-                      value={newAddressFormData.address_line_1}
-                      onChange={handleNewAddressChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Address Line 2</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="address_line_2"
-                      value={newAddressFormData.address_line_2}
-                      onChange={handleNewAddressChange}
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="city"
-                      value={newAddressFormData.city}
-                      onChange={handleNewAddressChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>State</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="state"
-                      value={newAddressFormData.state}
-                      onChange={handleNewAddressChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>ZIP Code</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="zip"
-                      value={newAddressFormData.zip}
-                      onChange={handleNewAddressChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Mobile</Form.Label>
-                    <Form.Control
-                      type="tel"
-                      name="mobile"
-                      value={newAddressFormData.mobile}
-                      onChange={handleNewAddressChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Country</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="country"
-                      value={newAddressFormData.country}
-                      onChange={handleNewAddressChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Button variant="success" type="submit">
-                    Add Address
-                  </Button>
-                </Form>
-              </Modal.Body>
-            </Modal>
+            <AddressModal
+              show={showAddressModal}
+              onHide={handleAddressModalClose}
+              formData={newAddressFormData}
+              onChange={handleNewAddressChange}
+              onSubmit={handleNewAddressSubmit}
+            />
 
             {currentStep === 2 && (
-              <div className="card mb-4">
-                <div className="card-header bg-success text-white">
-                  <h5 className="mb-0">Step 2: Review Items and Shipping</h5>
-                </div>
-                <div className="card-body">
-                  {cartData.item.map((product) => (
-                    <div
-                      key={product.id}
-                      className="row mb-3 align-items-center border-bottom pb-3"
-                    >
-                      <div className="col-md-3">
-                        <img
-                          src={`${ServerURL}/uploads/${product.productId.image[0]}`}
-                          alt={product.name}
-                          className="img-fluid"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <h5 className="fw-bold text-muted ">
-                          {product.productId.name}
-                        </h5>
-                        <p className="text-muted">Microgreen</p>
-                        <p className="fw-bold">
-                          ₹{product.productId.sale_rate}
-                        </p>
-                        <span className="m-1 text-muted text-decoration-line-through ">
-                          ₹{product.productId.price}
-                        </span>
-                        <span className="text-success fw-bold bg-success-subtle p-1">
-                          {product.productId.discount}% off
-                        </span>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="input-group">
-                          <button
-                            className="btn btn-outline-secondary"
-                            type="button"
-                            onClick={() =>
-                              handleQuantityChange(product, "decrement")
-                            }
-                            disabled={product.quantity === 1}
-                          >
-                            -
-                          </button>
-                          <input
-                            type="text"
-                            className="form-control text-center"
-                            value={product.qty}
-                            readOnly
-                          />
-                          <button
-                            className="btn btn-outline-secondary"
-                            type="button"
-                            onClick={() =>
-                              handleQuantityChange(product, "increment")
-                            }
-                          >
-                            +
-                          </button>
-                          <button
-                            className="btn btn-link text-danger"
-                            onClick={() => handleRemoveItem(product._id)}
-                          >
-                            <FaRegTrashAlt />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="d-flex justify-content-end">
-                    <button
-                      className="btn btn-success me-2"
-                      onClick={() => setCurrentStep(1)}
-                    >
-                      Back
-                    </button>
-                    <button
-                      className="btn btn-success"
-                      onClick={() => setCurrentStep(3)}
-                    >
-                      Continue
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <CartItemsList
+                cartItems={cartData.item}
+                onQuantityChange={handleQuantityChange}
+                onRemoveItem={handleRemoveItem}
+                onBack={() => setCurrentStep(1)}
+                onContinue={() => setCurrentStep(3)}
+              />
             )}
 
             {currentStep === 3 && (
-              <div className="card mb-4">
-                <div className="card-header bg-success text-white">
-                  <h5 className="mb-0">Step 3: Payment Options</h5>
-                </div>
-                <div className="card-body">
-                  <div className="form-check mb-3">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="paymentOption"
-                      id="phonepeOption"
-                      value="phonepe"
-                      checked={paymentOption === "phonepe"}
-                      onChange={() => setPaymentOption("phonepe")}
-                    />
-                    <label
-                      className="form-check-label fw-bold "
-                      htmlFor="phonepeOption"
-                    >
-                      Online Payment
-                    </label>
-                    <p className="text-muted">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </p>
-                  </div>
-                  <div className="form-check mb-3">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="paymentOption"
-                      id="codOption"
-                      value="cod"
-                      checked={paymentOption === "cod"}
-                      onChange={() => setPaymentOption("cod")}
-                    />
-                    <label
-                      className="form-check-label fw-bold "
-                      htmlFor="codOption"
-                    >
-                      Cash on Delivery / Pay on Delivery
-                    </label>
-                    <p className="text-muted">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    </p>
-                  </div>
-                  <div className="d-flex justify-content-end">
-                    <button
-                      className="btn btn-success me-2"
-                      onClick={() => setCurrentStep(2)}
-                    >
-                      Back
-                    </button>
-                    <button className="btn btn-danger" onClick={placeOrder}>
-                      Place Your Order
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <PaymentOptions
+                paymentOption={paymentOption}
+                onPaymentChange={setPaymentOption}
+                onBack={() => setCurrentStep(2)}
+                onPlaceOrder={placeOrder}
+              />
             )}
           </div>
         </div>

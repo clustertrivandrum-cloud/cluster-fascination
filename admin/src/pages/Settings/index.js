@@ -11,14 +11,17 @@ import {
   setFixedNavbar,
   setSidenavColor,
   setDarkMode,
-  setDirection
+  setDirection,
+  setAuth,
 } from "context";
 import Typography from "components/Typography";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function Settings() {
   const [controller, dispatch] = useController();
-  const { darkSidenav, miniSidenav, fixedNavbar, sidenavColor, darkMode, direction } =
-    controller;
+  const navigate = useNavigate();
+  const { darkSidenav, miniSidenav, fixedNavbar, sidenavColor, darkMode, direction } = controller;
   const sidenavColors = ["primary", "dark", "info", "success", "warning", "error"];
 
   const handledarkSidenav = () => setDarkSidenav(dispatch, true);
@@ -30,11 +33,27 @@ function Settings() {
     setDarkSidenav(dispatch, !darkMode);
     setDarkMode(dispatch, !darkMode);
   };
+
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      setAuth(dispatch, false);
+      localStorage.removeItem("adminAuth");
+      localStorage.removeItem("Tokens");
+      toast.success("Logged out successfully");
+      navigate("/");
+    }
+  };
   return (
-    <PageLayout
-      title={'Settings'}
-    >
-      <Box sx={{ flexGrow: 1 }} height={'100%'} width={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'} py={2}>
+    <PageLayout title={"Settings"}>
+      <Box
+        sx={{ flexGrow: 1 }}
+        height={"100%"}
+        width={"100%"}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        py={2}
+      >
         <Divider />
         <Box pt={1.25} pb={3} px={2}>
           <Box>
@@ -130,24 +149,32 @@ function Settings() {
             <Switch checked={direction === "rtl" ? true : false} onChange={handleDirection} />
           </Box>
 
-          <Box mt={12} textAlign="center">
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexWrap="wrap"
-            color="text"
-            fontSize='small'
-            px={1.5}
-          >
-            &copy; {new Date().getFullYear()}, created by
-            <Link href={`https://www.acmeflare.in/`} target="_blank">
-              <Typography variant="button" fontWeight="medium">
-                &nbsp;Acmeflare Technologies Pvt Ltd&nbsp;
-              </Typography>
-            </Link>
+          <Divider />
+
+          <Box mt={3}>
+            <Button color="error" variant="gradient" onClick={handleLogout} fullWidth>
+              Logout
+            </Button>
           </Box>
-        </Box>
+
+          <Box mt={12} textAlign="center">
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              flexWrap="wrap"
+              color="text"
+              fontSize="small"
+              px={1.5}
+            >
+              &copy; {new Date().getFullYear()}, created by
+              <Link href={`https://www.acmeflare.in/`} target="_blank">
+                <Typography variant="button" fontWeight="medium">
+                  &nbsp;Acmeflare Technologies Pvt Ltd&nbsp;
+                </Typography>
+              </Link>
+            </Box>
+          </Box>
         </Box>
       </Box>
     </PageLayout>
