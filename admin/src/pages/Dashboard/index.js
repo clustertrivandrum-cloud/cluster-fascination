@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import Icon from "@mui/material/Icon";
 import Box from "components/Box";
 import Typography from "components/Typography";
 import Button from "components/Button";
@@ -16,6 +15,8 @@ import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 import DetailedStatisticsCard from "examples/Cards/StatisticsCards/DetailedStatisticsCard";
 import VerticalBarChart from "examples/Charts/BarCharts/VerticalBarChart";
@@ -28,6 +29,8 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     fetchDashboardStats();
@@ -312,7 +315,7 @@ function Dashboard() {
           <DefaultLineChart
             title="Revenue Trend (Last 7 Days)"
             description="Daily revenue performance"
-            height="300px"
+            height={isMobile ? "250px" : "300px"}
             chart={revenueChartData}
           />
         </Grid>
@@ -320,7 +323,7 @@ function Dashboard() {
           <PieChart
             title="Order Status Distribution"
             description="Current order status breakdown"
-            height="300px"
+            height={isMobile ? "250px" : "300px"}
             chart={orderStatusChartData}
           />
         </Grid>
@@ -332,7 +335,7 @@ function Dashboard() {
           <DefaultLineChart
             title="Orders Trend (Last 7 Days)"
             description="Daily orders count"
-            height="300px"
+            height={isMobile ? "250px" : "300px"}
             chart={ordersChartData}
           />
         </Grid>
@@ -340,7 +343,7 @@ function Dashboard() {
           <VerticalBarChart
             title="Monthly Revenue (Last 12 Months)"
             description="Revenue by month"
-            height="300px"
+            height={isMobile ? "250px" : "300px"}
             chart={monthlyRevenueChartData}
           />
         </Grid>
@@ -352,7 +355,7 @@ function Dashboard() {
           <PieChart
             title="Payment Mode Distribution"
             description="Orders by payment method"
-            height="300px"
+            height={isMobile ? "250px" : "300px"}
             chart={paymentModeChartData}
           />
         </Grid>
@@ -360,7 +363,7 @@ function Dashboard() {
           <VerticalBarChart
             title="Products by Category"
             description="Product distribution across categories"
-            height="300px"
+            height={isMobile ? "250px" : "300px"}
             chart={productsByCategoryChartData}
           />
         </Grid>
@@ -368,10 +371,17 @@ function Dashboard() {
 
       {/* Top Products and Recent Orders */}
       <Grid container spacing={3} mb={3}>
-        <Grid item xs={12} lg={8}>
+        <Grid item xs={12} lg={8} order={isMobile ? 2 : 1}>
           <Card>
             <Box p={3}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+              <Box 
+                display="flex" 
+                justifyContent="space-between" 
+                alignItems="center" 
+                mb={3}
+                flexDirection={isMobile ? "column" : "row"}
+                gap={isMobile ? 2 : 0}
+              >
                 <Typography variant="h6" fontWeight="bold">
                   Top Selling Products
                 </Typography>
@@ -379,12 +389,31 @@ function Dashboard() {
                   variant="outlined"
                   size="small"
                   onClick={() => navigate("/products")}
+                  fullWidth={isMobile}
                 >
                   View All
                 </Button>
               </Box>
-              <TableContainer>
-                <Table>
+              <TableContainer
+                sx={{
+                  overflowX: "auto",
+                  "&::-webkit-scrollbar": {
+                    height: "8px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    backgroundColor: "#f1f1f1",
+                    borderRadius: "4px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "#888",
+                    borderRadius: "4px",
+                    "&:hover": {
+                      backgroundColor: "#555",
+                    },
+                  },
+                }}
+              >
+                <Table sx={{ minWidth: isMobile ? 500 : "auto" }}>
                   <TableHead>
                     <TableRow>
                       <TableCell>Product</TableCell>
@@ -438,10 +467,17 @@ function Dashboard() {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} lg={4} order={isMobile ? 1 : 2}>
           <Card>
             <Box p={3}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+              <Box 
+                display="flex" 
+                justifyContent="space-between" 
+                alignItems="center" 
+                mb={3}
+                flexDirection={isMobile ? "column" : "row"}
+                gap={isMobile ? 2 : 0}
+              >
                 <Typography variant="h6" fontWeight="bold">
                   Low Stock Products
                 </Typography>
@@ -449,6 +485,7 @@ function Dashboard() {
                   variant="outlined"
                   size="small"
                   onClick={() => navigate("/products")}
+                  fullWidth={isMobile}
                 >
                   View All
                 </Button>
@@ -482,8 +519,8 @@ function Dashboard() {
                           </Typography>
                           <Typography variant="caption" color="text">
                             {formatCurrency(product.price)}
-                          </Typography>
-                        </Box>
+        </Typography>
+      </Box>
                       </Box>
                       <Chip
                         label={`${product.stock} left`}
@@ -508,7 +545,14 @@ function Dashboard() {
         <Grid item xs={12}>
           <Card>
             <Box p={3}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+              <Box 
+                display="flex" 
+                justifyContent="space-between" 
+                alignItems="center" 
+                mb={3}
+                flexDirection={isMobile ? "column" : "row"}
+                gap={isMobile ? 2 : 0}
+              >
                 <Typography variant="h6" fontWeight="bold">
                   Recent Orders
                 </Typography>
@@ -516,21 +560,40 @@ function Dashboard() {
                   variant="outlined"
                   size="small"
                   onClick={() => navigate("/orders")}
+                  fullWidth={isMobile}
                 >
                   View All Orders
                 </Button>
               </Box>
-              <TableContainer>
-                <Table>
+              <TableContainer
+                sx={{
+                  overflowX: "auto",
+                  "&::-webkit-scrollbar": {
+                    height: "8px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    backgroundColor: "#f1f1f1",
+                    borderRadius: "4px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "#888",
+                    borderRadius: "4px",
+                    "&:hover": {
+                      backgroundColor: "#555",
+                    },
+                  },
+                }}
+              >
+                <Table sx={{ minWidth: isMobile ? 700 : "auto" }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Order ID</TableCell>
-                      <TableCell>Customer</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell>Payment</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Date</TableCell>
-                      <TableCell align="right">Action</TableCell>
+                      <TableCell sx={{ minWidth: isMobile ? 100 : "auto" }}>Order ID</TableCell>
+                      <TableCell sx={{ minWidth: isMobile ? 150 : "auto" }}>Customer</TableCell>
+                      <TableCell sx={{ minWidth: isMobile ? 100 : "auto" }}>Amount</TableCell>
+                      <TableCell sx={{ minWidth: isMobile ? 100 : "auto" }}>Payment</TableCell>
+                      <TableCell sx={{ minWidth: isMobile ? 100 : "auto" }}>Status</TableCell>
+                      <TableCell sx={{ minWidth: isMobile ? 100 : "auto" }}>Date</TableCell>
+                      <TableCell align="right" sx={{ minWidth: isMobile ? 80 : "auto" }}>Action</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

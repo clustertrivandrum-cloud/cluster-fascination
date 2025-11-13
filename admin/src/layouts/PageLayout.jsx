@@ -3,14 +3,32 @@ import PropTypes from 'prop-types';
 import Card from "@mui/material/Card";
 import Box from "components/Box";
 import Typography from "components/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const PageLayout = ({ title, action, children }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  
   return (
-    <Box py={3}>
-      <Card sx={{ boxShadow: 10, minHeight: '70vh' }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" p={3}>
-          <Typography variant="h6">{title}</Typography>
-          {action}
+    <Box py={isMobile ? 2 : 3} px={isMobile ? 1 : 0}>
+      <Card sx={{ boxShadow: 10, minHeight: '70vh', overflow: 'hidden' }}>
+        <Box 
+          display="flex" 
+          justifyContent="space-between" 
+          alignItems={isMobile ? "flex-start" : "center"} 
+          p={isMobile ? 2 : 3}
+          flexDirection={isMobile && action ? "column" : "row"}
+          gap={isMobile && action ? 2 : 0}
+        >
+          <Typography variant="h6" sx={{ fontSize: isMobile ? "1rem" : "1.25rem" }}>
+            {title}
+          </Typography>
+          {action && (
+            <Box sx={{ width: isMobile ? "100%" : "auto" }}>
+              {action}
+            </Box>
+          )}
         </Box>
         <Box
           sx={{

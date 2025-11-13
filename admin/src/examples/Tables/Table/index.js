@@ -110,7 +110,25 @@ function Table({ columns, rows }) {
 
   return useMemo(
     () => (
-      <TableContainer>
+      <TableContainer
+        sx={{
+          overflowX: "auto",
+          "&::-webkit-scrollbar": {
+            height: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#888",
+            borderRadius: "4px",
+            "&:hover": {
+              backgroundColor: "#555",
+            },
+          },
+        }}
+      >
         <MuiTable>
           <Box component="thead">
             <TableRow>{renderColumns}</TableRow>
