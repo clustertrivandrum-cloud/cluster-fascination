@@ -10,6 +10,25 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true  
     },
+    // Pricing breakdown
+    subtotal: {
+        type: Number,
+        default: 0,
+        required: true
+    },
+    delivery_fee: {
+        type: Number,
+        default: 0,
+        required: true
+    },
+    tax_amount: {
+        type: Number,
+        default: 0
+    },
+    discount_amount: {
+        type: Number,
+        default: 0
+    },
     amount: {
         type: Number,
         required: true
@@ -46,6 +65,42 @@ const orderSchema = new mongoose.Schema({
     },
     offer: {
         type: String,
+        default: "None"
+    },
+    coupon_code: {
+        type: String,
+        default: null
+    },
+    // Delivery information
+    tracking_number: {
+        type: String,
+        default: null
+    },
+    expected_delivery_date: {
+        type: Date,
+        default: null
+    },
+    // Order management
+    invoice_number: {
+        type: String,
+        default: null
+    },
+    order_notes: {
+        type: String,
+        default: null
+    },
+    cancellation_reason: {
+        type: String,
+        default: null
+    },
+    // Refund information
+    refund_amount: {
+        type: Number,
+        default: 0
+    },
+    refund_status: {
+        type: String,
+        enum: ["None", "Requested", "Processing", "Approved", "Rejected", "Completed"],
         default: "None"
     },
     // Razorpay transaction details

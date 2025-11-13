@@ -11,14 +11,14 @@ import Profile from "layouts/profile";
 import Box from "components/Box";
 
 const routes = [
-  // {
-  //   type: "route",
-  //   name: "Dashboard",
-  //   key: "dashboard",
-  //   route: "/dashboard",
-  //   icon: <Box component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
-  //   component: <Dashboard />,
-  // },
+  {
+    type: "route",
+    name: "Dashboard",
+    key: "dashboard",
+    route: "/dashboard",
+    icon: <Box component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
+    component: <Dashboard />,
+  },
   {
     type: "route",
     name: "Categories",

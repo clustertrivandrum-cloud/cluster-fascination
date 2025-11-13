@@ -27,7 +27,7 @@ const AddressSection = ({
         }}
       >
         <h5 className="mb-0" style={{ fontWeight: "600" }}>
-          Step 1: Shipping Address 📍
+          <i className="fas fa-map-marker-alt me-2"></i>Step 1: Shipping Address
         </h5>
       </div>
       <div className="card-body" style={{ padding: "25px" }}>
@@ -40,27 +40,46 @@ const AddressSection = ({
                   borderRadius: "15px",
                   backgroundColor: "var(--light-mint)",
                   border: "2px solid var(--primary-mint)",
+                  height: "100%",
                 }}
               >
-                <h6
-                  className="elegant-script mb-3"
-                  style={{
-                    color: "var(--text-dark)",
-                    fontSize: "1.3rem",
-                  }}
-                >
-                  Selected Address
-                </h6>
-                <p
-                  className="card-text"
-                  style={{ color: "var(--text-dark)", lineHeight: "1.8" }}
-                >
-                  {`${orderAddress?.address_line_1}.`} <br />
-                  {`${orderAddress?.city},`} <br />
-                  {`${orderAddress?.state},`} <br />
-                  {`${orderAddress?.country},`} <br />
-                  {`${orderAddress?.zip}.`}
-                </p>
+                <div className="d-flex align-items-center mb-3">
+                  <i
+                    className="fas fa-check-circle me-2"
+                    style={{ color: "var(--success-green)", fontSize: "1.2rem" }}
+                  ></i>
+                  <h6
+                    className="elegant-script mb-0"
+                    style={{
+                      color: "var(--text-dark)",
+                      fontSize: "1.3rem",
+                    }}
+                  >
+                    Selected Address
+                  </h6>
+                </div>
+                <div style={{ color: "var(--text-dark)", lineHeight: "1.8" }}>
+                  <p className="mb-2 fw-bold">
+                    {orderAddress?.firstname} {orderAddress?.lastname}
+                  </p>
+                  <p className="mb-1">
+                    <i className="fas fa-home me-2" style={{ color: "var(--primary-mint)" }}></i>
+                    {orderAddress?.address_line_1}
+                    {orderAddress?.address_line_2 && `, ${orderAddress.address_line_2}`}
+                  </p>
+                  <p className="mb-1">
+                    <i className="fas fa-map-marker-alt me-2" style={{ color: "var(--primary-mint)" }}></i>
+                    {orderAddress?.city}, {orderAddress?.state}
+                  </p>
+                  <p className="mb-1">
+                    <i className="fas fa-globe me-2" style={{ color: "var(--primary-mint)" }}></i>
+                    {orderAddress?.country} - {orderAddress?.zip}
+                  </p>
+                  <p className="mb-0">
+                    <i className="fas fa-phone me-2" style={{ color: "var(--primary-mint)" }}></i>
+                    {orderAddress?.mobile}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="col-md-6 mb-3">
@@ -73,24 +92,36 @@ const AddressSection = ({
                   height: "100%",
                 }}
               >
-                <h6
-                  className="elegant-script mb-3"
-                  style={{
-                    color: "var(--text-dark)",
-                    fontSize: "1.3rem",
-                  }}
-                >
-                  Other Addresses
-                </h6>
+                <div className="d-flex align-items-center mb-3">
+                  <i
+                    className="fas fa-list me-2"
+                    style={{ color: "var(--accent-beige)", fontSize: "1.2rem" }}
+                  ></i>
+                  <h6
+                    className="elegant-script mb-0"
+                    style={{
+                      color: "var(--text-dark)",
+                      fontSize: "1.3rem",
+                    }}
+                  >
+                    Other Addresses
+                  </h6>
+                </div>
                 <Form style={{ flex: 1 }}>
                   {addressDatas.map((addr) => (
                     <div key={addr._id} className="mb-2">
                       <Form.Check
                         type="radio"
-                        label={addr.address_line_1}
+                        label={
+                          <span>
+                            <i className="fas fa-map-pin me-1" style={{ fontSize: "0.8rem" }}></i>
+                            {addr.address_line_1}
+                          </span>
+                        }
                         name="group1"
                         id={addr._id}
                         onChange={() => onRadioChange(addr)}
+                        checked={selectedAddress?._id === addr._id}
                         style={{ color: "var(--text-dark)" }}
                       />
                     </div>
@@ -120,7 +151,7 @@ const AddressSection = ({
                       "0 3px 15px rgba(185, 234, 216, 0.3)";
                   }}
                 >
-                  Change Address
+                  <i className="fas fa-sync-alt me-2"></i>Change Address
                 </Button>
                 <Button
                   className="mt-2 w-100"
@@ -146,7 +177,7 @@ const AddressSection = ({
                       "0 3px 15px rgba(249, 223, 210, 0.3)";
                   }}
                 >
-                  + Add New Address
+                  <i className="fas fa-plus me-2"></i>Add New Address
                 </Button>
               </div>
             </div>
@@ -175,15 +206,26 @@ const AddressSection = ({
                   e.target.style.boxShadow = "none";
                 }}
               >
-                Next ✨
+                Next <i className="fas fa-arrow-right ms-2"></i>
               </button>
             </div>
           </div>
         ) : (
           <div className="text-center py-5">
-            <div style={{ fontSize: "3rem", marginBottom: "15px" }}>📍</div>
+            <div style={{ fontSize: "3rem", marginBottom: "15px", color: "var(--primary-mint)" }}>
+              <i className="fas fa-map-marker-alt"></i>
+            </div>
+            <h5
+              style={{
+                color: "var(--text-dark)",
+                fontFamily: "var(--font-serif)",
+                marginBottom: "10px",
+              }}
+            >
+              No Address Added
+            </h5>
             <p style={{ color: "var(--text-muted)", marginBottom: "20px" }}>
-              You haven&apos;t added any addresses yet.
+              You haven&apos;t added any addresses yet. Please add an address to continue.
             </p>
             <Button
               onClick={onAddNewAddress}
@@ -206,7 +248,7 @@ const AddressSection = ({
                 e.target.style.boxShadow = "none";
               }}
             >
-              Add New Address
+              <i className="fas fa-plus me-2"></i>Add New Address
             </Button>
           </div>
         )}

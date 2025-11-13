@@ -25,7 +25,8 @@ const CheckoutHeader = () => {
                 fontSize: '1.2rem'
               }}
             >
-              Curating fashion jewellery & accessories experiences 🌸
+              <i className="fas fa-gem me-2" style={{ color: 'var(--accent-pink)' }}></i>
+              Curating fashion jewellery & accessories experiences
             </p>
           </div>
           <div style={{ width: '150px' }}></div>

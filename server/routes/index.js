@@ -11,6 +11,7 @@ const blogRoutes = require("./blogRoutes");
 const testimonialRoutes = require("./testimonialRoutes");
 const brandRoutes = require("./brandRoutes");
 const reviewRoutes = require("./reviewRoutes");
+const dashboardRoutes = require("./dashboardRoutes");
 
 const router = express.Router();
 
@@ -26,5 +27,6 @@ router.use("/v1/blogs", blogRoutes);
 router.use("/v1/testimonials", testimonialRoutes);
 router.use("/v1/brands", brandRoutes);
 router.use("/v1/reviews", reviewRoutes);
+router.use("/v1/dashboard", dashboardRoutes);
 
 module.exports = router;

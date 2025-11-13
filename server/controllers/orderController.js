@@ -80,9 +80,38 @@ const getOrderById = async (req, res) => {
 const createOrder = async (req, res) => {
   const { _id } = req?.decoded
 
-  const { payment_mode, amount, address, products } = req?.body
+  const { 
+    payment_mode, 
+    amount, 
+    address, 
+    products,
+    subtotal,
+    delivery_fee = 0,
+    tax_amount = 0,
+    discount_amount = 0,
+    coupon_code = null,
+    order_notes = null
+  } = req?.body
+
+  // Calculate subtotal if not provided
+  const calculatedSubtotal = subtotal || (products?.totalPrice || 0)
+  
   try {
-    const data = await Order.create({ userId: _id, payment_mode, amount, address, products })
+    const orderData = {
+      userId: _id,
+      payment_mode,
+      subtotal: calculatedSubtotal,
+      delivery_fee: delivery_fee || 0,
+      tax_amount: tax_amount || 0,
+      discount_amount: discount_amount || 0,
+      amount,
+      address,
+      products,
+      coupon_code: coupon_code || null,
+      order_notes: order_notes || null
+    }
+
+    const data = await Order.create(orderData)
     console.log('prod qty findings ', products.item)
 
     const user = await User.findById(_id);
@@ -218,15 +247,35 @@ const verifyRazorpayPayment = async (req, res) => {
 
     if (isAuthentic) {
       // Payment is verified, create order
-      const { payment_mode, amount, address, products } = orderData;
+      const { 
+        payment_mode, 
+        amount, 
+        address, 
+        products,
+        subtotal,
+        delivery_fee = 0,
+        tax_amount = 0,
+        discount_amount = 0,
+        coupon_code = null,
+        order_notes = null
+      } = orderData;
+
+      // Calculate subtotal if not provided
+      const calculatedSubtotal = subtotal || (products?.totalPrice || 0);
       
       try {
         const data = await Order.create({ 
           userId: _id, 
-          payment_mode, 
+          payment_mode,
+          subtotal: calculatedSubtotal,
+          delivery_fee: delivery_fee || 0,
+          tax_amount: tax_amount || 0,
+          discount_amount: discount_amount || 0,
           amount, 
           address, 
           products,
+          coupon_code: coupon_code || null,
+          order_notes: order_notes || null,
           razorpay_order_id,
           razorpay_payment_id,
           razorpay_signature

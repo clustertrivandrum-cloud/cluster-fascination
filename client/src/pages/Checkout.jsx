@@ -9,6 +9,7 @@ import {
   AddressModal,
   CartItemsList,
   PaymentOptions,
+  CheckoutProgress,
 } from "../components/checkout";
 import "../components/checkout/Checkout.css";
 
@@ -145,24 +146,33 @@ const Checkout = () => {
     return totalSalePrice;
   };
   const calculateTotalProPrice = (items) => {
-    let totalSalePrice = 0;
+    let totalPrice = 0;
 
     items.forEach((item) => {
-      // Add the sale_rate to the totalSalePrice
-      totalSalePrice += item.productId.price * item.qty;
+      // Calculate total original price: price * quantity
+      const originalPrice = item.productId.price || 0;
+      const quantity = item.qty || 0;
+      totalPrice += originalPrice * quantity;
     });
 
-    return totalSalePrice;
+    return totalPrice;
   };
   const calculateTotalDiscountPrice = (items) => {
-    let totalSalePrice = 0;
+    let totalDiscount = 0;
 
     items.forEach((item) => {
-      // Add the sale_rate to the totalSalePrice
-      totalSalePrice += item.productId.discount;
+      // Calculate discount amount: (original price - sale price) * quantity
+      // Or: (price * discount percentage / 100) * quantity
+      const originalPrice = item.productId.price || 0;
+      const salePrice = item.productId.sale_rate || 0;
+      const quantity = item.qty || 0;
+      
+      // Discount amount per item = (original price - sale price) * quantity
+      const discountAmount = (originalPrice - salePrice) * quantity;
+      totalDiscount += discountAmount;
     });
 
-    return totalSalePrice;
+    return totalDiscount;
   };
 
   const fetchData = async () => {
@@ -316,9 +326,16 @@ const Checkout = () => {
     // Now 'products' object is ready to be used following the defined schema
     console.log("Final Products Object:", productsOrderData);
 
+    // Calculate discount amount from cart
+    const calculatedDiscount = discountTotal || 0;
+    
     const response = await axiosInstance.post(`/api/v1/orders`, {
       payment_mode: paymentOption,
-      amount: productsOrderData.totalPrice + deliveryCharges,
+      subtotal: proPriceTotal || productsOrderData.totalPrice,
+      delivery_fee: deliveryCharges || 0,
+      tax_amount: 0,
+      discount_amount: calculatedDiscount,
+      amount: productsOrderData.totalPrice + (deliveryCharges || 0),
       address: orderAddress._id,
       products: productsOrderData,
     });
@@ -348,9 +365,16 @@ const Checkout = () => {
         return;
       }
 
+      // Calculate discount amount from cart
+      const calculatedDiscount = discountTotal || 0;
+      
       const orderData = {
         payment_mode: paymentOption,
-        amount: productsOrderData.totalPrice + deliveryCharges,
+        subtotal: proPriceTotal || productsOrderData.totalPrice,
+        delivery_fee: deliveryCharges || 0,
+        tax_amount: 0,
+        discount_amount: calculatedDiscount,
+        amount: productsOrderData.totalPrice + (deliveryCharges || 0),
         address: orderAddress._id,
         products: productsOrderData,
       };
@@ -549,9 +573,12 @@ const Checkout = () => {
       <div className="container mt-5" style={{ marginBottom: "60px" }}>
         <div className="row justify-content-center">
           <div className="col-lg-8">
+            <CheckoutProgress currentStep={currentStep} />
             <OrderSummary
               salePriceTotal={salePriceTotal}
               deliveryCharges={deliveryCharges}
+              discountTotal={discountTotal}
+              proPriceTotal={proPriceTotal}
             />
 
             {currentStep === 1 && (

@@ -25,7 +25,9 @@ const CartItemsList = ({
           borderRadius: '18px 18px 0 0'
         }}
       >
-        <h5 className="mb-0" style={{ fontWeight: '600' }}>Step 2: Review Items 🛒</h5>
+        <h5 className="mb-0" style={{ fontWeight: '600' }}>
+          <i className="fas fa-shopping-cart me-2"></i>Step 2: Review Items
+        </h5>
       </div>
       <div className="card-body" style={{ padding: '25px' }}>
         {cartItems && cartItems.length > 0 ? (
@@ -35,44 +37,52 @@ const CartItemsList = ({
                 key={product._id}
                 className="row mb-4 align-items-center pb-3"
                 style={{ 
-                  borderBottom: '1px solid var(--primary-mint)',
+                  borderBottom: '1px solid var(--light-mint)',
                   transition: 'all 0.3s ease'
                 }}
               >
                 <div className="col-md-3 mb-3 mb-md-0">
-                  <img
-                    src={`${ServerURL}/uploads/${product.productId.image[0]}`}
-                    alt={product.productId.name}
-                    className="img-fluid"
-                    style={{ 
-                      borderRadius: '15px',
-                      border: '2px solid var(--primary-mint)',
-                      boxShadow: '0 3px 15px rgba(185, 234, 216, 0.2)'
-                    }}
-                  />
+                  <div style={{ position: 'relative' }}>
+                    <img
+                      src={`${ServerURL}/uploads/${product.productId.image[0]}`}
+                      alt={product.productId.name}
+                      className="img-fluid"
+                      style={{ 
+                        borderRadius: '15px',
+                        border: '2px solid var(--primary-mint)',
+                        boxShadow: '0 3px 15px rgba(185, 234, 216, 0.2)',
+                        width: '100%',
+                        height: '150px',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="col-md-6 mb-3 mb-md-0">
                   <h5 
-                    className="fw-bold" 
+                    className="fw-bold mb-2" 
                     style={{ 
                       color: 'var(--text-dark)',
-                      marginBottom: '8px'
+                      fontFamily: 'var(--font-serif)'
                     }}
                   >
                     {product.productId.name}
                   </h5>
-                  <p 
-                    className="text-muted mb-2" 
-                    style={{ fontSize: '0.9rem' }}
-                  >
-                    Fashion Jewellery
-                  </p>
-                  <div className="d-flex align-items-center gap-2 flex-wrap">
+                  {product.productId.brand && (
+                    <p 
+                      className="text-muted mb-2" 
+                      style={{ fontSize: '0.9rem' }}
+                    >
+                      <i className="fas fa-tag me-1" style={{ fontSize: '0.8rem' }}></i>
+                      {product.productId.brand}
+                    </p>
+                  )}
+                  <div className="d-flex align-items-center gap-2 flex-wrap mb-3">
                     <p 
                       className="fw-bold mb-0" 
                       style={{ 
                         color: 'var(--success-green)',
-                        fontSize: '1.1rem'
+                        fontSize: '1.2rem'
                       }}
                     >
                       ₹{product.productId.sale_rate}
@@ -93,19 +103,20 @@ const CartItemsList = ({
                         fontSize: '0.85rem'
                       }}
                     >
+                      <i className="fas fa-percent me-1" style={{ fontSize: '0.7rem' }}></i>
                       {product.productId.discount}% off
                     </span>
                   </div>
                 </div>
                 <div className="col-md-3">
-                  <div className="d-flex align-items-center gap-2">
+                  <div className="d-flex align-items-center gap-2 flex-column flex-md-row">
                     <div 
-                      className="input-group" 
+                      className="d-flex align-items-center" 
                       style={{ 
-                        maxWidth: '140px',
                         border: '2px solid var(--primary-mint)',
-                        borderRadius: '15px',
-                        overflow: 'hidden'
+                        borderRadius: '25px',
+                        overflow: 'hidden',
+                        width: 'fit-content'
                       }}
                     >
                       <button
@@ -118,10 +129,19 @@ const CartItemsList = ({
                           backgroundColor: 'var(--light-mint)',
                           color: 'var(--text-dark)',
                           fontWeight: '600',
+                          padding: '8px 15px',
                           transition: 'all 0.3s ease'
                         }}
+                        onMouseEnter={(e) => {
+                          if (!e.currentTarget.disabled) {
+                            e.currentTarget.style.backgroundColor = 'var(--primary-mint)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--light-mint)';
+                        }}
                       >
-                        -
+                        <i className="fas fa-minus"></i>
                       </button>
                       <input
                         type="text"
@@ -131,7 +151,9 @@ const CartItemsList = ({
                         style={{
                           border: 'none',
                           fontWeight: '600',
-                          color: 'var(--text-dark)'
+                          color: 'var(--text-dark)',
+                          width: '50px',
+                          padding: '8px 5px'
                         }}
                       />
                       <button
@@ -143,10 +165,17 @@ const CartItemsList = ({
                           backgroundColor: 'var(--light-mint)',
                           color: 'var(--text-dark)',
                           fontWeight: '600',
+                          padding: '8px 15px',
                           transition: 'all 0.3s ease'
                         }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--primary-mint)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--light-mint)';
+                        }}
                       >
-                        +
+                        <i className="fas fa-plus"></i>
                       </button>
                     </div>
                     <button
@@ -155,7 +184,15 @@ const CartItemsList = ({
                       style={{
                         color: '#dc3545',
                         fontSize: '1.2rem',
-                        padding: '8px'
+                        padding: '8px',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#ffebee';
+                        e.currentTarget.style.borderRadius = '50%';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
                       }}
                     >
                       <FaRegTrashAlt />
@@ -167,8 +204,12 @@ const CartItemsList = ({
           </>
         ) : (
           <div className="text-center py-5">
-            <div style={{ fontSize: '3rem', marginBottom: '15px' }}>🛒</div>
-            <p style={{ color: 'var(--text-muted)' }}>Your cart is empty</p>
+            <div style={{ fontSize: '3rem', marginBottom: '15px', color: 'var(--primary-mint)' }}>
+              <i className="fas fa-shopping-cart"></i>
+            </div>
+            <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-serif)' }}>
+              Your cart is empty
+            </p>
           </div>
         )}
         
@@ -192,7 +233,7 @@ const CartItemsList = ({
               e.target.style.backgroundColor = 'white';
             }}
           >
-            Back
+            <i className="fas fa-arrow-left me-2"></i>Back
           </button>
           <button
             className="btn flex-fill"
@@ -215,7 +256,7 @@ const CartItemsList = ({
               e.target.style.boxShadow = 'none';
             }}
           >
-            Continue ✨
+            Continue <i className="fas fa-arrow-right ms-2"></i>
           </button>
         </div>
       </div>

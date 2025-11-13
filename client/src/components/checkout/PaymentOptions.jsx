@@ -22,7 +22,9 @@ const PaymentOptions = ({
           borderRadius: '18px 18px 0 0'
         }}
       >
-        <h5 className="mb-0" style={{ fontWeight: '600' }}>Step 3: Payment Options 💳</h5>
+        <h5 className="mb-0" style={{ fontWeight: '600' }}>
+          <i className="fas fa-credit-card me-2"></i>Step 3: Payment Options
+        </h5>
       </div>
       <div className="card-body" style={{ padding: '25px' }}>
         <div 
@@ -31,37 +33,47 @@ const PaymentOptions = ({
             borderRadius: '15px',
             border: paymentOption === 'razorpay' ? '2px solid var(--primary-mint)' : '2px solid #e0e0e0',
             backgroundColor: paymentOption === 'razorpay' ? 'var(--light-mint)' : 'white',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
           }}
+          onClick={() => onPaymentChange("razorpay")}
         >
-          <input
-            className="form-check-input"
-            type="radio"
-            name="paymentOption"
-            id="razorpayOption"
-            value="razorpay"
-            checked={paymentOption === "razorpay"}
-            onChange={() => onPaymentChange("razorpay")}
-            style={{ cursor: 'pointer' }}
-          />
-          <label
-            className="form-check-label fw-bold ms-2"
-            htmlFor="razorpayOption"
-            style={{ cursor: 'pointer', color: 'var(--text-dark)' }}
-          >
-            Online Payment (Razorpay)
-            <span 
-              className="badge bg-warning text-dark ms-2" 
-              style={{ fontSize: '0.7em', borderRadius: '10px' }}
-            >
-              Setup Required
-            </span>
-          </label>
-          <p className="text-muted mt-2 mb-0" style={{ fontSize: '0.9rem' }}>
-            Pay securely using Credit Card, Debit Card, UPI, Net Banking, or Wallets.
-            <br />
-            <small className="text-warning">⚠️ Currently unavailable - Please use Cash on Delivery</small>
-          </p>
+          <div className="d-flex align-items-start">
+            <input
+              className="form-check-input mt-1"
+              type="radio"
+              name="paymentOption"
+              id="razorpayOption"
+              value="razorpay"
+              checked={paymentOption === "razorpay"}
+              onChange={() => onPaymentChange("razorpay")}
+              style={{ cursor: 'pointer' }}
+            />
+            <div className="ms-3 flex-grow-1">
+              <label
+                className="form-check-label fw-bold d-flex align-items-center"
+                htmlFor="razorpayOption"
+                style={{ cursor: 'pointer', color: 'var(--text-dark)' }}
+              >
+                <i className="fas fa-credit-card me-2" style={{ color: 'var(--primary-mint)' }}></i>
+                Online Payment (Razorpay)
+                <span 
+                  className="badge bg-warning text-dark ms-2" 
+                  style={{ fontSize: '0.7em', borderRadius: '10px' }}
+                >
+                  <i className="fas fa-exclamation-triangle me-1"></i>Setup Required
+                </span>
+              </label>
+              <p className="text-muted mt-2 mb-0" style={{ fontSize: '0.9rem' }}>
+                Pay securely using Credit Card, Debit Card, UPI, Net Banking, or Wallets.
+                <br />
+                <small className="text-warning">
+                  <i className="fas fa-info-circle me-1"></i>
+                  Currently unavailable - Please use Cash on Delivery
+                </small>
+              </p>
+            </div>
+          </div>
         </div>
         
         <div 
@@ -70,29 +82,37 @@ const PaymentOptions = ({
             borderRadius: '15px',
             border: paymentOption === 'cod' ? '2px solid var(--primary-mint)' : '2px solid #e0e0e0',
             backgroundColor: paymentOption === 'cod' ? 'var(--light-mint)' : 'white',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
           }}
+          onClick={() => onPaymentChange("cod")}
         >
-          <input
-            className="form-check-input"
-            type="radio"
-            name="paymentOption"
-            id="codOption"
-            value="cod"
-            checked={paymentOption === "cod"}
-            onChange={() => onPaymentChange("cod")}
-            style={{ cursor: 'pointer' }}
-          />
-          <label
-            className="form-check-label fw-bold ms-2"
-            htmlFor="codOption"
-            style={{ cursor: 'pointer', color: 'var(--text-dark)' }}
-          >
-            Cash on Delivery / Pay on Delivery ✨
-          </label>
-          <p className="text-muted mt-2 mb-0" style={{ fontSize: '0.9rem' }}>
-            Pay with cash when your order is delivered to your doorstep.
-          </p>
+          <div className="d-flex align-items-start">
+            <input
+              className="form-check-input mt-1"
+              type="radio"
+              name="paymentOption"
+              id="codOption"
+              value="cod"
+              checked={paymentOption === "cod"}
+              onChange={() => onPaymentChange("cod")}
+              style={{ cursor: 'pointer' }}
+            />
+            <div className="ms-3 flex-grow-1">
+              <label
+                className="form-check-label fw-bold d-flex align-items-center"
+                htmlFor="codOption"
+                style={{ cursor: 'pointer', color: 'var(--text-dark)' }}
+              >
+                <i className="fas fa-money-bill-wave me-2" style={{ color: 'var(--success-green)' }}></i>
+                Cash on Delivery / Pay on Delivery
+              </label>
+              <p className="text-muted mt-2 mb-0" style={{ fontSize: '0.9rem' }}>
+                <i className="fas fa-truck me-1"></i>
+                Pay with cash when your order is delivered to your doorstep.
+              </p>
+            </div>
+          </div>
         </div>
         
         <div className="d-flex justify-content-between gap-3 mt-4">
@@ -115,13 +135,13 @@ const PaymentOptions = ({
               e.target.style.backgroundColor = 'white';
             }}
           >
-            Back
+            <i className="fas fa-arrow-left me-2"></i>Back
           </button>
           <button 
             className="btn flex-fill" 
             onClick={onPlaceOrder}
             style={{
-              background: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)',
+              background: 'linear-gradient(135deg, var(--success-green) 0%, var(--dark-mint) 100%)',
               color: 'white',
               border: 'none',
               borderRadius: '20px',
@@ -132,14 +152,14 @@ const PaymentOptions = ({
             }}
             onMouseOver={(e) => {
               e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 8px 25px rgba(220, 53, 69, 0.4)';
+              e.target.style.boxShadow = '0 8px 25px rgba(123, 200, 164, 0.4)';
             }}
             onMouseOut={(e) => {
               e.target.style.transform = 'translateY(0)';
               e.target.style.boxShadow = 'none';
             }}
           >
-            Place Your Order 🎉
+            <i className="fas fa-check-circle me-2"></i>Place Your Order
           </button>
         </div>
       </div>
