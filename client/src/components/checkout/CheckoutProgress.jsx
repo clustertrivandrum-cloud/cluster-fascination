@@ -98,3 +98,4 @@ const CheckoutProgress = ({ currentStep }) => {
 
 export default CheckoutProgress;
 
+

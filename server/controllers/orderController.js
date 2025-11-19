@@ -93,6 +93,13 @@ const createOrder = async (req, res) => {
     order_notes = null
   } = req?.body
 
+  // Reject COD orders - only online payment allowed
+  if (payment_mode && payment_mode.toLowerCase() === 'cod') {
+    return res.status(400).json({ 
+      message: 'Cash on Delivery is not available. Please use online payment only.' 
+    });
+  }
+
   // Calculate subtotal if not provided
   const calculatedSubtotal = subtotal || (products?.totalPrice || 0)
   

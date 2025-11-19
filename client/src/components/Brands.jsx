@@ -85,7 +85,7 @@ useEffect(()=>{
         <div className='col-12'>
         <div className="container mt-4">
     <div className="categories-section">
-   kl;
+   
         <h3 className='text-center m-5 fw-bold '>Our Partners</h3>         {/* changed from Boutique Partners to Partners */}
         <Row className='d-flex justify-content-center align-content-center '>
           {categories.map((item, index) => (

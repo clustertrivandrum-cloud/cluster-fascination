@@ -64,7 +64,7 @@ function Bill({ name, company, email, vat, noGutter }) {
             Email Address:&nbsp;&nbsp;&nbsp;
             <Typography variant="caption" fontWeight="medium">
               {email}
-            </Typography>
+            </Typography>     
           </Typography>
         </Box>
         <Typography variant="caption" color="text">

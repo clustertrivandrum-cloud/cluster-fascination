@@ -19,6 +19,33 @@ module.exports.signup = async (req, res) => {
     phone)
 
    try {
+      // Normalize email to lowercase and trim whitespace
+      const normalizedEmail = email?.trim().toLowerCase();
+      
+      // Check if email already exists
+      const existingUser = await User.findOne({ 
+         $or: [
+            { email: normalizedEmail },
+            { email: email?.trim() } // Also check original format
+         ]
+      });
+      
+      if (existingUser) {
+         return res.status(409).json({ 
+            message: "Email already exists. Please use a different email address.",
+            success: false
+         });
+      }
+
+      // Check if username already exists
+      const existingUsername = await User.findOne({ username: username?.trim() });
+      if (existingUsername) {
+         return res.status(409).json({ 
+            message: "Username already exists. Please choose a different username.",
+            success: false
+         });
+      }
+
       const encryptedPassword = await bcrypt.hash(password, 10);
       // await User.create({
       //    username,
@@ -27,10 +54,10 @@ module.exports.signup = async (req, res) => {
       //    phone,
       // });
       const newUser = new User({
-         username,
+         username: username?.trim(),
          password: encryptedPassword,
-         phone,
-         email,
+         phone: phone?.trim(),
+         email: normalizedEmail,
        });
     
        await newUser.save();
@@ -61,7 +88,26 @@ module.exports.signup = async (req, res) => {
       });
    } catch (error) {
       console.log('err',error)
-      return res.status(500).json({ message: err?.message ?? 'Something went wrong' })
+      
+      // Handle MongoDB duplicate key error (E11000)
+      if (error.code === 11000) {
+         const field = Object.keys(error.keyPattern)[0];
+         if (field === 'email') {
+            return res.status(409).json({ 
+               message: "Email already exists. Please use a different email address.",
+               success: false
+            });
+         }
+         return res.status(409).json({ 
+            message: `${field} already exists. Please use a different ${field}.`,
+            success: false
+         });
+      }
+      
+      return res.status(500).json({ 
+         message: error?.message ?? 'Something went wrong',
+         success: false
+      })
    }
 };
 

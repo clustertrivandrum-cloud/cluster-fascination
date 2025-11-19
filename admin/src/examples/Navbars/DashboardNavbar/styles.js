@@ -24,6 +24,15 @@ function navbar(theme, ownerState) {
   return {
     boxShadow: transparentNavbar || absolute ? "none" : navbarBoxShadow,
     backgroundColor: transparentNavbar || absolute ? `${transparent.main} !important` : white.main,
+    overflowX: "hidden",
+    maxWidth: "100%",
+    width: "100%",
+    boxSizing: "border-box",
+    position: "relative",
+    left: 0,
+    right: 0,
+    marginLeft: 0,
+    marginRight: 0,
 
     color: () => {
       let color;
@@ -49,16 +58,22 @@ function navbar(theme, ownerState) {
     paddingLeft: absolute ? pxToRem(16) : 0,
 
     "& > *": {
-      transition: transitions.create("all", {
+      transition: transitions.create(["opacity", "transform"], {
         easing: transitions.easing.easeInOut,
         duration: transitions.duration.standard,
       }),
+      maxWidth: "100%",
+      overflowX: "hidden",
     },
 
     "& .MuiToolbar-root": {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
+      overflowX: "hidden",
+      maxWidth: "100%",
+      width: "100%",
+      minWidth: 0,
 
       [breakpoints.up("sm")]: {
         minHeight: "auto",
@@ -74,6 +89,10 @@ const navbarContainer = ({ breakpoints }) => ({
   justifyContent: "space-between",
   pt: 0.5,
   pb: 0.5,
+  overflowX: "hidden",
+  maxWidth: "100%",
+  width: "100%",
+  minWidth: 0,
 
   [breakpoints.up("md")]: {
     flexDirection: "row",
@@ -88,15 +107,19 @@ const navbarRow = ({ breakpoints }, { isMini }) => ({
   alignItems: "center",
   justifyContent: "space-between",
   width: "100%",
+  minWidth: 0,
+  overflow: "hidden",
 
   [breakpoints.up("md")]: {
-    justifyContent: isMini ? "space-between" : "stretch",
-    width: isMini ? "100%" : "max-content",
+    justifyContent: isMini ? "space-between" : "flex-start",
+    width: isMini ? "100%" : "auto",
+    flex: isMini ? "1 1 100%" : "0 1 auto",
   },
 
   [breakpoints.up("xl")]: {
-    justifyContent: "stretch !important",
-    width: "max-content !important",
+    justifyContent: "flex-start !important",
+    width: "auto !important",
+    flex: "0 1 auto !important",
   },
 });
 

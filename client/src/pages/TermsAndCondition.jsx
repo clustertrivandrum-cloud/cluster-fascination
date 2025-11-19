@@ -26,9 +26,19 @@ This website is governed by the laws and the courts of the state of Karnataka. A
 
 It is our prerogative to correct any errors or inaccuracies and change or update information on this website at any time without notice. This includes price and item availability.
 <br/><br/>
+<b>PAYMENT TERMS</b><br/><br/>
+
+<strong>Cash on Delivery (COD) is NOT available.</strong> All orders must be paid for online at the time of purchase using our secure payment gateway. We accept Credit Cards, Debit Cards, UPI, Net Banking, and Digital Wallets through Razorpay. Payment must be completed before your order is processed and shipped. We do not accept any form of cash payment or payment on delivery.
+<br/><br/>
+
+<b>REFUND AND RETURN POLICY</b><br/><br/>
+
+<strong>All sales are final.</strong> We do not accept returns, exchanges, or offer refunds for any reason, except in cases of defective or damaged products due to our error (as detailed in our Refund Policy). By placing an order, you acknowledge and agree to this policy. Please review product details carefully before completing your purchase.
+<br/><br/>
+
 <b>SHIPPING</b><br/><br/>
 
-All items will be delivered by a third party and delivery is therefore governed by the third party’s shipping contracts. While all efforts will be made to deliver items as quickly as possible via commercial contracts, we are not responsible for delivery delays beyond our control. We maintain the right to hold shipments to certain addresses or cancel orders at our discretion.
+All items will be delivered by a third party and delivery is therefore governed by the third party's shipping contracts. While all efforts will be made to deliver items as quickly as possible via commercial contracts, we are not responsible for delivery delays beyond our control. We maintain the right to hold shipments to certain addresses or cancel orders at our discretion.
 <br/><br/>
 <b>LINKS</b><br/><br/>
 

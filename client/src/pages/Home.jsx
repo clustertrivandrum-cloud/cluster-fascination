@@ -651,7 +651,7 @@ function Home() {
 
       {/* WhatsApp Button */}
       <WhatsAppButton
-        phoneNumber="+919876543210"
+        phoneNumber="+916282660237" // Replace with your WhatsApp business number
         message="Hello, I have a general inquiry about your products."
       />
     </div>

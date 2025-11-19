@@ -132,27 +132,73 @@ function DashboardNavbar({ absolute, light, isMini }) {
     <AppBar
       position={absolute ? "absolute" : navbarType}
       color="inherit"
-      sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
+      sx={(theme) => ({
+        ...navbar(theme, { transparentNavbar, absolute, light }),
+        overflowX: "hidden",
+        maxWidth: "100%",
+        width: "100%",
+        left: 0,
+        right: 0,
+        marginLeft: 0,
+        marginRight: 0,
+        transform: "none",
+      })}
     >
-      <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
+      <Toolbar 
+        sx={(theme) => ({
+          ...navbarContainer(theme, { navbarType }),
+          overflowX: "hidden",
+          maxWidth: "100%",
+          width: "100%",
+          position: "relative",
+          left: 0,
+          right: 0,
+          marginLeft: 0,
+          marginRight: 0,
+          transform: "none",
+        })}
+      >
         <Box
           color={light && transparentNavbar ? "white" : "dark"}
           mb={{ xs: 1, md: 0 }}
-          sx={(theme) => navbarRow(theme, { isMini })}
+          sx={(theme) => ({
+            ...navbarRow(theme, { isMini }),
+            overflowX: "hidden",
+            minWidth: 0,
+            flex: 1,
+          })}
         >
-          <Breadcrumbs
-            icon="home"
-            title={route[route.length - 1]}
-            route={route}
-            light={transparentNavbar ? light : false}
-          />
+          <Box sx={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
+            <Breadcrumbs
+              icon="home"
+              title={route[route.length - 1]}
+              route={route}
+              light={transparentNavbar ? light : false}
+            />
+          </Box>
           <Icon fontSize="medium" sx={navbarDesktopMenu} onClick={handleMiniSidenav}>
             {miniSidenav ? "menu_open" : "menu"}
           </Icon>
         </Box>
         {isMini ? null : (
-          <Box sx={(theme) => navbarRow(theme, { isMini })}>
-            <Box pr={1}>
+          <Box 
+            sx={(theme) => ({
+              ...navbarRow(theme, { isMini }),
+              overflowX: "hidden",
+              minWidth: 0,
+              flex: { xs: "0 0 auto", md: "1 1 auto" },
+              justifyContent: { xs: "flex-end", md: "flex-start" },
+            })}
+          >
+            <Box 
+              pr={1} 
+              sx={{ 
+                display: { xs: "none", sm: "block" },
+                minWidth: 0,
+                flex: { md: "0 1 auto" },
+                maxWidth: { md: "300px" },
+              }}
+            >
               <Input
                 placeholder="Type here..."
                 startAdornment={
@@ -162,7 +208,16 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 }
               />
             </Box>
-            <Box color={light ? "white" : "inherit"}>
+            <Box 
+              color={light ? "white" : "inherit"}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: { xs: 0.5, sm: 1 },
+                minWidth: 0,
+                flexShrink: 0,
+              }}
+            >
               <IconButton sx={navbarIconButton} size="small" onClick={handleOpenUserMenu}>
                 <Icon
                   sx={({ palette: { dark, white } }) => ({

@@ -8,6 +8,7 @@ const AddressSection = ({
   onChangeAddress,
   onNext,
   onAddNewAddress,
+  onEditAddress,
 }) => {
   return (
     <div
@@ -43,20 +44,50 @@ const AddressSection = ({
                   height: "100%",
                 }}
               >
-                <div className="d-flex align-items-center mb-3">
-                  <i
-                    className="fas fa-check-circle me-2"
-                    style={{ color: "var(--success-green)", fontSize: "1.2rem" }}
-                  ></i>
-                  <h6
-                    className="elegant-script mb-0"
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <div className="d-flex align-items-center">
+                    <i
+                      className="fas fa-check-circle me-2"
+                      style={{ color: "var(--success-green)", fontSize: "1.2rem" }}
+                    ></i>
+                    <h6
+                      className="elegant-script mb-0"
+                      style={{
+                        color: "var(--text-dark)",
+                        fontSize: "1.3rem",
+                      }}
+                    >
+                      Selected Address
+                    </h6>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onEditAddress(orderAddress)}
                     style={{
-                      color: "var(--text-dark)",
-                      fontSize: "1.3rem",
+                      background: "transparent",
+                      border: "2px solid var(--primary-mint)",
+                      color: "var(--primary-mint)",
+                      cursor: "pointer",
+                      padding: "6px 12px",
+                      borderRadius: "10px",
+                      transition: "all 0.3s ease",
+                      fontSize: "0.9rem",
+                      fontWeight: "600"
                     }}
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = "var(--primary-mint)";
+                      e.target.style.color = "white";
+                      e.target.style.transform = "scale(1.05)";
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.color = "var(--primary-mint)";
+                      e.target.style.transform = "scale(1)";
+                    }}
+                    title="Edit Address"
                   >
-                    Selected Address
-                  </h6>
+                    <i className="fas fa-edit me-1"></i>Edit
+                  </button>
                 </div>
                 <div style={{ color: "var(--text-dark)", lineHeight: "1.8" }}>
                   <p className="mb-2 fw-bold">
@@ -109,50 +140,64 @@ const AddressSection = ({
                 </div>
                 <Form style={{ flex: 1 }}>
                   {addressDatas.map((addr) => (
-                    <div key={addr._id} className="mb-2">
+                    <div 
+                      key={addr._id} 
+                      className="mb-2 d-flex align-items-center justify-content-between"
+                      style={{
+                        padding: "8px",
+                        borderRadius: "10px",
+                        backgroundColor: selectedAddress?._id === addr._id ? "var(--light-mint)" : "transparent",
+                        transition: "all 0.3s ease"
+                      }}
+                    >
                       <Form.Check
                         type="radio"
                         label={
                           <span>
                             <i className="fas fa-map-pin me-1" style={{ fontSize: "0.8rem" }}></i>
-                            {addr.address_line_1}
+                            {addr.address_line_1}, {addr.city}
                           </span>
                         }
                         name="group1"
                         id={addr._id}
-                        onChange={() => onRadioChange(addr)}
-                        checked={selectedAddress?._id === addr._id}
-                        style={{ color: "var(--text-dark)" }}
+                        onChange={() => {
+                          // Automatically change address when radio is clicked
+                          onRadioChange(addr);
+                        }}
+                        checked={selectedAddress?._id === addr._id || orderAddress?._id === addr._id}
+                        style={{ color: "var(--text-dark)", flex: 1 }}
                       />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditAddress(addr);
+                        }}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: "var(--primary-mint)",
+                          cursor: "pointer",
+                          padding: "5px 10px",
+                          borderRadius: "8px",
+                          transition: "all 0.3s ease",
+                          marginLeft: "10px"
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.backgroundColor = "var(--light-mint)";
+                          e.target.style.transform = "scale(1.1)";
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.backgroundColor = "transparent";
+                          e.target.style.transform = "scale(1)";
+                        }}
+                        title="Edit Address"
+                      >
+                        <i className="fas fa-edit"></i>
+                      </button>
                     </div>
                   ))}
                 </Form>
-                <Button
-                  className="mt-3 w-100"
-                  onClick={onChangeAddress}
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--primary-mint) 0%, var(--dark-mint) 100%)",
-                    border: "none",
-                    borderRadius: "20px",
-                    padding: "10px 25px",
-                    fontWeight: "600",
-                    transition: "all 0.3s ease",
-                    boxShadow: "0 3px 15px rgba(185, 234, 216, 0.3)",
-                  }}
-                  onMouseOver={(e) => {
-                    e.target.style.transform = "translateY(-2px)";
-                    e.target.style.boxShadow =
-                      "0 8px 25px rgba(185, 234, 216, 0.4)";
-                  }}
-                  onMouseOut={(e) => {
-                    e.target.style.transform = "translateY(0)";
-                    e.target.style.boxShadow =
-                      "0 3px 15px rgba(185, 234, 216, 0.3)";
-                  }}
-                >
-                  <i className="fas fa-sync-alt me-2"></i>Change Address
-                </Button>
                 <Button
                   className="mt-2 w-100"
                   onClick={onAddNewAddress}

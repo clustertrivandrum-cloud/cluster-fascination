@@ -66,50 +66,6 @@ const PaymentOptions = ({
               </label>
               <p className="text-muted mt-2 mb-0" style={{ fontSize: '0.9rem' }}>
                 Pay securely using Credit Card, Debit Card, UPI, Net Banking, or Wallets.
-                <br />
-                <small className="text-warning">
-                  <i className="fas fa-info-circle me-1"></i>
-                  Currently unavailable - Please use Cash on Delivery
-                </small>
-              </p>
-            </div>
-          </div>
-        </div>
-        
-        <div 
-          className="form-check mb-4 p-3" 
-          style={{ 
-            borderRadius: '15px',
-            border: paymentOption === 'cod' ? '2px solid var(--primary-mint)' : '2px solid #e0e0e0',
-            backgroundColor: paymentOption === 'cod' ? 'var(--light-mint)' : 'white',
-            transition: 'all 0.3s ease',
-            cursor: 'pointer'
-          }}
-          onClick={() => onPaymentChange("cod")}
-        >
-          <div className="d-flex align-items-start">
-            <input
-              className="form-check-input mt-1"
-              type="radio"
-              name="paymentOption"
-              id="codOption"
-              value="cod"
-              checked={paymentOption === "cod"}
-              onChange={() => onPaymentChange("cod")}
-              style={{ cursor: 'pointer' }}
-            />
-            <div className="ms-3 flex-grow-1">
-              <label
-                className="form-check-label fw-bold d-flex align-items-center"
-                htmlFor="codOption"
-                style={{ cursor: 'pointer', color: 'var(--text-dark)' }}
-              >
-                <i className="fas fa-money-bill-wave me-2" style={{ color: 'var(--success-green)' }}></i>
-                Cash on Delivery / Pay on Delivery
-              </label>
-              <p className="text-muted mt-2 mb-0" style={{ fontSize: '0.9rem' }}>
-                <i className="fas fa-truck me-1"></i>
-                Pay with cash when your order is delivered to your doorstep.
               </p>
             </div>
           </div>

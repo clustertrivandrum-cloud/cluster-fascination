@@ -39,7 +39,7 @@ const INDIAN_STATES = [
   "Puducherry",
 ];
 
-const AddressModal = ({ show, onHide, formData, onChange, onSubmit }) => {
+const AddressModal = ({ show, onHide, formData, onChange, onSubmit, isEditMode = false }) => {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header
@@ -57,7 +57,7 @@ const AddressModal = ({ show, onHide, formData, onChange, onSubmit }) => {
             fontSize: "1.8rem",
           }}
         >
-          Add New Address 🏠
+          {isEditMode ? "Edit Address ✏️" : "Add New Address 🏠"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ padding: "25px" }}>
@@ -265,7 +265,7 @@ const AddressModal = ({ show, onHide, formData, onChange, onSubmit }) => {
               e.target.style.boxShadow = "none";
             }}
           >
-            Add Address ✨
+            {isEditMode ? "Update Address ✨" : "Add Address ✨"}
           </Button>
         </Form>
       </Modal.Body>

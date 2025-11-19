@@ -6,15 +6,14 @@ import { Switch } from "@mui/material";
 import Typography from "components/Typography";
 import Button from "components/Button";
 import { Link } from "react-router-dom";
-import { useController } from "context";
-import { setAuth } from "context";
+import { useController, setAuth } from "context";
 import toast from "react-hot-toast";
-import image from "assets/images/logo.png";
 
 const Login = () => {
   const [controller, dispatch] = useController();
-  const [data, setData] = useState({});
+  const [data, setData] = useState({ email: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Load saved credentials if remember me was checked
   useEffect(() => {
@@ -26,33 +25,42 @@ const Login = () => {
     }
   }, []);
 
-  const handleLogin = () => {
-    if (
-      process.env.REACT_APP_USERNAME === data?.email &&
-      process.env.REACT_APP_PASSWORD === data?.password
-    ) {
-      toast.success("Login Successfull");
-      setAuth(dispatch, true);
+  const handleChange = (e) => {
+    setData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-      // Handle remember me
-      if (rememberMe) {
-        localStorage.setItem("rememberedEmail", data?.email);
-        localStorage.setItem("rememberMe", "true");
+  const handleRememberMeChange = () => setRememberMe((prev) => !prev);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      if (
+        process.env.REACT_APP_USERNAME === data.email &&
+        process.env.REACT_APP_PASSWORD === data.password
+      ) {
+        toast.success("Login Successful");
+        setAuth(dispatch, true);
+
+        // Handle remember me
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", data.email);
+          localStorage.setItem("rememberMe", "true");
+        } else {
+          localStorage.removeItem("rememberedEmail");
+          localStorage.removeItem("rememberMe");
+        }
       } else {
-        localStorage.removeItem("rememberedEmail");
-        localStorage.removeItem("rememberMe");
+        toast.error("Invalid username or password");
       }
-    } else {
-      toast.error("Invalid username or password");
+    } finally {
+      setLoading(false);
     }
   };
-  const handleChange = (e) => {
-    setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
 
-  const handleRememberMeChange = () => {
-    setRememberMe(!rememberMe);
-  };
   return (
     <AuthLayout
       title="Sign In"
@@ -60,11 +68,15 @@ const Login = () => {
       illustration={{
         title: "Cluster Fascination",
         description: "Admin Management Console",
-        image,
       }}
       color="info"
     >
-      <Box component="form" role="form">
+      <Box
+        component="form"
+        role="form"
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
         <Box mb={2}>
           <Input
             type="email"
@@ -72,7 +84,10 @@ const Login = () => {
             size="large"
             onChange={handleChange}
             name="email"
-            value={data?.email || ""}
+            value={data.email}
+            disabled={loading}
+            autoFocus
+            required
           />
         </Box>
         <Box mb={2}>
@@ -82,11 +97,19 @@ const Login = () => {
             size="large"
             onChange={handleChange}
             name="password"
-            value={data?.password || ""}
+            value={data.password}
+            disabled={loading}
+            required
+            autoComplete="current-password"
           />
         </Box>
-        <Box display="flex" alignItems="center">
-          <Switch checked={rememberMe} onChange={handleRememberMeChange} />
+        <Box display="flex" alignItems="center" mb={2}>
+          <Switch
+            checked={rememberMe}
+            onChange={handleRememberMeChange}
+            color="info"
+            disabled={loading}
+          />
           <Typography
             variant="button"
             fontWeight="regular"
@@ -96,25 +119,19 @@ const Login = () => {
             &nbsp;&nbsp;Remember me
           </Typography>
         </Box>
-        <Box mt={4} mb={1}>
-          <Button color="info" size="large" fullWidth onClick={handleLogin}>
-            Sign In
+        <Box mt={3} mb={1}>
+          <Button
+            color="info"
+            size="large"
+            fullWidth
+            variant="contained"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Signing In..." : "Sign In"}
           </Button>
         </Box>
-        <Box mt={3} textAlign="center">
-          <Typography variant="button" color="text" fontWeight="regular">
-            Don&apos;t have an account?{" "}
-            <Typography
-              component={Link}
-              to="/authentication/sign-up"
-              variant="button"
-              color="info"
-              fontWeight="medium"
-            >
-              Sign up
-            </Typography>
-          </Typography>
-        </Box>
+       
       </Box>
     </AuthLayout>
   );

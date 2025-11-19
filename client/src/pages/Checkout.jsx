@@ -17,7 +17,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [deliveryAddress, setDeliveryAddress] = useState("");
-  const [paymentOption, setPaymentOption] = useState("cod"); // Changed default to COD since Razorpay not configured
+  const [paymentOption, setPaymentOption] = useState("razorpay"); // Only online payment allowed
   const [cartData, setCartData] = useState([]);
   const [salePriceTotal, setSalePriceTotal] = useState(0);
   const [proPriceTotal, setProPriceTotal] = useState(0);
@@ -26,6 +26,8 @@ const Checkout = () => {
   const [addressDatas, setAddressDatas] = useState([]);
   const [orderAddress, setOrderAddress] = useState({});
   const [showAddressModal, setShowAddressModal] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingAddressId, setEditingAddressId] = useState(null);
   const [newAddressFormData, setNewAddressFormData] = useState({
     firstname: "",
     lastname: "",
@@ -80,8 +82,53 @@ const Checkout = () => {
   // Don't auto-calculate delivery charges
   // Calculate only when user explicitly confirms an address
 
-  const handleAddressModalClose = () => setShowAddressModal(false);
-  const handleAddressModalShow = () => setShowAddressModal(true);
+  const handleAddressModalClose = () => {
+    setShowAddressModal(false);
+    setIsEditMode(false);
+    setEditingAddressId(null);
+    setNewAddressFormData({
+      firstname: "",
+      lastname: "",
+      address_line_1: "",
+      city: "",
+      state: "",
+      zip: "",
+      mobile: "",
+      country: "",
+    });
+  };
+  
+  const handleAddressModalShow = () => {
+    setIsEditMode(false);
+    setEditingAddressId(null);
+    setNewAddressFormData({
+      firstname: "",
+      lastname: "",
+      address_line_1: "",
+      city: "",
+      state: "",
+      zip: "",
+      mobile: "",
+      country: "",
+    });
+    setShowAddressModal(true);
+  };
+
+  const handleEditAddress = (addr) => {
+    setIsEditMode(true);
+    setEditingAddressId(addr._id);
+    setNewAddressFormData({
+      firstname: addr.firstname || "",
+      lastname: addr.lastname || "",
+      address_line_1: addr.address_line_1 || "",
+      city: addr.city || "",
+      state: addr.state || "",
+      zip: addr.zip || "",
+      mobile: addr.mobile || "",
+      country: addr.country || "",
+    });
+    setShowAddressModal(true);
+  };
 
   const handleNewAddressChange = (e) => {
     const { name, value } = e.target;
@@ -94,42 +141,89 @@ const Checkout = () => {
   const handleNewAddressSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post(
-        "/api/v1/address",
-        newAddressFormData,
-      );
-      console.log("Address submitted: ", response.data);
+      let response;
+      let updatedAddress;
 
-      // Store the newly added address data
-      const newlyAddedAddress = response.data.data || newAddressFormData;
+      if (isEditMode && editingAddressId) {
+        // Edit existing address - find the original to preserve all fields
+        const originalAddress = addressDatas.find(addr => addr._id === editingAddressId);
+        const updatedAddressData = {
+          ...newAddressFormData,
+          _id: editingAddressId,
+        };
+        response = await axiosInstance.patch(
+          "/api/v1/address",
+          updatedAddressData,
+        );
+        console.log("Address updated: ", response.data);
+        // Merge with original to preserve fields like primary, userId, etc.
+        updatedAddress = {
+          ...originalAddress,
+          ...newAddressFormData,
+          _id: editingAddressId,
+        };
+      } else {
+        // Add new address
+        response = await axiosInstance.post(
+          "/api/v1/address",
+          newAddressFormData,
+        );
+        console.log("Address submitted: ", response.data);
+        updatedAddress = response.data.data || newAddressFormData;
+      }
 
-      setNewAddressFormData({
-        firstname: "",
-        lastname: "",
-        address_line_1: "",
-        city: "",
-        state: "",
-        zip: "",
-        mobile: "",
-        country: "",
-      });
-      handleAddressModalClose();
-      await fetchAddress("/api/v1/address");
+      // Update state immediately without refetching
+      if (isEditMode && editingAddressId) {
+        // Update existing address in the list
+        setAddressDatas((prevAddresses) =>
+          prevAddresses.map((addr) =>
+            addr._id === editingAddressId ? updatedAddress : addr
+          )
+        );
+        
+        // If this was the selected address, update it
+        if (orderAddress?._id === editingAddressId) {
+          setOrderAddress(updatedAddress);
+          setSelectedAddress(updatedAddress);
+        }
+      } else {
+        // Add new address to the list
+        setAddressDatas((prevAddresses) => [...prevAddresses, updatedAddress]);
+        
+        // Set the newly added address as the order address
+        setOrderAddress(updatedAddress);
+        setSelectedAddress(updatedAddress);
+      }
 
-      // Set the newly added address as the order address
-      setOrderAddress(newlyAddedAddress);
       setIsAddressConfirmed(true);
 
-      // Recalculate delivery charges with the new address after confirmation
-      if (newlyAddedAddress.state && salePriceTotal > 0) {
+      // Recalculate delivery charges with the new/updated address after confirmation
+      if (updatedAddress.state && salePriceTotal > 0) {
         const charges = calculateDeliveryCharges(
-          newlyAddedAddress.state,
+          updatedAddress.state,
           salePriceTotal,
         );
         setDeliveryCharges(charges);
       }
+
+      handleAddressModalClose();
+
+      Swal.fire({
+        title: isEditMode ? "Address Updated" : "Address Added",
+        text: isEditMode 
+          ? "Your address has been updated successfully." 
+          : "Your address has been added successfully.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Error submitting address: ", error);
+      Swal.fire({
+        title: "Error",
+        text: error.response?.data?.message || "Failed to save address. Please try again.",
+        icon: "error",
+      });
     }
   };
 
@@ -477,20 +571,14 @@ const Checkout = () => {
           title: "Payment Gateway Unavailable",
           html: `
             <p>Online payment is currently unavailable.</p>
-            <p><strong>Please use Cash on Delivery option instead.</strong></p>
+            <p><strong>Please contact support to complete your order.</strong></p>
             <p style="font-size: 0.9em; color: #666; margin-top: 15px;">
               (Administrator: Razorpay credentials need to be configured)
             </p>
           `,
-          icon: "warning",
-          confirmButtonText: "Use COD Instead",
+          icon: "error",
+          confirmButtonText: "OK",
           confirmButtonColor: "#28a745",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Automatically switch to COD
-            setPaymentOption("cod");
-            setCurrentStep(3); // Stay on payment selection step
-          }
         });
       } else {
         // Other errors
@@ -507,9 +595,8 @@ const Checkout = () => {
 
   const placeOrder = async () => {
     console.log("payment ", paymentOption);
-    if (paymentOption === "cod") {
-      handlePaymentSuccess();
-    } else if (paymentOption === "razorpay") {
+    // Only Razorpay payment is allowed - COD is disabled
+    if (paymentOption === "razorpay") {
       const mappedCartItems = await cartData?.item.map((item) => ({
         product_id: item.productId._id,
         qty: item.qty,
@@ -527,6 +614,12 @@ const Checkout = () => {
       };
 
       handleRazorpayPayment(productsOrderData);
+    } else {
+      Swal.fire({
+        title: "Payment Required",
+        text: "Only online payment is accepted. Please complete the payment to place your order.",
+        icon: "warning",
+      });
     }
   };
 
@@ -535,18 +628,32 @@ const Checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
 
   const handleRadioChange = (addr) => {
-    setSelectedAddress(addr);
-    // Don't calculate delivery charges yet - wait for confirmation
-  };
-
-  const handleChangeAddress = () => {
-    if (selectedAddress) {
-      setOrderAddress(selectedAddress);
+    // Automatically change address when radio is clicked
+    if (addr) {
+      setSelectedAddress(addr);
+      setOrderAddress(addr);
       setIsAddressConfirmed(true);
       // Recalculate delivery charges after address confirmation
-      if (selectedAddress.state && salePriceTotal > 0) {
+      if (addr.state && salePriceTotal > 0) {
         const charges = calculateDeliveryCharges(
-          selectedAddress.state,
+          addr.state,
+          salePriceTotal,
+        );
+        setDeliveryCharges(charges);
+      }
+    }
+  };
+
+  const handleChangeAddress = (addr) => {
+    const addressToUse = addr || selectedAddress;
+    if (addressToUse) {
+      setOrderAddress(addressToUse);
+      setSelectedAddress(addressToUse);
+      setIsAddressConfirmed(true);
+      // Recalculate delivery charges after address confirmation
+      if (addressToUse.state && salePriceTotal > 0) {
+        const charges = calculateDeliveryCharges(
+          addressToUse.state,
           salePriceTotal,
         );
         setDeliveryCharges(charges);
@@ -590,6 +697,7 @@ const Checkout = () => {
                 onChangeAddress={handleChangeAddress}
                 onNext={handleNext}
                 onAddNewAddress={handleAddressModalShow}
+                onEditAddress={handleEditAddress}
               />
             )}
 
@@ -599,6 +707,7 @@ const Checkout = () => {
               formData={newAddressFormData}
               onChange={handleNewAddressChange}
               onSubmit={handleNewAddressSubmit}
+              isEditMode={isEditMode}
             />
 
             {currentStep === 2 && (

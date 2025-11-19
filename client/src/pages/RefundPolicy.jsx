@@ -4,7 +4,7 @@ import MiddleNav from '../components/MiddleNav'
 import MainNav from '../components/MainNav'
 import Footer from '../components/Footer'
 
-function TermsAndCondition() {
+function RefundPolicy() {
   return (
     <div>
          <TopNav/>
@@ -13,49 +13,88 @@ function TermsAndCondition() {
         <div className="container my-5">
       <div className="row">
         <div className="col">
-          <h1 className="mb-4">Refund and Return Policy
-          </h1>
-          <b>Overview
-          </b><br/><br/>
+          <h1 className="mb-4">Refund and Return Policy</h1>
+          
+          <div className="alert alert-warning" role="alert" style={{ 
+            backgroundColor: '#fff3cd', 
+            border: '2px solid #ffc107', 
+            borderRadius: '10px',
+            padding: '20px',
+            marginBottom: '30px'
+          }}>
+            <h4 style={{ color: '#856404', marginBottom: '15px' }}>
+              <i className="fas fa-exclamation-triangle me-2"></i>
+              Important Policy Notice
+            </h4>
+            <p style={{ marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600', color: '#856404' }}>
+              <strong>NO COD | NO RETURNS | NO REFUNDS</strong>
+            </p>
+            <p style={{ marginBottom: 0, color: '#856404' }}>
+              All sales are final. Please review your order carefully before completing your purchase.
+            </p>
+          </div>
 
-          At Cluster Fascination, we strive to provide the highest quality fashion jewellery & accessories products to our customers. If you are not completely satisfied with your purchase, we are here to help.   {/* changed from boutique wellness products to fashion jewellery & accessories products */}
-<br/><br/>
-<b>Returns
-</b><br/><br/>
+          <b>Overview</b><br/><br/>
 
-Our policy lasts 2 days from the date of purchase. If 2 days have gone by since your purchase, unfortunately, we can’t offer you a refund or exchange.
+          At Cluster Fascination, we strive to provide the highest quality fashion jewellery & accessories products to our customers. We want to ensure you are completely satisfied with your purchase, which is why we encourage you to review product details, images, and descriptions carefully before placing your order.
+          <br/><br/>
 
-<br/>
-To be eligible for a return, your item must be unused, in the same condition that you received it, and in the original packaging.
-<br/>
-To initiate a return, please contact our customer service team at info@clusterfascination.com with your order number and details about the product you wish to return. We will respond promptly with instructions on how to proceed.
-<br/><br/>
-<b>Refunds
-</b><br/><br/>
+          <b>Payment Policy</b><br/><br/>
 
-Once your return is received and inspected, we will notify you of the approval or rejection of your refund. If approved, your refund will be processed, and a credit will automatically be applied to your original method of payment within 7 days.<br/><br/>
-<b>Late or Missing Refunds
-</b><br/><br/>
-Late or Missing Refunds
-If you haven’t received a refund yet, first check your bank account again. Then contact your credit card company; it may take some time before your refund is officially posted. Next, contact your bank. There is often some processing time before a refund is posted. If you’ve done all of this and you still have not received your refund yet, please contact us at info@clusterfascination.com
-<br/><br/>
-<b>Exchanges
-</b><br/><br/>
+          <strong>Cash on Delivery (COD) is NOT available.</strong> All orders must be paid for online using our secure payment gateway (Razorpay) at the time of purchase. We accept Credit Cards, Debit Cards, UPI, Net Banking, and Digital Wallets.
+          <br/><br/>
 
-We only replace items if they are defective or damaged. If you need to exchange it for the same item, send us an email at info@clusterfascination.com
-<br/><br/>
-<b>Shipping
-</b><br/><br/>
-To return your product, you should mail your product .
-<br />
-You will be responsible for paying for your own shipping costs for returning your item. Shipping costs are non-refundable. If you receive a refund, the cost of return shipping will be deducted from your refund.
-<br />Depending on where you live, the time it may take for your exchanged product to reach you may vary.
-<br />If you are shipping an item over a certain value, you should consider using a trackable shipping service or purchasing shipping insurance. We don’t guarantee that we will receive your returned item.
+          <b>Return Policy</b><br/><br/>
 
-<br/><br/>
-<b>Contact Us
-</b><br/><br/>
-If you have any questions on how to return your item to us, contact us at info@clusterfascination.com </div>
+          <strong>We do not accept returns or exchanges.</strong> All sales are final. Once an order is placed and confirmed, it cannot be returned or exchanged for any reason, including but not limited to:
+          <ul style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <li>Change of mind</li>
+            <li>Size or color preferences</li>
+            <li>Product not meeting expectations</li>
+            <li>Accidental orders</li>
+          </ul>
+          <br/>
+
+          <b>Refund Policy</b><br/><br/>
+
+          <strong>We do not offer refunds.</strong> All purchases are final and non-refundable. This policy applies to all products, regardless of the reason for the refund request.
+          <br/><br/>
+
+          <b>Defective or Damaged Products</b><br/><br/>
+
+          In the rare event that you receive a product that is defective or damaged due to our error, please contact us immediately at <strong>info@clusterfascination.com</strong> within 24 hours of delivery with:
+          <ul style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <li>Your order number</li>
+            <li>Clear photographs of the defect or damage</li>
+            <li>Description of the issue</li>
+          </ul>
+          We will review your case and, if approved, may offer a replacement for the same product (subject to availability). This is the only exception to our no-return, no-refund policy.
+          <br/><br/>
+
+          <b>Order Cancellation</b><br/><br/>
+
+          Orders can only be cancelled before they are shipped. Once an order has been shipped, cancellation is not possible. To cancel an order, please contact us immediately at <strong>info@clusterfascination.com</strong> with your order number.
+          <br/><br/>
+
+          <b>Quality Assurance</b><br/><br/>
+
+          We take great care in ensuring the quality of our products. All items are carefully inspected before shipping. We encourage customers to:
+          <ul style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <li>Review product descriptions, images, and specifications carefully</li>
+            <li>Check sizing information before ordering</li>
+            <li>Contact us with any questions before placing an order</li>
+          </ul>
+          <br/>
+
+          <b>Contact Us</b><br/><br/>
+
+          If you have any questions about this policy or need assistance with your order, please contact us at <strong>info@clusterfascination.com</strong>. Our customer service team is here to help ensure you have the best shopping experience possible.
+          <br/><br/>
+
+          <p style={{ fontSize: '0.9rem', color: '#666', fontStyle: 'italic', marginTop: '20px' }}>
+            <strong>Note:</strong> By placing an order on our website, you acknowledge that you have read, understood, and agree to this Refund and Return Policy.
+          </p>
+        </div>
       </div>
     </div>
     <Footer/>
@@ -63,4 +102,4 @@ If you have any questions on how to return your item to us, contact us at info@c
   )
 }
 
-export default TermsAndCondition
+export default RefundPolicy

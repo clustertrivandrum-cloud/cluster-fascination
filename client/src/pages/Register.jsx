@@ -249,8 +249,20 @@ function Register() {
         
         if (status === 400) {
           setErrorMessage(data?.message || 'Invalid registration data. Please check your inputs.');
+          // Set specific field error if available
+          if (data?.field === 'email') {
+            setErrors(prev => ({ ...prev, email: data.message }));
+          }
         } else if (status === 409) {
-          setErrorMessage('Email or username already exists. Please use different credentials.');
+          const errorMsg = data?.message || 'Email or username already exists. Please use different credentials.';
+          setErrorMessage(errorMsg);
+          
+          // If it's an email conflict, highlight the email field
+          if (errorMsg.toLowerCase().includes('email')) {
+            setErrors(prev => ({ ...prev, email: 'This email is already registered. Please use a different email.' }));
+          } else if (errorMsg.toLowerCase().includes('username')) {
+            setErrors(prev => ({ ...prev, username: 'This username is already taken. Please choose a different username.' }));
+          }
         } else if (status === 429) {
           setErrorMessage('Too many registration attempts. Please try again later.');
         } else if (status === 500) {

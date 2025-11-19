@@ -93,14 +93,15 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    // Refund information
+    // Refund information - DISABLED: No refunds or returns allowed
+    // Policy: All sales are final - No COD, No Returns, No Refunds
     refund_amount: {
         type: Number,
         default: 0
     },
     refund_status: {
         type: String,
-        enum: ["None", "Requested", "Processing", "Approved", "Rejected", "Completed"],
+        enum: ["None"], // Only "None" allowed - refunds disabled
         default: "None"
     },
     // Razorpay transaction details

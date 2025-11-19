@@ -9,12 +9,22 @@ function Breadcrumbs({ icon, title, route, light }) {
   const routes = route.slice(0, -1);
 
   return (
-    <Box mr={{ xs: 0, xl: 8 }}>
+    <Box 
+      mr={{ xs: 0, xl: 8 }}
+      sx={{
+        minWidth: 0,
+        overflow: "hidden",
+        flex: 1,
+      }}
+    >
       <MuiBreadcrumbs
         sx={{
           "& .MuiBreadcrumbs-separator": {
             color: ({ palette: { white, grey } }) => (light ? white.main : grey[600]),
           },
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
         }}
       >
         <Link to="/">
@@ -59,6 +69,11 @@ function Breadcrumbs({ icon, title, route, light }) {
         variant="h6"
         color={light ? "white" : "dark"}
         noWrap
+        sx={{
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          maxWidth: "100%",
+        }}
       >
         {title.replace("-", " ")}
       </Typography>

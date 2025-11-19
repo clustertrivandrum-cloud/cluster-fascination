@@ -25,7 +25,6 @@ function Footer() {
               <li><Link to={'/about'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Our Story</Link></li>
               <li><Link to={'/allproducts'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Collection</Link></li>
               <li><Link to={'/privacypolicy'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Privacy Policy</Link></li>
-              <li><Link to={'/shippingpolicy'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Delivery Policy</Link></li>
               <li><Link to={'/termsandcondition'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Terms & Conditions</Link></li>
               <li><Link to={'/refund-policy'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Return & Refund policy</Link></li>
             </ul>
@@ -46,9 +45,25 @@ function Footer() {
               Contact
             </h5>
             <ul className="list-unstyled" style={{lineHeight: '2.2'}}>
-              <li><a href="tel:7736225610" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-beige)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Call: +91 7736225610</a></li>
+              <li><a href="tel:+916282660237" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-beige)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Call: +91 6282 660 237</a></li>
               <li><a href="mailto:info@clusterfascination.com" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-beige)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Email: info@clusterfascination.com</a></li>
-              <li><a href="https://maps.app.goo.gl/uc96wrTnx9wfqmhJA" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px', display: 'block'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-beige)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Address: Avilunni Vilakath Veed, Narivanmood, Parambukkonam, Thirivananthapuram, 695528</a></li>
+              <li>
+                <a
+                  href="https://maps.app.goo.gl/uc96wrTnx9wfqmhJA"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    display: 'block'
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-beige)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Address: Cluster Fascination, 98/3499-3, Kallingal Rd, Kulathoor, Thiruvananthapuram, Kerala 695583
+                </a>
+              </li>
             </ul>
           </Col>
         </Row>

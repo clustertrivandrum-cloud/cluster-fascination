@@ -536,7 +536,7 @@ function Product() {
     
       <Footer />
       <WhatsAppButton 
-        phoneNumber="+919876543210" 
+        phoneNumber="+916282660237" // Replace with your WhatsApp business number
       />
     </ProductContext.Provider>
   );
