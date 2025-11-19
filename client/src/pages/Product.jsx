@@ -20,6 +20,7 @@ import TopNav from "../components/TopNav";
 import MiddleNav from "../components/MiddleNav";
 import MainNav from "../components/MainNav";
 import Footer from "../components/Footer";
+import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
 import { ServerURL } from "../services/baseUrl";
 import { ProductContext } from "../components/WhatsAppButton";
 import WhatsAppButton from "../components/WhatsAppButton";
@@ -334,6 +335,10 @@ function Product() {
       <TopNav />
       <MiddleNav notification={notif} />
       <MainNav />
+      
+      {/* Free Delivery Banner */}
+      <FreeDeliveryBanner />
+      
       <div>
         <Container className="product-details-container my-5">
           <Row>

@@ -62,10 +62,10 @@ function RefundPolicy() {
 
           <b>Defective or Damaged Products</b><br/><br/>
 
-          In the rare event that you receive a product that is defective or damaged due to our error, please contact us immediately at <strong>info@clusterfascination.com</strong> within 24 hours of delivery with:
+          In the rare event that you receive a product that is defective or damaged due to our error, please contact us immediately at <strong>clusterfascination@gmail.com</strong> within 24 hours of delivery with:
           <ul style={{ marginTop: '10px', marginBottom: '10px' }}>
             <li>Your order number</li>
-            <li>Clear photographs of the defect or damage</li>
+            <li>Clear photographs of the defect or damage</li>  
             <li>Description of the issue</li>
           </ul>
           We will review your case and, if approved, may offer a replacement for the same product (subject to availability). This is the only exception to our no-return, no-refund policy.
@@ -73,7 +73,7 @@ function RefundPolicy() {
 
           <b>Order Cancellation</b><br/><br/>
 
-          Orders can only be cancelled before they are shipped. Once an order has been shipped, cancellation is not possible. To cancel an order, please contact us immediately at <strong>info@clusterfascination.com</strong> with your order number.
+          Orders can only be cancelled before they are shipped. Once an order has been shipped, cancellation is not possible. To cancel an order, please contact us immediately at <strong>clusterfascination@gmail.com</strong> with your order number.
           <br/><br/>
 
           <b>Quality Assurance</b><br/><br/>
@@ -88,7 +88,7 @@ function RefundPolicy() {
 
           <b>Contact Us</b><br/><br/>
 
-          If you have any questions about this policy or need assistance with your order, please contact us at <strong>info@clusterfascination.com</strong>. Our customer service team is here to help ensure you have the best shopping experience possible.
+              If you have any questions about this policy or need assistance with your order, please contact us at <strong>clusterfascination@gmail.com</strong>. Our customer service team is here to help ensure you have the best shopping experience possible.
           <br/><br/>
 
           <p style={{ fontSize: '0.9rem', color: '#666', fontStyle: 'italic', marginTop: '20px' }}>

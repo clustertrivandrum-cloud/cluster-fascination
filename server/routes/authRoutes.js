@@ -12,13 +12,15 @@ const authorization = require("../middlewares/authorization");
 // Rate limiting for login attempts
 const loginRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 requests per windowMs
+  max: 10, // limit each IP to 10 requests per windowMs (increased from 5)
   message: {
     success: false,
-    message: "Too many login attempts, please try again later"
+    message: "Too many login attempts. Please try again in 15 minutes."
   },
   standardHeaders: true,
   legacyHeaders: false,
+  skipSuccessfulRequests: true, // Don't count successful logins against the limit
+  skipFailedRequests: false, // Count failed attempts
 });
 
 // Rate limiting for registration

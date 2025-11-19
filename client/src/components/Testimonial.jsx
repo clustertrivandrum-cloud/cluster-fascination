@@ -76,7 +76,7 @@ useEffect(()=>{
               <Slider {...settings}>
                 {items.map(item => (
                   <div key={item.id} className='text-center'>
-                    <article className='p-3'>"The boutique experience here is absolutely exceptional! Every product feels carefully curated and the quality is unmatched. It's like having a personal wellness concierge that understands my sophisticated taste."</article>
+                    <article className='p-3'>"The Cluster Fascination experience here is absolutely exceptional! Every product feels carefully curated and the quality is unmatched. It's like having a personal wellness concierge that understands my sophisticated taste."</article>
                     <img src={item.imageUrl} alt={item.name}  className="img-fluid mx-auto rounded-circle " width={80} />
                   </div>
                 ))}

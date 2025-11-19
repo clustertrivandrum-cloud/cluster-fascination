@@ -42,10 +42,10 @@ function TopNav() {
           </a>
         </div>
         <div className="social-media">
-          <a href="" aria-label="Instagram">
+          <a href="https://wa.me/message/ZWDKV2NYT662F1" aria-label="Instagram">
             <i className="fa-brands fa-instagram"></i>
           </a>
-          <a href="" aria-label="Facebook">
+          <a href="https://www.facebook.com/share/1BciYLfetm/" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
             <i className="fa-brands fa-facebook"></i>
           </a>
         </div>

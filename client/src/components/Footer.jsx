@@ -5,48 +5,270 @@ import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
-    <footer style={{
-      background: 'linear-gradient(135deg, var(--text-dark) 0%, #1a3a2e 100%)',
-      position: 'relative',
-      overflow: 'hidden'
-    }} className="text-light py-5">
+    <footer
+      style={{
+        background: 'linear-gradient(135deg, var(--text-dark) 0%, #1a3a2e 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+      className="text-light py-5"
+    >
       {/* Decorative watercolor spots */}
-      <div className="watercolor-spot spot-mint" style={{width: '200px', height: '200px', top: '20%', right: '5%', opacity: '0.1'}}></div>
-      <div className="watercolor-spot spot-pink" style={{width: '180px', height: '180px', bottom: '10%', left: '10%', opacity: '0.08'}}></div>
-      
-      <Container style={{position: 'relative', zIndex: 1}}>
+      <div
+        className="watercolor-spot spot-mint"
+        style={{ width: '200px', height: '200px', top: '20%', right: '5%', opacity: '0.1' }}
+      ></div>
+      <div
+        className="watercolor-spot spot-pink"
+        style={{ width: '180px', height: '180px', bottom: '10%', left: '10%', opacity: '0.08' }}
+      ></div>
+
+      <Container style={{ position: 'relative', zIndex: 1 }}>
         <Row>
+          {/* Navigation */}
           <Col md={4} className="mb-4">
-            <h5 className="elegant-script" style={{fontSize: '24px', color: 'var(--primary-mint)', marginBottom: '20px'}}>
+            <h5
+              className="elegant-script"
+              style={{
+                fontSize: '24px',
+                color: 'var(--primary-mint)',
+                marginBottom: '20px',
+              }}
+            >
               Fashion Jewellery & Accessories Store
             </h5>
-            <ul className="list-unstyled" style={{lineHeight: '2.2'}}>
-              <li><Link to={'/'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px', transition: 'all 0.3s ease'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Home</Link></li>
-              <li><Link to={'/about'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Our Story</Link></li>
-              <li><Link to={'/allproducts'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Collection</Link></li>
-              <li><Link to={'/privacypolicy'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Privacy Policy</Link></li>
-              <li><Link to={'/termsandcondition'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Terms & Conditions</Link></li>
-              <li><Link to={'/refund-policy'} style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Return & Refund policy</Link></li>
+            <ul className="list-unstyled" style={{ lineHeight: '2.2' }}>
+              <li>
+                <Link
+                  to="/"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--primary-mint)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--primary-mint)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                >
+                  Our Story
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/allproducts"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--primary-mint)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                >
+                  Collection
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/privacypolicy"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--primary-mint)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/termsandcondition"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--primary-mint)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/refund-policy"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--primary-mint)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                >
+                  Return & Refund Policy
+                </Link>
+              </li>
             </ul>
           </Col>
+
+          {/* Social Links */}
           <Col md={4} className="mb-4">
-            <h5 className="elegant-script" style={{fontSize: '24px', color: 'var(--accent-pink)', marginBottom: '20px'}}>
-              Fashion Jewellery & Accessories Store
+            <h5
+              className="elegant-script"
+              style={{
+                fontSize: '24px',
+                color: 'var(--accent-pink)',
+                marginBottom: '20px',
+              }}
+            >
+              Connect With Us
             </h5>
-            <ul className="list-unstyled" style={{lineHeight: '2.2'}}>
-              <li><a href="#" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-pink)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Instagram</a></li>
-              <li><a href="#" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-pink)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Facebook</a></li>
-              <li><a href="#" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-pink)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Contact</a></li>
-              <li><a href="#" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-pink)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Style Guide</a></li>
+            <ul className="list-unstyled" style={{ lineHeight: '2.2' }}>
+              <li>
+                <a
+                  href="https://www.instagram.com/clusterfascination?igsh=MXJhamx5ejljdWkzZQ=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-pink)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                  aria-label="Instagram"
+                >
+                  <i className="fab fa-instagram"></i> Instagram
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.facebook.com/share/1BciYLfetm/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-pink)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                  aria-label="Facebook"
+                >
+                  <i className="fab fa-facebook"></i> Facebook
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/message/ZWDKV2NYT662F1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-pink)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                  aria-label="WhatsApp Direct"
+                >
+                  <i className="fab fa-whatsapp"></i> WhatsApp Direct
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://chat.whatsapp.com/CNiGdxAEIAh3VxRXFo6Yyc?mode=ac_c"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-pink)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                  aria-label="WhatsApp Group"
+                >
+                  <i className="fab fa-whatsapp"></i> WhatsApp Group
+                </a>
+              </li>
             </ul>
           </Col>
+
+          {/* Contact Details */}
           <Col md={4} className="mb-4">
-            <h5 className="elegant-script" style={{fontSize: '24px', color: 'var(--accent-beige)', marginBottom: '20px'}}>
+            <h5
+              className="elegant-script"
+              style={{
+                fontSize: '24px',
+                color: 'var(--accent-beige)',
+                marginBottom: '20px',
+              }}
+            >
               Contact
             </h5>
-            <ul className="list-unstyled" style={{lineHeight: '2.2'}}>
-              <li><a href="tel:+916282660237" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-beige)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Call: +91 6282 660 237</a></li>
-              <li><a href="mailto:info@clusterfascination.com" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '14px'}} onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-beige)'} onMouseOut={(e) => e.currentTarget.style.color = '#E8F8F3'}>Email: info@clusterfascination.com</a></li>
+            <ul className="list-unstyled" style={{ lineHeight: '2.2' }}>
+              <li>
+                <a
+                  href="tel:+916282660237"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-beige)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                >
+                  <i className="fas fa-phone"></i> Call: +91 6282 660 237
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:clusterfascination@gmail.com"
+                  style={{
+                    color: '#E8F8F3',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-beige)')}
+                  onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
+                >
+                  <i className="fas fa-envelope"></i> Email: clusterfascination@gmail.com
+                </a>
+              </li>
               <li>
                 <a
                   href="https://maps.app.goo.gl/uc96wrTnx9wfqmhJA"
@@ -54,26 +276,43 @@ function Footer() {
                     color: '#E8F8F3',
                     fontFamily: 'var(--font-sans)',
                     fontSize: '14px',
-                    display: 'block'
+                    display: 'block',
                   }}
                   onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-beige)')}
                   onMouseOut={(e) => (e.currentTarget.style.color = '#E8F8F3')}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <i className="fas fa-map-marker-alt"></i>{' '}
                   Address: Cluster Fascination, 98/3499-3, Kallingal Rd, Kulathoor, Thiruvananthapuram, Kerala 695583
                 </a>
               </li>
             </ul>
           </Col>
         </Row>
-        <hr style={{borderTop: '1px solid var(--primary-mint)', opacity: '0.3', margin: '30px 0'}} />
+        <hr
+          style={{
+            borderTop: '1px solid var(--primary-mint)',
+            opacity: '0.3',
+            margin: '30px 0',
+          }}
+        />
         <Row className="align-items-center">
           <Col className="text-center">
-            <p className="mb-2 signature-text" style={{fontSize: '2rem', color: 'var(--primary-mint)'}}>Cluster Fascination</p>
-            <p className="mb-0" style={{color: '#E8F8F3', fontFamily: 'var(--font-sans)', fontSize: '13px'}}>
-              Copyright &copy; Cluster Fascination Fashion Jewellery & Accessories Store   {new Date().getFullYear()}
-            </p>  
+            <p className="mb-2 signature-text" style={{ fontSize: '2rem', color: 'var(--primary-mint)' }}>
+              Cluster Fascination
+            </p>
+            <p
+              className="mb-0"
+              style={{
+                color: '#E8F8F3',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '13px',
+              }}
+            >
+              Copyright &copy; Cluster Fascination Fashion Jewellery & Accessories Store{' '}
+              {new Date().getFullYear()}
+            </p>
           </Col>
         </Row>
       </Container>

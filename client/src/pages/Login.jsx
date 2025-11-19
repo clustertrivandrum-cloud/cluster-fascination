@@ -128,7 +128,11 @@ const Login = () => {
         if (status === 401) {
           setErrorMessage('Invalid email or password. Please check your credentials.');
         } else if (status === 429) {
-          setErrorMessage('Too many login attempts. Please try again later.');
+          const retryAfter = error.response.headers['retry-after'];
+          const message = retryAfter 
+            ? `Too many login attempts. Please try again in ${Math.ceil(retryAfter / 60)} minutes.`
+            : data?.message || 'Too many login attempts. Please try again in 15 minutes.';
+          setErrorMessage(message);
         } else if (status === 500) {
           setErrorMessage('Server error. Please try again later.');
         } else if (data?.message) {

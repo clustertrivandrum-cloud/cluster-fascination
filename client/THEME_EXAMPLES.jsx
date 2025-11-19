@@ -66,7 +66,7 @@ export const FeaturedSectionExample = () => (
           Featured Products
         </h2>
         <p style={{fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--text-muted)', fontStyle: 'italic'}}>
-          Handpicked for your wellness journey
+          Handpicked for you with Cluster Fascination
         </p>
         <div className="d-flex justify-content-center mt-3">
           <BranchDecoration width={150} />
@@ -145,7 +145,7 @@ export const TestimonialExample = () => (
               lineHeight: '1.8',
               marginBottom: '20px'
             }}>
-              "Cluster Fascination has transformed my wellness routine. 
+              "Cluster Fascination has transformed my jewellery journey. 
               The quality and care in every product is exceptional!"
             </p>
             <div className="d-flex align-items-center gap-3">

@@ -188,7 +188,7 @@ function Products({ setNotification }) {
         <div className="text-center mb-5">
           <h2 className="elegant-script mb-3" style={{fontSize: '2.5rem', color: 'var(--text-dark)'}}>
             <FlowerAccent size={30} color="var(--accent-pink)" />
-            Boutique Collection
+            Cluster Fascination Collection
             <FlowerAccent size={30} color="var(--accent-pink)" />
           </h2>
           <div className="d-flex justify-content-center mb-4">

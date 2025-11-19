@@ -6,6 +6,7 @@ import TopNav from "../components/TopNav";
 import MiddleNav from "../components/MiddleNav";
 import MainNav from "../components/MainNav";
 import Footer from "../components/Footer";
+import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
 import { ServerURL } from "../services/baseUrl";
 
 const Allproducts = () => {
@@ -307,6 +308,9 @@ const Allproducts = () => {
       <TopNav />
       <MiddleNav notification={notif} />
       <MainNav />
+      
+      {/* Free Delivery Banner */}
+      <FreeDeliveryBanner />
 
       <div className="container py-5" style={{ position: "relative" }}>
         {/* Decorative watercolor spots */}

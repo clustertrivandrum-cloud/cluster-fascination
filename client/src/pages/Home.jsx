@@ -12,6 +12,7 @@ import TopNav from "../components/TopNav";
 import MiddleNav from "../components/MiddleNav";
 import MainNav from "../components/MainNav";
 import Footer from "../components/Footer";
+import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails, clearUserDetails } from "../redux/actions/userActions";
 import WhatsAppButton from "../components/WhatsAppButton";
@@ -26,6 +27,9 @@ function Home() {
       <TopNav />
       <MiddleNav notification={notif} />
       <MainNav />
+      
+      {/* Free Delivery Banner */}
+      <FreeDeliveryBanner />
 
       {/* Hero Banner */}
       <Banner />
@@ -69,13 +73,12 @@ function Home() {
                 margin: "0 auto",
               }}
             >
-              Experience the perfect blend of nature and luxury with our
-              handcrafted products
+              Experience the perfect blend of nature and luxury with our handcrafted products
             </p>
           </div>
 
-          <Row className="g-4">
-            <Col md={6} lg={3}>
+          <Row className="g-4 justify-content-center text-center align-items-stretch">
+            <Col md={6} lg={3} className="d-flex align-items-stretch">
               <div
                 style={{
                   background: "white",
@@ -84,75 +87,12 @@ function Home() {
                   textAlign: "center",
                   boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
                   transition: "all 0.3s ease",
-                  height: "100%",
+                  width: "100%",
                   border: "2px solid transparent",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-10px)";
-                  e.currentTarget.style.borderColor = "var(--soft-mint)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.borderColor = "transparent";
-                }}
-              >
-                <div
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    background: "var(--light-mint)",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 25px",
-                  }}
-                >
-                  <i
-                    className="fas fa-leaf"
-                    style={{
-                      fontSize: "35px",
-                      color: "var(--primary-mint)",
-                    }}
-                  ></i>
-                </div>
-                <h4
-                  style={{
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "20px",
-                    fontWeight: "600",
-                    color: "var(--text-dark)",
-                    marginBottom: "15px",
-                  }}
-                >
-                  100% Natural
-                </h4>
-                <p
-                  style={{
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "14px",
-                    color: "var(--text-muted)",
-                    lineHeight: "1.7",
-                    margin: 0,
-                  }}
-                >
-                  Pure, organic ingredients sourced directly from nature for
-                  your wellness
-                </p>
-              </div>
-            </Col>
-
-            <Col md={6} lg={3}>
-              <div
-                style={{
-                  background: "white",
-                  borderRadius: "20px",
-                  padding: "40px 30px",
-                  textAlign: "center",
-                  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
-                  transition: "all 0.3s ease",
-                  height: "100%",
-                  border: "2px solid transparent",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-10px)";
@@ -203,13 +143,12 @@ function Home() {
                     margin: 0,
                   }}
                 >
-                  Handcrafted with care, ensuring the highest quality in every
-                  product
+                  Handcrafted with care, ensuring the highest quality in every product
                 </p>
               </div>
             </Col>
 
-            <Col md={6} lg={3}>
+            <Col md={6} lg={3} className="d-flex align-items-stretch">
               <div
                 style={{
                   background: "white",
@@ -218,8 +157,12 @@ function Home() {
                   textAlign: "center",
                   boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
                   transition: "all 0.3s ease",
-                  height: "100%",
+                  width: "100%",
                   border: "2px solid transparent",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-10px)";
@@ -270,13 +213,12 @@ function Home() {
                     margin: 0,
                   }}
                 >
-                  Quick and secure shipping to bring nature's goodness to your
-                  doorstep
+                  Quick and secure shipping to bring nature's goodness to your doorstep
                 </p>
               </div>
             </Col>
 
-            <Col md={6} lg={3}>
+            <Col md={6} lg={3} className="d-flex align-items-stretch">
               <div
                 style={{
                   background: "white",
@@ -285,8 +227,12 @@ function Home() {
                   textAlign: "center",
                   boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
                   transition: "all 0.3s ease",
-                  height: "100%",
+                  width: "100%",
                   border: "2px solid transparent",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-10px)";
@@ -326,7 +272,8 @@ function Home() {
                     marginBottom: "15px",
                   }}
                 >
-                  24/7 Support
+               Need Assistance
+
                 </h4>
                 <p
                   style={{
@@ -337,8 +284,7 @@ function Home() {
                     margin: 0,
                   }}
                 >
-                  Dedicated customer support team ready to assist you anytime
-                </p>
+ Please contact us, we'll get back to you as soon as possible.                </p>
               </div>
             </Col>
           </Row>
@@ -346,120 +292,9 @@ function Home() {
       </section>
 
       {/* Brands Section */}
-      <Brands />
 
       {/* Special Offer Banner */}
-      <section
-        style={{
-          background:
-            "linear-gradient(135deg, var(--primary-mint) 0%, var(--soft-mint) 100%)",
-          padding: "60px 0",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <Container>
-          <Row className="align-items-center">
-            <Col lg={8}>
-              <div style={{ color: "white" }}>
-                <h2
-                  style={{
-                    fontFamily: "var(--font-serif)",
-                    fontSize: "38px",
-                    fontWeight: "700",
-                    marginBottom: "15px",
-                  }}
-                >
-                  Subscribe to Our Newsletter
-                </h2>
-                <p
-                  style={{
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "16px",
-                    marginBottom: "0",
-                    opacity: "0.95",
-                  }}
-                >
-                  Get exclusive offers, wellness tips, and new product updates
-                  delivered to your inbox
-                </p>
-              </div>
-            </Col>
-            <Col lg={4}>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  marginTop: window.innerWidth < 992 ? "20px" : "0",
-                }}
-              >
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  style={{
-                    flex: 1,
-                    padding: "14px 20px",
-                    border: "none",
-                    borderRadius: "50px",
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "14px",
-                    outline: "none",
-                  }}
-                />
-                <Button
-                  style={{
-                    background: "var(--text-dark)",
-                    border: "none",
-                    borderRadius: "50px",
-                    padding: "14px 30px",
-                    fontFamily: "var(--font-sans)",
-                    fontWeight: "600",
-                    fontSize: "14px",
-                    whiteSpace: "nowrap",
-                    transition: "all 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = "white";
-                    e.target.style.color = "var(--primary-mint)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = "var(--text-dark)";
-                    e.target.style.color = "white";
-                  }}
-                >
-                  Subscribe
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-
-        {/* Decorative Elements */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-50px",
-            right: "-50px",
-            width: "200px",
-            height: "200px",
-            background: "rgba(255, 255, 255, 0.1)",
-            borderRadius: "50%",
-            pointerEvents: "none",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: "-80px",
-            left: "-80px",
-            width: "250px",
-            height: "250px",
-            background: "rgba(255, 255, 255, 0.08)",
-            borderRadius: "50%",
-            pointerEvents: "none",
-          }}
-        />
-      </section>
+    
 
       {/* Testimonials */}
       <Testimonial />
@@ -602,7 +437,7 @@ function Home() {
                 marginBottom: "20px",
               }}
             >
-              Ready to Experience Natural Wellness?
+              Discover Unique, Trendy Jewellery
             </h2>
             <p
               style={{
@@ -613,8 +448,7 @@ function Home() {
                 lineHeight: "1.7",
               }}
             >
-              Discover our curated collection of organic, handcrafted products
-              designed to enhance your natural beauty and wellbeing
+              Explore our exclusive product collections handcrafted for every occasion. Elevate your style with quality, affordable jewellery curated just for you.
             </p>
             <Button
               onClick={() => navigate("/allproducts")}
@@ -641,7 +475,7 @@ function Home() {
                   "0 10px 30px rgba(185, 234, 216, 0.3)";
               }}
             >
-              Shop Now <i className="fas fa-arrow-right ms-2"></i>
+              Browse Products <i className="fas fa-arrow-right ms-2"></i>
             </Button>
           </div>
         </Container>

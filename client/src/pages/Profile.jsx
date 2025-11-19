@@ -65,7 +65,7 @@ function Profile() {
                         <h2 className='elegant-script' style={{
                           fontSize: '1.8rem',
                           color: 'var(--dark-mint)'
-                        }}>Hello, Wellness Seeker</h2>
+                        }}>Hello, Dear Customer</h2>  
                     </div>
                     <div className='d-flex flex-column gap-2'>
                         <button 

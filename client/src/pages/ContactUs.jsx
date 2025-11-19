@@ -144,14 +144,14 @@ const ContactUs = () => {
                     style={{ color: 'var(--primary-mint)' }}
                   ></i>
                   <a
-                    href="mailto:info@clusterfascination.com"
+                    href="mailto:clusterfascination@gmail.com"
                     style={{
                       color: 'var(--text-dark)',
                       textDecoration: 'none',
                       fontSize: '1rem'
                     }}
                   >
-                    info@clusterfascination.com
+                    clusterfascination@gmail.com
                   </a>
                 </div>
                 <div className="mb-3">
