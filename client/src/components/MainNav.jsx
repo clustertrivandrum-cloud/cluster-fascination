@@ -15,10 +15,25 @@ function MainNav() {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
+  }, []);
+
+  // Check screen size
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsMobileSidebarOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const fetchCategories = async () => {
@@ -62,6 +77,7 @@ function MainNav() {
     setShowDropdown(false);
     setHoveredCategory(null);
     setIsNavCollapsed(true);
+    setIsMobileSidebarOpen(false);
     navigate(`/allproducts?category=${categoryId}`);
   };
 
@@ -70,6 +86,7 @@ function MainNav() {
     setHoveredCategory(null);
     setIsNavCollapsed(true);
     setExpandedMobileCategory(null);
+    setIsMobileSidebarOpen(false);
     navigate(
       `/allproducts?category=${categoryId}&subcategory=${subcategoryId}`,
     );
@@ -77,6 +94,7 @@ function MainNav() {
 
   const handleNavLinkClick = () => {
     setIsNavCollapsed(true);
+    setIsMobileSidebarOpen(false);
   };
 
   const toggleMobileCategory = (categoryId) => {
@@ -100,7 +118,13 @@ function MainNav() {
         <Container>
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
-            onClick={() => setIsNavCollapsed(!isNavCollapsed)}
+            onClick={() => {
+              if (isMobile) {
+                setIsMobileSidebarOpen(!isMobileSidebarOpen);
+              } else {
+                setIsNavCollapsed(!isNavCollapsed);
+              }
+            }}
             style={{
               border: "2px solid var(--text-dark)",
               borderRadius: "8px",
@@ -713,47 +737,438 @@ function MainNav() {
         </Container>
       </Navbar>
 
+      {/* Mobile Sidebar Overlay */}
+      {isMobile && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsMobileSidebarOpen(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.5)",
+              zIndex: 1040,
+              opacity: isMobileSidebarOpen ? 1 : 0,
+              visibility: isMobileSidebarOpen ? "visible" : "hidden",
+              transition: "opacity 0.3s ease, visibility 0.3s ease",
+            }}
+          />
+
+          {/* Sidebar */}
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              height: "100vh",
+              width: "320px",
+              maxWidth: "85vw",
+              background: "white",
+              zIndex: 1050,
+              transform: isMobileSidebarOpen
+                ? "translateX(0)"
+                : "translateX(-100%)",
+              transition: "transform 0.3s ease",
+              boxShadow: "2px 0 20px rgba(0, 0, 0, 0.15)",
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* Sidebar Header */}
+            <div
+              style={{
+                padding: "20px",
+                borderBottom: "2px solid var(--primary-mint)",
+                background: "linear-gradient(135deg, var(--primary-mint) 0%, var(--success-green) 100%)",
+                color: "white",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                position: "sticky",
+                top: 0,
+                zIndex: 1,
+              }}
+            >
+              <h5
+                style={{
+                  margin: 0,
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "600",
+                  fontSize: "18px",
+                }}
+              >
+                Menu
+              </h5>
+              <button
+                onClick={() => setIsMobileSidebarOpen(false)}
+                style={{
+                  background: "rgba(255, 255, 255, 0.2)",
+                  border: "none",
+                  borderRadius: "50%",
+                  width: "36px",
+                  height: "36px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  color: "white",
+                  fontSize: "18px",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "rgba(255, 255, 255, 0.3)";
+                  e.target.style.transform = "rotate(90deg)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                  e.target.style.transform = "rotate(0deg)";
+                }}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+
+            {/* Sidebar Content */}
+            <div style={{ flex: 1, padding: "10px 0" }}>
+              {/* Home Link */}
+              <Link
+                to={"/"}
+                onClick={handleNavLinkClick}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "16px 20px",
+                  color: "var(--text-dark)",
+                  textDecoration: "none",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "15px",
+                  fontWeight: "500",
+                  borderBottom: "1px solid #f0f0f0",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--light-mint)";
+                  e.currentTarget.style.color = "var(--primary-mint)";
+                  e.currentTarget.style.paddingLeft = "25px";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--text-dark)";
+                  e.currentTarget.style.paddingLeft = "20px";
+                }}
+              >
+                <i className="fas fa-home me-3" style={{ width: "20px" }}></i>
+                Home
+              </Link>
+
+              {/* All Products Link */}
+              <div
+                onClick={() => {
+                  setIsMobileSidebarOpen(false);
+                  navigate("/allproducts");
+                }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "16px 20px",
+                  color: "var(--primary-mint)",
+                  cursor: "pointer",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "15px",
+                  fontWeight: "600",
+                  borderBottom: "1px solid #f0f0f0",
+                  background: "var(--light-mint)",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--primary-mint)";
+                  e.currentTarget.style.color = "white";
+                  e.currentTarget.style.paddingLeft = "25px";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "var(--light-mint)";
+                  e.currentTarget.style.color = "var(--primary-mint)";
+                  e.currentTarget.style.paddingLeft = "20px";
+                }}
+              >
+                <i
+                  className="fas fa-th-large me-3"
+                  style={{ width: "20px" }}
+                ></i>
+                All Products
+              </div>
+
+              {/* Categories Section */}
+              <div
+                style={{
+                  borderBottom: "1px solid #f0f0f0",
+                  paddingBottom: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "12px 20px",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    color: "#999",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  Categories
+                </div>
+                {categories.map((category) => (
+                  <div key={category._id}>
+                    <div
+                      onClick={() => {
+                        if (
+                          category.subcategories &&
+                          category.subcategories.length > 0
+                        ) {
+                          toggleMobileCategory(category._id);
+                        } else {
+                          handleCategoryClick(category._id);
+                        }
+                      }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "14px 20px",
+                        cursor: "pointer",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "15px",
+                        fontWeight: "500",
+                        color: "var(--text-dark)",
+                        borderBottom: "1px solid #f0f0f0",
+                        transition: "all 0.2s ease",
+                        background:
+                          expandedMobileCategory === category._id
+                            ? "#fafafa"
+                            : "transparent",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (expandedMobileCategory !== category._id) {
+                          e.currentTarget.style.background = "var(--light-mint)";
+                          e.currentTarget.style.color = "var(--primary-mint)";
+                          e.currentTarget.style.paddingLeft = "25px";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (expandedMobileCategory !== category._id) {
+                          e.currentTarget.style.background = "transparent";
+                          e.currentTarget.style.color = "var(--text-dark)";
+                          e.currentTarget.style.paddingLeft = "20px";
+                        }
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <i
+                          className="fas fa-folder me-3"
+                          style={{ width: "20px", color: "var(--primary-mint)" }}
+                        ></i>
+                        <span>{category.name}</span>
+                      </div>
+                      {category.subcategories &&
+                        category.subcategories.length > 0 && (
+                          <i
+                            className={`fas fa-chevron-${
+                              expandedMobileCategory === category._id
+                                ? "up"
+                                : "down"
+                            }`}
+                            style={{
+                              fontSize: "12px",
+                              color: "var(--primary-mint)",
+                              transition: "transform 0.2s ease",
+                            }}
+                          ></i>
+                        )}
+                    </div>
+
+                    {/* Subcategories */}
+                    {expandedMobileCategory === category._id &&
+                      category.subcategories &&
+                      category.subcategories.length > 0 && (
+                        <div
+                          style={{
+                            background: "#f9f9f9",
+                            borderBottom: "1px solid #f0f0f0",
+                          }}
+                        >
+                          {category.subcategories.map((subcategory) => (
+                            <div
+                              key={subcategory._id}
+                              onClick={() =>
+                                handleSubcategoryClick(
+                                  category._id,
+                                  subcategory._id,
+                                )
+                              }
+                              style={{
+                                padding: "12px 20px 12px 55px",
+                                cursor: "pointer",
+                                fontFamily: "var(--font-sans)",
+                                fontSize: "14px",
+                                color: "var(--text-muted)",
+                                borderBottom: "1px solid #f0f0f0",
+                                transition: "all 0.2s ease",
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background =
+                                  "var(--light-mint)";
+                                e.currentTarget.style.color =
+                                  "var(--primary-mint)";
+                                e.currentTarget.style.paddingLeft = "60px";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "#f9f9f9";
+                                e.currentTarget.style.color = "var(--text-muted)";
+                                e.currentTarget.style.paddingLeft = "55px";
+                              }}
+                            >
+                              <i
+                                className="fas fa-circle"
+                                style={{
+                                  fontSize: "6px",
+                                  marginRight: "12px",
+                                  color: "var(--accent-pink)",
+                                }}
+                              ></i>
+                              {subcategory.name}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Profile Link */}
+              <Link
+                to={userDetails ? "/profile" : "/login"}
+                onClick={handleNavLinkClick}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "16px 20px",
+                  color: "var(--text-dark)",
+                  textDecoration: "none",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "15px",
+                  fontWeight: "500",
+                  borderBottom: "1px solid #f0f0f0",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--light-mint)";
+                  e.currentTarget.style.color = "var(--primary-mint)";
+                  e.currentTarget.style.paddingLeft = "25px";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--text-dark)";
+                  e.currentTarget.style.paddingLeft = "20px";
+                }}
+              >
+                <i
+                  className="fas fa-user me-3"
+                  style={{ width: "20px" }}
+                ></i>
+                Profile
+              </Link>
+
+              {/* Contact Link */}
+              <Link
+                to={"/contactus"}
+                onClick={handleNavLinkClick}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "16px 20px",
+                  color: "var(--text-dark)",
+                  textDecoration: "none",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "15px",
+                  fontWeight: "500",
+                  borderBottom: "1px solid #f0f0f0",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--light-mint)";
+                  e.currentTarget.style.color = "var(--primary-mint)";
+                  e.currentTarget.style.paddingLeft = "25px";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--text-dark)";
+                  e.currentTarget.style.paddingLeft = "20px";
+                }}
+              >
+                <i
+                  className="fas fa-envelope me-3"
+                  style={{ width: "20px" }}
+                ></i>
+                Contact
+              </Link>
+
+              {/* Style Guide Link */}
+              <Link
+                to={"/blogs"}
+                onClick={handleNavLinkClick}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "16px 20px",
+                  color: "var(--text-dark)",
+                  textDecoration: "none",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "15px",
+                  fontWeight: "500",
+                  borderBottom: "1px solid #f0f0f0",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--light-mint)";
+                  e.currentTarget.style.color = "var(--primary-mint)";
+                  e.currentTarget.style.paddingLeft = "25px";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--text-dark)";
+                  e.currentTarget.style.paddingLeft = "20px";
+                }}
+              >
+                <i
+                  className="fas fa-book me-3"
+                  style={{ width: "20px" }}
+                ></i>
+                Style Guide
+              </Link>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Add responsive styles */}
       <style>
         {`
           @media (max-width: 991px) {
             .navbar-collapse {
-              background: white;
-              padding: 10px 0;
-              margin-top: 10px;
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-              border-radius: 8px;
-            }
-
-            .navbar-collapse .nav {
-              flex-direction: column;
-              width: 100%;
-              gap: 0 !important;
-            }
-
-            .navbar-collapse .nav a,
-            .navbar-collapse .nav > div {
-              width: 100%;
-              padding: 15px 20px !important;
-              border-bottom: 1px solid #f0f0f0 !important;
-              justify-content: flex-start;
-              min-height: auto !important;
-            }
-
-            .navbar-collapse .nav a:hover,
-            .navbar-collapse .nav > div > span:hover {
-              background: var(--light-mint) !important;
-              color: var(--primary-mint) !important;
+              display: none !important;
             }
           }
 
-          @media (max-width: 768px) {
-            .navbar-brand {
-              font-size: 18px;
-            }
-
-            .navbar-toggler {
-              padding: 6px 10px;
+          @media (min-width: 992px) {
+            .mobile-sidebar {
+              display: none !important;
             }
           }
         `}

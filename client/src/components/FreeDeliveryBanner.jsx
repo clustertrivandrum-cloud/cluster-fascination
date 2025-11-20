@@ -6,14 +6,14 @@ const FreeDeliveryBanner = () => {
     <div
       className="free-delivery-banner"
       style={{
-        background: "linear-gradient(135deg, var(--primary-mint) 0%, var(--success-green) 100%)",
+        background: "linear-gradient(135deg, var(--text-dark) 0%, #193624 100%)",
         padding: "14px 0",
         textAlign: "center",
         color: "white",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.18)",
         position: "relative",
         overflow: "hidden",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.10)",
       }}
     >
       <Container>
@@ -39,7 +39,7 @@ const FreeDeliveryBanner = () => {
           
           <span
             style={{
-              fontFamily: "var(--font-sans)",
+              fontFamily: "'Times New Roman', Times, serif",
               fontSize: "15px",
               fontWeight: "600",
               letterSpacing: "0.3px",
@@ -66,7 +66,7 @@ const FreeDeliveryBanner = () => {
           }
           
           .free-delivery-banner:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18) !important;
           }
         `}
       </style>

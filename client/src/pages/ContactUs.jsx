@@ -108,7 +108,6 @@ const ContactUs = () => {
                   marginBottom: '30px'
                 }}
               >
-                We would love to hear from you!
               </p>
               <div className="contact-info" style={{ fontFamily: 'var(--font-serif)' }}>
                 <h4
@@ -169,8 +168,7 @@ const ContactUs = () => {
                       fontSize: '1rem'
                     }}
                   >
-                    Avilunni Vilakath Veed, Narivanmood, Parambukkonam, Thirivananthapuram, 695528
-                  </a>
+cluster fascination, 98/3499-3, Kallingal Rd, Kulathoor, Thiruvananthapuram, Kerala 695583                  </a>
                 </div>
                 {/* WhatsApp Direct */}
                 <div className="mb-3">
@@ -220,12 +218,12 @@ const ContactUs = () => {
                       fontWeight: '500'
                     }}
                   >
-                    Share on Facebook
+                    Connect on Facebook
                   </a>
                 </div>
                 {/* Google Drive / Docs Share */}
                 <div className="mb-3">
-                  <i className="fab fa-google-drive me-2" style={{ color: '#34a853' }}></i>
+                  <i className="fab fa-google me-2" style={{ color: '#ea4335' }}></i>
                   <a
                     href={GOOGLE_DRIVE_LINK}
                     target="_blank"
@@ -237,7 +235,7 @@ const ContactUs = () => {
                       fontWeight: '500'
                     }}
                   >
-                    View Google Doc/Drive
+                 View us on Google
                   </a>
                 </div>
               </div>

@@ -64,7 +64,7 @@ function Home() {
             >
               Why Choose Cluster Fascination?
             </h2>
-            <p
+            <p className="elegant-script"
               style={{
                 fontFamily: "var(--font-sans)",
                 fontSize: "16px",
@@ -73,8 +73,7 @@ function Home() {
                 margin: "0 auto",
               }}
             >
-              Experience the perfect blend of nature and luxury with our handcrafted products
-            </p>
+Discover affordable, trendy, and premium jewellery that elevates every occasion, handpicked with love.          </p>
           </div>
 
           <Row className="g-4 justify-content-center text-center align-items-stretch">
@@ -297,7 +296,7 @@ function Home() {
     
 
       {/* Testimonials */}
-      <Testimonial />
+      {/* <Testimonial /> */}
 
       {/* Stats Section */}
       <section
@@ -320,7 +319,7 @@ function Home() {
                     marginBottom: "10px",
                   }}
                 >
-                  10K+
+                  5K +  
                 </h3>
                 <p
                   style={{
@@ -330,7 +329,7 @@ function Home() {
                     margin: 0,
                   }}
                 >
-                  Happy Customers
+                Offline Customers
                 </p>
               </div>
             </Col>
@@ -355,7 +354,7 @@ function Home() {
                     margin: 0,
                   }}
                 >
-                  Natural Products
+                   Products
                 </p>
               </div>
             </Col>
@@ -380,8 +379,7 @@ function Home() {
                     margin: 0,
                   }}
                 >
-                  Organic Certified
-                </p>
+Quality Assured                </p>
               </div>
             </Col>
             <Col md={3} sm={6}>
@@ -405,8 +403,7 @@ function Home() {
                     margin: 0,
                   }}
                 >
-                  Customer Support
-                </p>
+World wide Delivery                 </p>
               </div>
             </Col>
           </Row>
@@ -453,26 +450,30 @@ function Home() {
             <Button
               onClick={() => navigate("/allproducts")}
               style={{
-                background: "var(--primary-mint)",
-                border: "none",
-                borderRadius: "50px",
-                padding: "16px 50px",
+                background: "white",
+                border: "2px solid var(--text-dark)",
+                borderRadius: "40px",
+                padding: "14px 40px",
                 fontFamily: "var(--font-sans)",
                 fontWeight: "600",
                 fontSize: "16px",
-                color: "white",
-                transition: "all 0.3s ease",
-                boxShadow: "0 10px 30px rgba(185, 234, 216, 0.3)",
+                color: "var(--text-dark)",
+                transition: "background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.2s",
+                boxShadow: "0 4px 14px rgba(51, 92, 88, 0.12)",
               }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = "translateY(-3px)";
+              onMouseEnter={e => {
+                e.target.style.background = "var(--primary-mint)";
+                e.target.style.color = "var(--text-dark)";
+                e.target.style.transform = "translateY(-2px)";
                 e.target.style.boxShadow =
-                  "0 15px 40px rgba(185, 234, 216, 0.4)";
+                  "0 6px 18px rgba(51, 92, 88, 0.18)";
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
+                e.target.style.background = "white";
+                e.target.style.color = "var(--text-dark)";
                 e.target.style.transform = "translateY(0)";
                 e.target.style.boxShadow =
-                  "0 10px 30px rgba(185, 234, 216, 0.3)";
+                  "0 4px 14px rgba(51, 92, 88, 0.12)";
               }}
             >
               Browse Products <i className="fas fa-arrow-right ms-2"></i>

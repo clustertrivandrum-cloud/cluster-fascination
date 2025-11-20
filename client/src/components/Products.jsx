@@ -26,7 +26,14 @@ function Products({ setNotification }) {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get(urlQuery);
-        setProducts(response.data.data);
+        const productsData = response.data.data || [];
+        
+        // Remove duplicates based on product _id
+        const uniqueProducts = productsData.filter((product, index, self) =>
+          index === self.findIndex((p) => p._id === product._id)
+        );
+        
+        setProducts(uniqueProducts);
         const wishlistResponse = await axiosInstance.get('/api/v1/user/getwishlist');
         setWishlistItems(wishlistResponse.data.data || []);
         const cartResponse = await axiosInstance.get('/api/v1/user/getcarts');
@@ -130,17 +137,22 @@ function Products({ setNotification }) {
     return cartItems && cartItems.some((item) => item.productId._id === productId);
   };
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 4000,
-    pauseOnHover: true,
-    arrows: true,
-    responsive: [
+  // Dynamic settings based on products count
+  const getSettings = () => {
+    const productCount = products.length;
+    const hasEnoughProducts = productCount > 4;
+    
+    return {
+      dots: true,
+      infinite: hasEnoughProducts,
+      speed: 500,
+      slidesToShow: Math.min(4, productCount),
+      slidesToScroll: 1,
+      autoplay: hasEnoughProducts,
+      autoplaySpeed: 4000,
+      pauseOnHover: true,
+      arrows: hasEnoughProducts,
+      responsive: [
       {
         breakpoint: 1200,
         settings: {
@@ -173,7 +185,10 @@ function Products({ setNotification }) {
         }
       }
     ]
+    };
   };
+
+  const settings = getSettings();
 
   return (
     <section className="products-section watercolor-bg py-5" style={{ position: 'relative', overflowX: 'hidden' }}>
@@ -188,7 +203,7 @@ function Products({ setNotification }) {
         <div className="text-center mb-5">
           <h2 className="elegant-script mb-3" style={{fontSize: '2.5rem', color: 'var(--text-dark)'}}>
             <FlowerAccent size={30} color="var(--accent-pink)" />
-            Cluster Fascination Collection
+            Exolore our Collection
             <FlowerAccent size={30} color="var(--accent-pink)" />
           </h2>
           <div className="d-flex justify-content-center mb-4">
@@ -204,8 +219,8 @@ function Products({ setNotification }) {
           <Col xs={12}>
             <div className="products-slider-container">
               <Slider {...settings}>
-                {products && products.length > 0 ? products.map(item => (
-                  <div key={item._id} className="slider-item">
+                {products && products.length > 0 ? products.map((item, index) => (
+                  <div key={`product-${item._id}-${index}`} className="slider-item">
                     <div className="product-card card-cluster">
                       <div className="product-image-container">
                         <Link to={`/product/${item._id}/${item.category}`}>
