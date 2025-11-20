@@ -10,11 +10,13 @@ import { useNavigate } from 'react-router-dom';
 import './Products.css';
 import { ServerURL } from '../services/baseUrl';
 import { SectionDivider, FlowerAccent } from './DecorativeElements';
+import Preloader from './Preloader';
 
 function Products({ setNotification }) {
   const [products, setProducts] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const userDetails = useSelector(state => state.userDetails);
@@ -25,6 +27,7 @@ function Products({ setNotification }) {
 
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const response = await axiosInstance.get(urlQuery);
         const productsData = response.data.data || [];
         
@@ -40,6 +43,8 @@ function Products({ setNotification }) {
         setCartItems(cartResponse.data.data.item || []);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -217,8 +222,11 @@ function Products({ setNotification }) {
         {/* Products Slider */}
         <Row>
           <Col xs={12}>
-            <div className="products-slider-container">
-              <Slider {...settings}>
+            {isLoading ? (
+              <Preloader message="Loading products..." />
+            ) : (
+              <div className="products-slider-container">
+                <Slider {...settings}>
                 {products && products.length > 0 ? products.map((item, index) => (
                   <div key={`product-${item._id}-${index}`} className="slider-item">
                     <div className="product-card card-cluster">
@@ -297,18 +305,21 @@ function Products({ setNotification }) {
                     </div>
                   </div>
                 )}
-              </Slider>
-            </div>
+                </Slider>
+              </div>
+            )}
             
             {/* Explore Collection Button */}
-            <div className="text-center mt-5">
-              <Link to="/allproducts">
-                <Button className="btn btn-cluster px-5 py-3">
-                  <i className="fa-solid fa-arrow-right me-2"></i>
-                  Explore Full Collection
-                </Button>
-              </Link>
-            </div>
+            {!isLoading && (
+              <div className="text-center mt-5">
+                <Link to="/allproducts">
+                  <Button className="btn btn-cluster px-5 py-3">
+                    <i className="fa-solid fa-arrow-right me-2"></i>
+                    Explore Full Collection
+                  </Button>
+                </Link>
+              </div>
+            )}
           </Col>
         </Row>
       </Container>

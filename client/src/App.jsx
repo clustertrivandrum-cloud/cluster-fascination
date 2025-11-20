@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import './App.css';
 import About from './pages/About';
 import Allproducts from './pages/Allproducts';
@@ -25,13 +26,25 @@ import TermsAndCondition from './pages/TermsAndCondition';
 import ShippingPolicy from './pages/ShippingPolicy';
 import RefundPolicy from './pages/RefundPolicy';
 import WhatsAppButton from './components/WhatsAppButton';
+import Preloader from './components/Preloader';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate initial app load
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); // Adjust timing as needed
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
-   <Provider store={store}> 
-     <Routes>
+      {isLoading && <Preloader fullPage={true} message="Welcome to Cluster Fascination" />}
+      <Provider store={store}> 
+        <Routes>
       <Route path='/' element={<Home/>}/>
       <Route path='/cart' element={<Cart/>}/>
       <Route path='/allproducts' element={<Allproducts/>}/>
