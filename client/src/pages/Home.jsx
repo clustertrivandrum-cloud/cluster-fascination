@@ -212,7 +212,7 @@ Discover affordable, trendy, and premium jewellery that elevates every occasion,
                     margin: 0,
                   }}
                 >
-                  Quick and secure shipping to bring nature's goodness to your doorstep
+                  Quick and secure shipping.
                 </p>
               </div>
             </Col>
