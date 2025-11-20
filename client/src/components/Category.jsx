@@ -98,7 +98,7 @@ function Category() {
         <div className="text-center mb-5">
           <h2 className="section-title elegant-script">Shop by Category</h2>
           <p className="section-subtitle">
-            Discover our curated wellness collections 
+            Discover our curated jewellery collections 
           </p>
           <div className="d-flex justify-content-center">
             <SectionDivider width={200} />

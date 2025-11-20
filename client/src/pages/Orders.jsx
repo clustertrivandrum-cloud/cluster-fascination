@@ -186,7 +186,7 @@ function Orders() {
                 My Orders
               </h1>
               <p style={{fontFamily: 'var(--font-serif)', fontSize: '1.1rem', color: 'var(--text-muted)', fontStyle: 'italic'}}>
-                <span className='flower-accent'>✿</span> Track Your Wellness Journey <span className='flower-accent'>✿</span>
+                <span className='flower-accent'>✿</span> Track Your Jewellery Journey <span className='flower-accent'>✿</span>
               </p>
               <div className="section-divider"></div>
             </div>

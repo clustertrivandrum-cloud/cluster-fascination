@@ -359,7 +359,7 @@ function Register() {
                   fontStyle: 'italic'
                 }}>
                   <span className='flower-accent'>✿</span>
-                  Begin Your Wellness Journey
+                  Begin Your Journey with our curated collections
                   <span className='flower-accent'>✿</span>
                 </p>
                 <div className="section-divider mt-3"></div>

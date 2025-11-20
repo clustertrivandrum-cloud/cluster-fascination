@@ -228,7 +228,7 @@ const Login = () => {
                   fontStyle: 'italic'
                 }}>
                   <span className='flower-accent'>✿</span>
-                  Unlocking Doors to Wellness
+                  Unlock access to our curated collections
                   <span className='flower-accent'>✿</span>
                 </p>
                 <div className="section-divider mt-3"></div>

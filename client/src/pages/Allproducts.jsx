@@ -355,7 +355,7 @@ const Allproducts = () => {
               fontStyle: "italic",
             }}
           >
-            <span className="flower-accent">✿</span> Discover Curated Wellness
+            <span className="flower-accent">✿</span> Discover Curated Jewellery Collections
             Products <span className="flower-accent">✿</span>
           </p>
           <div className="section-divider"></div>

@@ -28,7 +28,7 @@ function PageNotFound() {
             color: 'var(--text-muted)',
             maxWidth: '600px'
           }}>
-            The page you're looking for seems to have wandered off. Let's get you back to our wellness collection.
+            The page you're looking for seems to have wandered off. Let's get you back to our jewellery collection.
           </p>
           <Link to="/">
             <button className="btn btn-cluster">
