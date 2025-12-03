@@ -182,6 +182,16 @@ const getProductsHome = async (req, res) => {
       query.discount = { $gt: parseInt(sortDiscountGreaterThan) };
     }
 
+    if (req.query.random) {
+      const products = await Product.aggregate([
+        { $match: query },
+        { $sample: { size: limitNumber } },
+      ]);
+      await Product.populate(products, { path: "category", select: "name" });
+      await Product.populate(products, { path: "subcategory", select: "name" });
+      return res.status(200).json({ data: products });
+    }
+
     // Find products based on the constructed query
     const totalProducts = await Product.countDocuments(query);
     console.log("tpro", totalProducts);

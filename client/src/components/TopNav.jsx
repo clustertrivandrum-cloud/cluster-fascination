@@ -1,7 +1,7 @@
 import "../App.css";
 
 function TopNav() {
-  const whatsappNumber = "919072415009"; // Replace with your WhatsApp business number
+  const whatsappNumber = "916282660237"; // Replace with your WhatsApp business number
   const whatsappMessage = "Hello! I have an enquiry about your products.";
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 

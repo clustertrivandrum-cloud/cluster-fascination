@@ -24,6 +24,8 @@ import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
 import { ServerURL } from "../services/baseUrl";
 import { ProductContext } from "../components/WhatsAppButton";
 import WhatsAppButton from "../components/WhatsAppButton";
+import "../components/Products.css";
+import "../components/ProductGallery.css";
 
 function Product() {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -43,7 +45,7 @@ function Product() {
   let urlQuery = "";
 
   useEffect(() => {
-    urlQuery = `/api/v1/products/productshome?page=1&limit=8&sortField=createdAt&sortOrder=desc&category=${catId}`;
+    urlQuery = `/api/v1/products/productshome?page=1&limit=8&random=true`;
 
     const fetchData = async () => {
       try {
@@ -234,52 +236,6 @@ function Product() {
     return cartItemsData.some((item) => item.productId._id === productId);
   };
 
-  const product = {
-    name: "Broccoli Microgreen Seeds",
-    mrp: 1200,
-    price: 700,
-    images: [
-      "https://img.freepik.com/free-photo/top-view-vase-with-decorative-flowers_23-2147601269.jpg?size=626&ext=jpg&ga=GA1.1.1794837574.1691059421&semt=ais",
-      "https://img.freepik.com/premium-photo/white-frame-with-plant-it_81048-17009.jpg?size=626&ext=jpg&ga=GA1.1.1794837574.1691059421&semt=ais",
-      "https://img.freepik.com/free-photo/white-vase-with-bamboo-flowerpot_23-2147621577.jpg?size=626&ext=jpg&ga=GA1.1.1794837574.1691059421&semt=ais",
-      "https://images.unsplash.com/photo-1493510296082-689a0d42701b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MjZ8MjEwMDExNXx8ZW58MHx8fHx8",
-    ],
-    details: ["Detoxifies Body", "Improved Digestion", "Prevents Cancer"],
-    about: [
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique molestias consequuntur commodi cupiditate inventore ipsum sit deleniti. Quod nulla rerum dolor quidem accusamus ea repellat, ratione enim tenetur sint perferendis?",
-    ],
-  };
-
-  const similarProducts = [
-    {
-      id: 1,
-      name: "Radish White Microgreen seeds",
-      image:
-        "https://t4.ftcdn.net/jpg/03/88/04/41/240_F_388044101_IidJjwi2bonGwWDGZZqgPz7oxaowhsjp.jpg",
-      price: 1999,
-    },
-    {
-      id: 2,
-      name: "Radish White Microgreen seeds",
-      image:
-        "https://t4.ftcdn.net/jpg/03/88/04/41/240_F_388044101_IidJjwi2bonGwWDGZZqgPz7oxaowhsjp.jpg",
-      price: 2499,
-    },
-    {
-      id: 3,
-      name: "Radish White Microgreen seeds",
-      image:
-        "https://t4.ftcdn.net/jpg/03/88/04/41/240_F_388044101_IidJjwi2bonGwWDGZZqgPz7oxaowhsjp.jpg",
-      price: 2999,
-    },
-    {
-      id: 4,
-      name: "Radish White Microgreen seeds",
-      image:
-        "https://t4.ftcdn.net/jpg/03/88/04/41/240_F_388044101_IidJjwi2bonGwWDGZZqgPz7oxaowhsjp.jpg",
-      price: 3999,
-    },
-  ];
 
   const sliderSettings = {
     dots: products.length > 1,
@@ -335,110 +291,91 @@ function Product() {
       <TopNav />
       <MiddleNav notification={notif} />
       <MainNav />
-      
+
       {/* Free Delivery Banner */}
       <FreeDeliveryBanner />
-      
+
       <div>
         <Container className="product-details-container my-5">
           <Row>
             {/* Render Carousel on mobile screens */}
-            <Col xs={12} className="mb-4 d-md-none">
-              <Carousel
-                interval={null}
-                indicators={false}
-                className="main-image-carousel"
-              >
-                {productData.image &&
-                  productData?.image?.map((image1, index) => (
+            {/* Unified Product Gallery Section */}
+            <Col xs={12} lg={6} className="mb-4">
+              {/* Mobile Carousel View */}
+              <div className="d-md-none mobile-gallery-carousel mb-3">
+                <Carousel interval={null} indicators={true} className="shadow-sm rounded-4 overflow-hidden">
+                  {productData.image && productData.image.map((image1, index) => (
                     <Carousel.Item key={index}>
                       <Image
                         src={`${ServerURL}/uploads/${image1}`}
-                        alt={`Image ${index}`}
+                        alt={`Product view ${index + 1}`}
                         fluid
                         className="main-image"
-                        style={{width:'100%', height:'350px', objectFit:'cover'}}
+                        style={{ width: '100%', height: '400px', objectFit: 'cover' }}
                       />
                     </Carousel.Item>
                   ))}
-              </Carousel>
-            </Col>
-            {/* Render main image and thumbnails on larger screens */}
-            <Col lg={6} className="mb-4 d-none d-md-block">
-              <Row className="thumbnail-images">
-                <Col xs={3} md={3} lg={3} className="">
-                  {productData.image &&
-                    productData?.image?.map((image1, index) => (
-                      <div key={index} className="border mb-1" style={{width:'100%', height:'100px'}}>
-                        <Image
-                          src={`${ServerURL}/uploads/${image1}`}
-                          alt={`Thumbnail ${index}`}
-                          fluid
-                          style={{ width: "100%",  height:'100%', objectFit:'cover'}}
-                          className={`thumbnail-image ${
-                            index === selectedImage ? "selected" : ""
-                          }`}
-                          onClick={() => handleThumbnailClick(index)}
-                        />
-                      </div>
-                    ))}
-                </Col>
-                <Col xs={9} md={9} lg={9} className="border">
-                  <div className="main-image mt-3 " style={{height:'400px'}}>
-                    {productData.image && (
+                </Carousel>
+              </div>
+
+              {/* Desktop Gallery View */}
+              <div className="d-none d-md-block product-gallery-container">
+                <div className="main-image-wrapper">
+                  {productData.image && (
+                    <Image
+                      src={`${ServerURL}/uploads/${productData.image[selectedImage]}`}
+                      alt={productData.name}
+                      className="main-image-display"
+                      fluid
+                    />
+                  )}
+                  {/* Optional: Add zoom hint or badge here if needed */}
+                </div>
+
+                <div className="thumbnail-list mt-3">
+                  {productData.image && productData.image.map((image1, index) => (
+                    <div
+                      key={index}
+                      className={`thumbnail-item ${selectedImage === index ? 'active' : ''}`}
+                      onClick={() => handleThumbnailClick(index)}
+                    >
                       <Image
-                        src={`${ServerURL}/uploads/${productData.image[selectedImage]}`}
-                        fluid
-                        style={{ width: "100%",  height:'100%', objectFit:'cover'}}
+                        src={`${ServerURL}/uploads/${image1}`}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="thumbnail-img"
                       />
-                    )}{" "}
-                  </div>
-                </Col>
-              </Row>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </Col>
             <Col lg={6}>
-              <div className="product-info mb-4">
-                <h1 className="product-name fw-bold ">{productData.name}</h1>
-                <p className="text-muted fw-lighter m-0">
-                  MRP:{" "}
-                  <span className="text-decoration-line-through">
+              <div className="product-info mb-4 ps-lg-5">
+                <h1 className="product-name fw-bold mb-3" style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-dark)' }}>{productData.name}</h1>
+                <div className="d-flex align-items-center mb-3">
+                  <span className="text-muted text-decoration-line-through me-2" style={{ fontFamily: 'var(--font-sans)' }}>
                     ₹{productData.price}
-                  </span>{" "}
-                </p>
-                <h3 className="font-weight-bold">
-                  Price: ₹{productData.sale_rate}
-                </h3>
-
-                {productData.price && productData.sale_rate && (
-                  <p className="m-0 text-success">
-                    You save:{" "}
-                    {(
-                      ((productData.price - productData.sale_rate) /
-                        productData.price) *
-                      100
-                    ).toFixed(2)}
-                    %
-                  </p>
-                )}
-                <p className="text-muted">(inclusive of all taxes)</p>
-
-                <div className="product-details mb-3">
-                  <h4 className="bg-success-subtle p-1 d-inline-block ">
-                    Benefits
-                  </h4>
-                  <ListGroup variant="flush">
-                    {product.details.map((detail, index) => (
-                      <ListGroup.Item key={index}>
-                        <i className="fa-regular fa-circle-check text-success "></i>{" "}
-                        {detail}
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
+                  </span>
+                  <h3 className="font-weight-bold m-0" style={{ color: 'var(--success-green)', fontFamily: 'var(--font-sans)' }}>
+                    ₹{productData.sale_rate}
+                  </h3>
+                  {productData.price && productData.sale_rate && (
+                    <span className="ms-3 badge rounded-pill" style={{ background: 'var(--light-mint)', color: 'var(--success-green)', border: '1px solid var(--soft-mint)' }}>
+                      Save {(
+                        ((productData.price - productData.sale_rate) /
+                          productData.price) *
+                        100
+                      ).toFixed(0)}%
+                    </span>
+                  )}
                 </div>
-                <div className="product-actions">
+
+                <p className="text-muted small mb-4">(inclusive of all taxes)</p>
+
+                <div className="product-actions d-flex gap-3">
                   <Button
-                    variant="success"
-                    className="me-2"
+                    className="btn-add-cart flex-grow-1"
+                    style={{ background: 'var(--primary-mint)', color: 'var(--text-dark)', border: 'none' }}
                     onClick={() => buyNow(productData._id)}
                   >
                     Buy Now
@@ -447,6 +384,8 @@ function Product() {
                   {!isInCartData(proId) ? (
                     <Button
                       variant="outline-success"
+                      className="flex-grow-1"
+                      style={{ borderRadius: '25px', borderColor: 'var(--success-green)', color: 'var(--success-green)' }}
                       onClick={() => addCartData(proId)}
                     >
                       Add to Cart
@@ -454,6 +393,8 @@ function Product() {
                   ) : (
                     <Button
                       variant="outline-danger"
+                      className="flex-grow-1"
+                      style={{ borderRadius: '25px' }}
                       onClick={() => removeCartData(proId)}
                     >
                       Remove from Cart
@@ -471,66 +412,56 @@ function Product() {
                   <Accordion.Header>About this item</Accordion.Header>
                   <Accordion.Body>{productData.description}</Accordion.Body>
                 </Accordion.Item>
-                <Accordion.Item eventKey="1">
-                  <Accordion.Header>Benefits</Accordion.Header>
-                  <Accordion.Body>
-                    {" "}
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quibusdam sit ut sequi cumque ab ipsum molestias. Doloribus
-                    esse perspiciatis necessitatibus quam, doloremque porro unde
-                    excepturi corrupti voluptas accusamus quibusdam officiis.
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Possimus obcaecati accusamus iste temporibus mollitia
-                    laboriosam consequatur assumenda quasi eveniet eligendi illo
-                    sapiente deleniti nemo, sequi at voluptatibus ab eius
-                    repudiandae.
-                  </Accordion.Body>
-                </Accordion.Item>
-                <Accordion.Item eventKey="2">
-                  <Accordion.Header>Other info</Accordion.Header>
-                  <Accordion.Body>
-                    {" "}
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quibusdam sit ut sequi cumque ab ipsum molestias. Doloribus
-                    esse perspiciatis necessitatibus quam, doloremque porro unde
-                    excepturi corrupti voluptas accusamus quibusdam officiis.
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Possimus obcaecati accusamus iste temporibus mollitia
-                    laboriosam consequatur assumenda quasi eveniet eligendi illo
-                    sapiente deleniti nemo, sequi at voluptatibus ab eius
-                    repudiandae.
-                  </Accordion.Body>
-                </Accordion.Item>
+
               </Accordion>
             </Col>
           </Row>
 
           <Row className="mb-4 container-fluid ">
-  <Col md={products.length === 1 ? 3 : undefined}>
-    <h3 className="mb-4">Similar Products</h3>
-    <Slider {...sliderSettings}>
-      {products.map(item => (
-        <div key={item._id} className="d-flex justify-content-center p-3">
-          <div className="shadow p-3 bg-white rounded" style={{  width: "80%" }}>
-            <Link to={`/product/${item._id}/${item.category}`}>
-              <Image src={`${ServerURL}/uploads/${item.image[0]}`} alt={item.name} fluid className="mx-auto mb-2" style={{ mixBlendMode: 'multiply' }} />
-            </Link>
-            <Link to={'/product'} className='text-muted fw-bold '><h6>{item.name}</h6></Link>
-            <p className="fw-bold m-1">₹{item.sale_rate}</p>
-            <span className='m-1 text-muted text-decoration-line-through'>₹{item.price}</span>
-            <span className='text-success fw-bold bg-success-subtle p-1'>{item.discount}% off</span>
-            <div className="d-flex justify-content-between mt-3 ">
-              <button className="btn btn-success rounded-3">
-                <i className="fa-solid fa-heart"></i>
-              </button>
-              <button className="btn btn-outline-success rounded-3"><i className="fas fa-shopping-cart"></i></button>
-            </div>
-          </div>
-        </div>
-      ))}
-    </Slider>
-  </Col>
-</Row>
+            <Col md={products.length === 1 ? 3 : undefined}>
+              <h3 className="mb-4" style={{ fontFamily: 'var(--font-serif)' }}>Similar Products</h3>
+              <Slider {...sliderSettings} className="products-slider-container">
+                {products.map(item => (
+                  <div key={item._id} className="slider-item">
+                    <div className="product-card">
+                      <div className="product-image-container">
+                        <Link to={`/product/${item._id}/${item.category?._id || item.category}`}>
+                          <Image src={`${ServerURL}/uploads/${item.image[0]}`} alt={item.name} className="product-image" />
+                        </Link>
+                        {item.discount > 0 && (
+                          <div className="product-badge badge-cluster">
+                            {item.discount}% OFF
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="product-info">
+                        <Link to={`/product/${item._id}/${item.category?._id || item.category}`} className="product-link">
+                          <h6 className="product-title">{item.name}</h6>
+                        </Link>
+
+                        <div className="product-pricing">
+                          <div className="price-details">
+                            <span className="product-price">₹{item.sale_rate}</span>
+                            <span className="original-price">₹{item.price}</span>
+                          </div>
+                        </div>
+
+                        <div className="product-actions">
+                          <button className="btn-wishlist">
+                            <i className="fa-solid fa-heart"></i>
+                          </button>
+                          <button className="btn-add-cart">
+                            Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </Col>
+          </Row>
 
           <Row>
             <Review productId={productData._id} />
@@ -538,9 +469,9 @@ function Product() {
         </Container>
       </div>
 
-    
+
       <Footer />
-      <WhatsAppButton 
+      <WhatsAppButton
         phoneNumber="+916282660237" // Replace with your WhatsApp business number
       />
     </ProductContext.Provider>

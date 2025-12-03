@@ -24,7 +24,7 @@ const Login = () => {
   // Input validation function
   const validateInput = (name, value) => {
     const newErrors = { ...errors };
-    
+
     switch (name) {
       case 'email':
         if (!value.trim()) {
@@ -47,7 +47,7 @@ const Login = () => {
       default:
         break;
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -58,42 +58,42 @@ const Login = () => {
       ...prevDetails,
       [name]: value,
     }));
-    
+
     // Clear messages when user starts typing
     if (successMessage) setSuccessMessage('');
     if (errorMessage) setErrorMessage('');
-    
+
     // Validate input in real-time
     validateInput(name, value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Clear previous messages
     setErrorMessage('');
     setSuccessMessage('');
-    
+
     // Validate all fields before submission
     const emailValid = validateInput('email', userDetails.email);
     const passwordValid = validateInput('password', userDetails.password);
-    
+
     if (!emailValid || !passwordValid) {
       setErrorMessage('Please fix the errors above before submitting.');
       return;
     }
-    
+
     // Check for empty fields
     if (!userDetails.email.trim() || !userDetails.password.trim()) {
       setErrorMessage('Please fill in all required fields.');
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
       const response = await axiosInstance.post('/api/v1/auth/login', userDetails);
-      
+
       // Check if login was successful
       if (response.data.proceed && response.data.data && response.data.data.token) {
         // Store tokens securely using TokenManager
@@ -101,10 +101,10 @@ const Login = () => {
           response.data.data.token.accessToken,
           response.data.data.token.refreshToken
         );
-        
+
         if (success) {
           setSuccessMessage('Login successful! Redirecting...');
-          
+
           // Redirect after a short delay to show success message
           setTimeout(() => {
             navigate('/');
@@ -112,24 +112,24 @@ const Login = () => {
         } else {
           setErrorMessage('Login failed. Unable to store authentication data.');
         }
-        
+
       } else {
         setErrorMessage('Login failed. Invalid server response.');
       }
 
     } catch (error) {
       console.error('Error during login:', error);
-      
+
       // Handle different types of errors
       if (error.response) {
         const status = error.response.status;
         const data = error.response.data;
-        
+
         if (status === 401) {
           setErrorMessage('Invalid email or password. Please check your credentials.');
         } else if (status === 429) {
           const retryAfter = error.response.headers['retry-after'];
-          const message = retryAfter 
+          const message = retryAfter
             ? `Too many login attempts. Please try again in ${Math.ceil(retryAfter / 60)} minutes.`
             : data?.message || 'Too many login attempts. Please try again in 15 minutes.';
           setErrorMessage(message);
@@ -152,78 +152,62 @@ const Login = () => {
 
 
   return (
-   <>
-     {/* Header with Cluster Fascination Theme */}
-     <div className='watercolor-bg' style={{
-       background: 'linear-gradient(135deg, var(--cream-white) 0%, var(--light-mint) 50%, var(--soft-pink) 100%)',
-       position: 'relative',
-       overflow: 'hidden'
-     }}>
-       {/* Watercolor spots */}
-       <div className="watercolor-spot spot-mint" 
-            style={{width: '300px', height: '300px', top: '-100px', right: '10%'}}></div>
-       <div className="watercolor-spot spot-beige" 
-            style={{width: '250px', height: '250px', bottom: '-50px', left: '5%'}}></div>
-       
-      <div className='container p-3 py-4'>
-        <div className='d-flex justify-content-between align-items-center'>
-         <Link to={'/'}>
-            <div className='floating-element'>
-              <img src={logo} className='img-fluid' width={150} alt="Cluster Fascination Logo" 
-                   style={{filter: 'drop-shadow(0 2px 8px rgba(185, 234, 216, 0.3))'}} />
+    <>
+      {/* Header with Cluster Fascination Theme */}
+      <div className='watercolor-bg' style={{
+        background: 'linear-gradient(135deg, var(--cream-white) 0%, var(--light-mint) 50%, var(--soft-pink) 100%)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Watercolor spots */}
+        <div className="watercolor-spot spot-mint"
+          style={{ width: '300px', height: '300px', top: '-100px', right: '10%' }}></div>
+        <div className="watercolor-spot spot-beige"
+          style={{ width: '250px', height: '250px', bottom: '-50px', left: '5%' }}></div>
+
+        <div className='container p-3 py-4'>
+          <div className='d-flex justify-content-between align-items-center'>
+            <Link to={'/'}>
+              <div className='floating-element'>
+                <img src={logo} className='img-fluid' width={150} alt="Cluster Fascination Logo"
+                  style={{ filter: 'drop-shadow(0 2px 8px rgba(185, 234, 216, 0.3))' }} />
+              </div>
+            </Link>
+            <div>
+              <p className='d-none d-md-block elegant-script mb-0'
+                style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-dark)' }}>
+                Fashion Jewellery & Accessories Store collection
+              </p>
             </div>
-         </Link>
-          <div>
-            <p className='d-none d-md-block elegant-script mb-0' 
-               style={{fontSize: '20px', fontWeight: '600', color: 'var(--text-dark)'}}>
-              Fashion Jewellery & Accessories Store collection    
-            </p>
-          </div>
-          <div style={{width: '150px'}}>
-            {/* Spacer for alignment */}
+            <div style={{ width: '150px' }}>
+              {/* Spacer for alignment */}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
       {/* Login Form Section */}
-      <div className="container p-5 mt-5" style={{position: 'relative'}}>
+      <div className="container p-5 mt-5" style={{ position: 'relative' }}>
         {/* Decorative leaf */}
-        <div style={{position: 'absolute', top: '-30px', right: '50px', opacity: '0.3'}}>
+        <div style={{ position: 'absolute', top: '-30px', right: '50px', opacity: '0.3' }}>
           <LeafDecoration size={60} />
         </div>
-        
+
         <div className="">
           <Row className="align-items-center">
-            <Col md={6} className='d-none d-md-block'>
-              <div style={{position: 'relative'}}>
-                <img
-                  src="https://images.unsplash.com/photo-1504541891213-1b1dfdadb739?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MTV8MjEwMDExNXx8ZW58MHx8fHx8"
-                  alt="Wellness" 
-                  style={{
-                    width:'100%', 
-                    borderRadius: '25px',
-                    boxShadow: '0 10px 30px rgba(185, 234, 216, 0.2)'
-                  }}
-                />
-                {/* Decorative flower overlay */}
-                <div style={{position: 'absolute', top: '20px', right: '20px'}}>
-                  <FlowerAccent size={40} color="var(--accent-pink)" style={{opacity: 0.8}} />
-                </div>
-              </div>
-            </Col>
-            <Col md={6} className='card-cluster p-5' style={{
+
+            <Col md={8} lg={6} className='mx-auto card-cluster p-5' style={{
               background: 'white',
               borderRadius: '25px',
               boxShadow: '0 10px 35px rgba(185, 234, 216, 0.25)'
             }}>
               <div className='text-center mb-4'>
-                <h2 className='elegant-script' style={{fontSize: '2.5rem', color: 'var(--text-dark)'}}>
+                <h2 className='elegant-script' style={{ fontSize: '2.5rem', color: 'var(--text-dark)' }}>
                   Welcome Back
                 </h2>
                 <p style={{
-                  fontFamily: 'var(--font-serif)', 
-                  fontSize: '1.1rem', 
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: '1.1rem',
                   color: 'var(--text-muted)',
                   fontStyle: 'italic'
                 }}>
@@ -233,7 +217,7 @@ const Login = () => {
                 </p>
                 <div className="section-divider mt-3"></div>
               </div>
-              
+
               {/* Success Message */}
               {successMessage && (
                 <Alert variant="success" className="mb-3" style={{
@@ -247,7 +231,7 @@ const Login = () => {
                   </div>
                 </Alert>
               )}
-              
+
               {/* Error Message */}
               {errorMessage && (
                 <Alert variant="danger" className="mb-3" style={{
@@ -261,7 +245,7 @@ const Login = () => {
                   </div>
                 </Alert>
               )}
-              
+
               <Form onSubmit={handleSubmit}>
                 <div>
                   {/* Email Input with Theme Styling */}
@@ -275,7 +259,7 @@ const Login = () => {
                     }}>
                       Email address
                     </Form.Label>
-                    <Form.Control 
+                    <Form.Control
                       type="email"
                       name="email"
                       placeholder="name@example.com"
@@ -294,7 +278,7 @@ const Login = () => {
                     />
                   </Form.Group>
                   {errors.email && (
-                    <div className="text-danger small mb-3" style={{fontSize: '0.85rem'}}>
+                    <div className="text-danger small mb-3" style={{ fontSize: '0.85rem' }}>
                       {errors.email}
                     </div>
                   )}
@@ -330,7 +314,7 @@ const Login = () => {
                     <span
                       className="position-absolute top-50 end-0 translate-middle-y me-3"
                       onClick={() => setShowPassword(!showPassword)}
-                      style={{ 
+                      style={{
                         cursor: "pointer",
                         fontSize: '1.2rem',
                         zIndex: 10
@@ -340,15 +324,15 @@ const Login = () => {
                     </span>
                   </Form.Group>
                   {errors.password && (
-                    <div className="text-danger small mb-3" style={{fontSize: '0.85rem'}}>
+                    <div className="text-danger small mb-3" style={{ fontSize: '0.85rem' }}>
                       {errors.password}
                     </div>
                   )}
 
                   {/* Login Button and Links */}
                   <div className='mt-4'>
-                    <button 
-                      className='btn btn-cluster w-100 mb-3' 
+                    <button
+                      className='btn btn-cluster w-100 mb-3'
                       type="submit"
                       disabled={isLoading || Object.keys(errors).length > 0}
                       style={{
@@ -368,7 +352,7 @@ const Login = () => {
                         'Login to Your Account'
                       )}
                     </button>
-                    
+
                     <div className='text-center'>
                       <p style={{
                         fontFamily: 'var(--font-sans)',
@@ -376,8 +360,8 @@ const Login = () => {
                         fontSize: '0.95rem'
                       }}>
                         New to Cluster Fascination?{' '}
-                        <Link 
-                          to={'/register'} 
+                        <Link
+                          to={'/register'}
                           style={{
                             color: 'var(--success-green)',
                             fontWeight: '600',
@@ -397,7 +381,7 @@ const Login = () => {
           </Row>
         </div>
       </div>
-   </>
+    </>
   );
 };
 

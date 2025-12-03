@@ -567,11 +567,10 @@ function MainNav() {
                           {category.subcategories &&
                             category.subcategories.length > 0 && (
                               <i
-                                className={`fas fa-chevron-${
-                                  expandedMobileCategory === category._id
-                                    ? "up"
-                                    : "down"
-                                }`}
+                                className={`fas fa-chevron-${expandedMobileCategory === category._id
+                                  ? "up"
+                                  : "down"
+                                  }`}
                                 style={{
                                   fontSize: "10px",
                                   color: "var(--primary-mint)",
@@ -668,7 +667,7 @@ function MainNav() {
                   }
                 }}
               >
-                Profile
+                My Profile
               </Link>
 
               <Link
@@ -702,36 +701,6 @@ function MainNav() {
                 Contact
               </Link>
 
-              <Link
-                to={"/blogs"}
-                onClick={handleNavLinkClick}
-                style={{
-                  color: "var(--text-dark)",
-                  fontFamily: "var(--font-sans)",
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  padding: "0 20px",
-                  display: "flex",
-                  alignItems: "center",
-                  textDecoration: "none",
-                  borderBottom: "2px solid transparent",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  if (window.innerWidth >= 992) {
-                    e.target.style.borderBottomColor = "var(--primary-mint)";
-                    e.target.style.color = "var(--primary-mint)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (window.innerWidth >= 992) {
-                    e.target.style.borderBottomColor = "transparent";
-                    e.target.style.color = "var(--text-dark)";
-                  }
-                }}
-              >
-                Style Guide
-              </Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -977,11 +946,10 @@ function MainNav() {
                       {category.subcategories &&
                         category.subcategories.length > 0 && (
                           <i
-                            className={`fas fa-chevron-${
-                              expandedMobileCategory === category._id
-                                ? "up"
-                                : "down"
-                            }`}
+                            className={`fas fa-chevron-${expandedMobileCategory === category._id
+                              ? "up"
+                              : "down"
+                              }`}
                             style={{
                               fontSize: "12px",
                               color: "var(--primary-mint)",
@@ -1082,7 +1050,7 @@ function MainNav() {
                   className="fas fa-user me-3"
                   style={{ width: "20px" }}
                 ></i>
-                Profile
+                My Profile
               </Link>
 
               {/* Contact Link */}
@@ -1119,39 +1087,6 @@ function MainNav() {
                 Contact
               </Link>
 
-              {/* Style Guide Link */}
-              <Link
-                to={"/blogs"}
-                onClick={handleNavLinkClick}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "16px 20px",
-                  color: "var(--text-dark)",
-                  textDecoration: "none",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "15px",
-                  fontWeight: "500",
-                  borderBottom: "1px solid #f0f0f0",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "var(--light-mint)";
-                  e.currentTarget.style.color = "var(--primary-mint)";
-                  e.currentTarget.style.paddingLeft = "25px";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.color = "var(--text-dark)";
-                  e.currentTarget.style.paddingLeft = "20px";
-                }}
-              >
-                <i
-                  className="fas fa-book me-3"
-                  style={{ width: "20px" }}
-                ></i>
-                Style Guide
-              </Link>
             </div>
           </div>
         </>
