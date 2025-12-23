@@ -12,14 +12,31 @@ import axiosInstance from '../axios'
 
 
 const dummyReviewsData = [
-  { name: "Alice Johnson", rating: 5, review: "Absolutely love this! The quality is top-notch.", date: "2023-10-05" },
-  { name: "Bob Smith", rating: 4, review: "Great value for money. Will buy again.", date: "2023-09-20" },
-  { name: "Charlie Brown", rating: 5, review: "Exceeded my expectations. Fast delivery too!", date: "2023-10-12" },
-  { name: "Diana Prince", rating: 3, review: "It's okay, but I expected a bit more based on the description.", date: "2023-08-15" },
-  { name: "Ethan Hunt", rating: 5, review: "Perfect for my needs. Highly recommended.", date: "2023-11-01" },
-  { name: "Fiona Gallagher", rating: 4, review: "Good product, sturdy and well-made.", date: "2023-09-28" },
-  { name: "George Martin", rating: 2, review: "Not what I was looking for. Had to return it.", date: "2023-07-10" },
-  { name: "Hannah Abbott", rating: 5, review: "Five stars! Amazing customer service.", date: "2023-10-22" }
+   { name: "Ananya Menon", rating: 5, review: "Received exactly the same product shown in pictures. Very happy!", date: "2025-01-12" },
+  { name: "Meera Nair", rating: 5, review: "Smooth online ordering and quick response on DM. Great service.", date: "2025-01-18" },
+  { name: "Aiswarya Krishnan", rating: 5, review: "The quality exceeded my expectations for an online purchase.", date: "2025-02-03" },
+  { name: "Sneha Pillai", rating: 4, review: "Packaging was neat and secure. Jewelry arrived safely.", date: "2025-02-10" },
+  { name: "Kavya Menon", rating: 5, review: "Loved the design and finishing. Looks premium even though it’s affordable.", date: "2025-02-22" },
+  { name: "Neethu Varghese", rating: 5, review: "Fast delivery and polite communication throughout. Great experience ordering jewelry online.", date: "2025-03-01" },
+  { name: "Athira Suresh", rating: 5, review: "Anti-tarnish quality is really good. Still looks new after use.", date: "2025-03-08" },
+  { name: "Riya Rajan", rating: 4, review: "The jewelry looks even better in real. Very happy with the purchase.", date: "2025-03-15" },
+  { name: "Devika Nambiar", rating: 5, review: "Easy ordering process and clear updates till delivery.", date: "2025-03-22" },
+  { name: "Nithya Mohan", rating: 5, review: "Very lightweight and comfortable for daily wear.", date: "2025-04-02" },
+  { name: "Sruthi Das", rating: 4, review: "Customer support was friendly and helpful on WhatsApp.", date: "2025-04-08" },
+  { name: "Lakshmi Iyer", rating: 5, review: "Perfect fit and elegant design. Value for money. Worth ordering again.", date: "2025-04-15" },
+  { name: "Pooja Nair", rating: 5, review: "Timely delivery and genuine product received.", date: "2025-04-21" },
+  { name: "Amritha Menon", rating: 4, review: "Trendy designs at reasonable prices.", date: "2025-04-28" },
+  { name: "Keerthana R", rating: 5, review: "Safe packaging and on-time delivery. No damage at all.", date: "2025-05-03" },
+  { name: "Anjali Prasad", rating: 5, review: "Very reliable online store. Will recommend to friends.", date: "2025-05-10" },
+  { name: "Sona Mathew", rating: 5, review: "Ordered as a gift and it was loved by the receiver.", date: "2025-05-16" },
+  { name: "Diya Thomas", rating: 4, review: "Online shopping experience was hassle-free.", date: "2025-05-20" },
+  { name: "Haritha K", rating: 5, review: "Quality and shine are really impressive.", date: "2025-05-24" },
+  { name: "Malavika Warrier", rating: 5, review: "Honest pricing and genuine products. One of my best online jewelry shopping experiences.", date: "2025-05-30" },
+  { name: "Aparna Unni", rating: 5, review: "The quality is excellent and feels premium despite the affordable price.", date: "2025-06-02" },
+  { name: "Gopika N", rating: 4, review: "Very good finishing and sturdy quality. Totally satisfied.", date: "2025-06-06" },
+  { name: "Aswathy Ramesh", rating: 5, review: "Impressed with the quality. Looks elegant and long-lasting.", date: "2025-06-10" },
+  { name: "Shreya Balakrishnan", rating: 5, review: "Loved the collection, with both traditional and modern styles.", date: "2025-06-14" },
+  { name: "Anu S", rating: 4, review: "Lovely jewelry and very comfortable to wear. No skin irritation at all.", date: "2025-06-18" }
 ];
 
 const getRandomReviews = () => {
