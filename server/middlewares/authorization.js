@@ -4,24 +4,23 @@ const authorization = (req, res, next) => {
   try {
     let token = req.headers.authorization;
     if (!token) {
-      throw new Error("Token not found");
+      return res.status(401).json({ message: "Token not found" });
     }
     token = token.split(" ")[1];
 
     verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
       if (err) {
         console.log(err);
-        return res.status(403).json({ message: err?.message });
+        return res.status(401).json({ message: err?.message || "Invalid token" });
       }
       if (decoded) {
         req.decoded = decoded;
-      }
-      if (!err) {
         next();
       }
     });
-    
+
   } catch (error) {
+    console.error("Auth middleware error:", error);
     return res.status(500).json({ message: error?.message ?? 'something went wrong' });
   }
 };

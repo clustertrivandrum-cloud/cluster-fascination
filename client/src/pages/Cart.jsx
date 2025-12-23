@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import TopNav from '../components/TopNav';
 import MiddleNav from '../components/MiddleNav';
 import MainNav from '../components/MainNav';
 import Footer from '../components/Footer';
 import { ServerURL } from '../services/baseUrl';
+import { useSelector } from 'react-redux';
+
+import useCart from '../hooks/useCart';
 
 function Cart() {
-  const [cartData, setCartData] = useState({ item: [] });
+  const { cartItems, updateQuantity, removeFromCart, isLoading, refreshCart } = useCart();
   const [salePriceTotal, setSalePriceTotal] = useState(0);
   const [proPriceTotal, setProPriceTotal] = useState(0);
   const [discountTotal, setDiscountTotal] = useState(0);
   const [notif, setNotif] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const userDetails = useSelector(state => state.userDetails);
+  const navigate = useNavigate();
 
   const calculateTotalSalePrice = (items) => {
     let totalSalePrice = 0;
@@ -45,80 +49,44 @@ function Cart() {
     return totalDiscount;
   };
 
-  const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axiosInstance.get(`/api/v1/user/getcarts`);
-      const cartResponse = response.data.data || { item: [] };
-      setCartData(cartResponse);
-      
-      const items = cartResponse.item || [];
-
-      const totalSalePrice = calculateTotalSalePrice(items);
-      setSalePriceTotal(totalSalePrice || 0);
-
-      const totalProPrice = calculateTotalProPrice(items);
-      setProPriceTotal(totalProPrice || 0);
-
-      const totalDiscount = calculateTotalDiscountPrice(items);
-      setDiscountTotal(totalDiscount || 0);
-    } catch (error) {
-      console.error('Error fetching cart data:', error);
-      // Set safe defaults on error
-      setCartData({ item: [] });
-      setSalePriceTotal(0);
-      setProPriceTotal(0);
-      setDiscountTotal(0);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Calculate totals whenever cartItems change
   useEffect(() => {
-    fetchData();
-  }, []);
+    const items = cartItems || [];
 
-  const handleQuantityChange = async (item, operation, index) => {
-    let QtyApi = item.qty;
+    const totalSalePrice = calculateTotalSalePrice(items);
+    setSalePriceTotal(totalSalePrice || 0);
+
+    const totalProPrice = calculateTotalProPrice(items);
+    setProPriceTotal(totalProPrice || 0);
+
+    const totalDiscount = calculateTotalDiscountPrice(items);
+    setDiscountTotal(totalDiscount || 0);
+  }, [cartItems]);
+
+  const handleQuantityChange = async (item, operation) => {
+    let newQty = item.qty;
     if (operation === 'increment') {
-      QtyApi += 1;
+      newQty += 1;
     } else if (operation === 'decrement') {
-      QtyApi -= 1;
+      newQty -= 1;
     }
-    
+
     // Validate quantity
-    if (QtyApi < 1) return;
-    if (operation === 'increment' && QtyApi > item.productId.stock) return;
-    
-    try {
-      setIsLoading(true);
-      await axiosInstance.patch(`/api/v1/user/updateQty`, {
-        qty: QtyApi,
-        productId: item.productId._id,
-      });
-      // Re-fetch data to get updated values
-      await fetchData();
-    } catch (error) {
-      console.error('Error updating quantity:', error);
-      // Re-fetch data on error to ensure state is correct
-      await fetchData();
-    }
+    if (newQty < 1) return;
+    if (operation === 'increment' && newQty > item.productId.stock) return;
+
+    await updateQuantity(item.productId._id, newQty);
+    setNotif(prev => !prev);
   };
 
-  const handleRemoveItem = async (itemId) => {
-    try {
-      setIsLoading(true);
-      await axiosInstance.patch(`/api/v1/user/removeFromCart/${itemId}`);
-      
-      // Re-fetch data to ensure consistency
-      await fetchData();
-      
-      setNotif((prev) => !prev);
-    } catch (error) {
-      console.error('Error removing item from cart:', error);
-      // Re-fetch on error to ensure state is correct
-      await fetchData();
-    }
+  const handleRemoveItem = async (itemId, productId) => {
+    // Note: useCart's removeFromCart expects productId for guest and handles itemId lookup for user internally.
+    // However, the hook implementation I wrote uses productId (or itemID lookup inside).
+    // Let's check useCart hook implementation. 
+    // It finds the cart item based on productId or matches productId._id. 
+    // So passing productId is safer if we want to support both modes transparently.
+    await removeFromCart(productId);
+    setNotif(prev => !prev);
   };
 
   return (
@@ -196,7 +164,7 @@ function Cart() {
               Updating cart...
             </p>
           </div>
-        ) : cartData?.item?.length === 0 ? (
+        ) : cartItems.length === 0 ? (
           <div className="text-center p-5">
             <div
               style={{
@@ -269,11 +237,11 @@ function Cart() {
                       fontWeight: '600',
                     }}
                   >
-                    Your Items ({cartData?.item?.length || 0})
+                    Your Items ({cartItems.length || 0})
                   </h4>
                 </div>
 
-                {cartData?.item?.map((item, index) => (
+                {cartItems.map((item, index) => (
                   <div
                     key={item._id}
                     className="card-cluster mb-3 p-3"
@@ -442,7 +410,7 @@ function Cart() {
 
                           <button
                             className="btn"
-                            onClick={() => handleRemoveItem(item._id)}
+                            onClick={() => handleRemoveItem(item._id, item.productId._id)}
                             style={{
                               border: 'none',
                               color: '#dc3545',
@@ -544,15 +512,15 @@ function Cart() {
                     >
                       <i className="fas fa-tag me-1"></i>You're Saving
                     </div>
-            <div
-              style={{
-                fontSize: '1.8rem',
-                fontWeight: '700',
-                color: '#155724',
-              }}
-            >
-              ₹{((discountTotal || 0)).toFixed(2)}
-            </div>
+                    <div
+                      style={{
+                        fontSize: '1.8rem',
+                        fontWeight: '700',
+                        color: '#155724',
+                      }}
+                    >
+                      ₹{((discountTotal || 0)).toFixed(2)}
+                    </div>
                   </div>
                 )}
 
@@ -640,14 +608,14 @@ function Cart() {
                       </div>
                       {discountTotal > 0 && (
                         <div
-                        style={{
-                          fontSize: '0.75rem',
-                          color: 'var(--success-green)',
-                          marginTop: '2px',
-                        }}
-                      >
-                        You saved ₹{((discountTotal || 0)).toFixed(2)}!
-                      </div>
+                          style={{
+                            fontSize: '0.75rem',
+                            color: 'var(--success-green)',
+                            marginTop: '2px',
+                          }}
+                        >
+                          You saved ₹{((discountTotal || 0)).toFixed(2)}!
+                        </div>
                       )}
                     </div>
                     <div style={{ textAlign: 'right' }}>
@@ -674,19 +642,18 @@ function Cart() {
                     </div>
                   </div>
 
-                  <Link to={'/checkout'} style={{ textDecoration: 'none' }}>
-                    <button
-                      className="btn btn-cluster w-100"
-                      style={{
-                        padding: '14px 30px',
-                        fontSize: '1rem',
-                        fontWeight: '600',
-                        marginTop: '10px',
-                      }}
-                    >
-                      <i className="fas fa-arrow-right me-2"></i>Proceed to Checkout
-                    </button>
-                  </Link>
+                  <button
+                    className="btn btn-cluster w-100"
+                    onClick={() => userDetails ? navigate('/checkout') : navigate('/login', { state: { from: '/checkout' } })}
+                    style={{
+                      padding: '14px 30px',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      marginTop: '10px',
+                    }}
+                  >
+                    <i className="fas fa-arrow-right me-2"></i>Proceed to Checkout
+                  </button>
 
                   <Link to={'/allproducts'} style={{ textDecoration: 'none' }}>
                     <button
@@ -705,7 +672,7 @@ function Cart() {
             </div>
           </div>
         )}
-      </div>
+      </div >
       <Footer />
     </>
   );

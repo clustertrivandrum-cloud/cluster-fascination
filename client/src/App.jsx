@@ -18,6 +18,7 @@ import Product from './pages/Product';
 import Profile from './pages/Profile';
 import ProfileInfo from './pages/ProfileInfo';
 import Register from './pages/Register';
+import ScrollToTop from './components/ScrollToTop';
 import SingleOrder from './pages/SingleOrder';
 import Wishlist from './pages/Wishlist';
 import store from './redux/store';
@@ -42,32 +43,33 @@ function App() {
 
   return (
     <>
-      {isLoading && <Preloader fullPage={true} message="Welcome to Cluster Fascination" />}
-      <Provider store={store}> 
+      {isLoading && <Preloader fullPage={true} />}
+      <Provider store={store}>
+        <ScrollToTop setIsLoading={setIsLoading} />
         <Routes>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/cart' element={<Cart/>}/>
-      <Route path='/allproducts' element={<Allproducts/>}/>
-      <Route path='/wishlist' element={<Wishlist/>}/>
-      <Route path='/product/:proId/:catId' element={<Product/>}/>
-      <Route path='/contactus' element={<ContactUs/>}/>
-      <Route path='/blogs' element={<Blogs/>}/>
-      <Route path='/about' element={<About/>}/>
-      <Route path='/Checkout' element={<Checkout/>}/>
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/register' element={<Register/>}/>
-      <Route path='/profile' element={<Profile/>}/>
-      <Route path='/profileinfo' element={<ProfileInfo/>}/>
-      <Route path='/manageaddress' element={<ManageAddress/>}/>
-      <Route path='/order' element={<Orders/>}/>
-      <Route path='/ordertrack/:orderId' element={<SingleOrder/>}/>
-      <Route path='/privacypolicy' element={<PrivacyPolicy/>}/>
-      <Route path='/termsandcondition' element={<TermsAndCondition/>}/>
-      <Route path='/shippingpolicy' element={<ShippingPolicy/>}/>
-      <Route path='/refund-policy' element={<RefundPolicy />}/>
-      <Route path='*' element={<PageNotFound/>}/>
-     </Routes>
-     </Provider>
+          <Route path='/' element={<Home />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/allproducts' element={<Allproducts />} />
+          <Route path='/wishlist' element={<Wishlist />} />
+          <Route path='/product/:proId/:catId' element={<Product />} />
+          <Route path='/contactus' element={<ContactUs />} />
+          <Route path='/blogs' element={<Blogs />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/Checkout' element={<Checkout />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/profileinfo' element={<ProfileInfo />} />
+          <Route path='/manageaddress' element={<ManageAddress />} />
+          <Route path='/order' element={<Orders />} />
+          <Route path='/ordertrack/:orderId' element={<SingleOrder />} />
+          <Route path='/privacypolicy' element={<PrivacyPolicy />} />
+          <Route path='/termsandcondition' element={<TermsAndCondition />} />
+          <Route path='/shippingpolicy' element={<ShippingPolicy />} />
+          <Route path='/refund-policy' element={<RefundPolicy />} />
+          <Route path='*' element={<PageNotFound />} />
+        </Routes>
+      </Provider>
     </>
   )
 }

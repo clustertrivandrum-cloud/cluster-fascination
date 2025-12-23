@@ -26,15 +26,15 @@ instance.interceptors.request.use(
       console.warn('Error getting access token:', error);
       TokenManager.clearTokens();
     }
- 
+
     return config;
   }
-  
+
 );
 
 instance.interceptors.response.use(
   (response) => {
-   // console.log('response1',response);
+    // console.log('response1',response);
     return response;
   },
   async (error) => {
@@ -54,12 +54,12 @@ instance.interceptors.response.use(
           if (!refreshToken) {
             return Promise.reject(error);
           }
-          
+
           const response = await instance.post("users/token/refresh/", {
             refresh: refreshToken,
           });
           let accessToken = response?.data?.access;
- 
+
           if (accessToken) {
             TokenManager.setTokens(accessToken, refreshToken);
           }
@@ -72,9 +72,9 @@ instance.interceptors.response.use(
         }
       }
     }
-  
+
     else {
-     
+
       return Promise.reject(error);
     }
   }
@@ -85,11 +85,9 @@ instance.interceptors.response.use(
   },
   async (error) => {
     if (error?.response?.status === 500) {
-      const originalConfig = error.config;
-      originalConfig._retry = true;
-    } else {
-      return Promise.reject(error);
+      console.error('Server Error (500):', error.response.data);
     }
+    return Promise.reject(error);
   }
 );
 

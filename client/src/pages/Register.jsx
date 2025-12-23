@@ -108,7 +108,7 @@
 // export default Register
 import React, { useState } from 'react';
 import axiosInstance from '../axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Col, Row, Alert } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
@@ -128,6 +128,7 @@ function Register() {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
 
   // Input validation function
@@ -232,8 +233,9 @@ function Register() {
         setSuccessMessage('Registration successful! Redirecting to login...');
 
         // Redirect to login page after a short delay
+        const from = location.state?.from || '/';
         setTimeout(() => {
-          navigate('/login');
+          navigate('/login', { state: { from } });
         }, 2000);
       } else {
         setErrorMessage('Registration failed. Please try again.');
@@ -546,11 +548,13 @@ function Register() {
                       fontSize: '0.95rem'
                     }}>
                       Already a user?{' '}
-                      <Link to={'/login'} style={{
-                        color: 'var(--success-green)',
-                        fontWeight: '600',
-                        textDecoration: 'none'
-                      }}
+                      <Link to={'/login'}
+                        state={{ from: location.state?.from }}
+                        style={{
+                          color: 'var(--success-green)',
+                          fontWeight: '600',
+                          textDecoration: 'none'
+                        }}
                         onMouseOver={(e) => e.target.style.color = 'var(--dark-mint)'}
                         onMouseOut={(e) => e.target.style.color = 'var(--success-green)'}
                       >

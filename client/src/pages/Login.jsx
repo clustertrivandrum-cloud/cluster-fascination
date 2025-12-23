@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import TokenManager from '../utils/tokenManager';
+import { mergeCartWithServer } from '../utils/cartUtils';
 
 import { Col, Row, Alert } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
@@ -20,6 +21,7 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Input validation function
   const validateInput = (name, value) => {
@@ -103,11 +105,13 @@ const Login = () => {
         );
 
         if (success) {
+          await mergeCartWithServer();
           setSuccessMessage('Login successful! Redirecting...');
 
           // Redirect after a short delay to show success message
+          const from = location.state?.from || '/';
           setTimeout(() => {
-            navigate('/');
+            navigate(from);
           }, 1500);
         } else {
           setErrorMessage('Login failed. Unable to store authentication data.');
@@ -362,6 +366,7 @@ const Login = () => {
                         New to Cluster Fascination?{' '}
                         <Link
                           to={'/register'}
+                          state={{ from: location.state?.from }}
                           style={{
                             color: 'var(--success-green)',
                             fontWeight: '600',

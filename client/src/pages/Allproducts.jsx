@@ -8,6 +8,8 @@ import MainNav from "../components/MainNav";
 import Footer from "../components/Footer";
 import FreeDeliveryBanner from "../components/FreeDeliveryBanner";
 import { ServerURL } from "../services/baseUrl";
+import useCart from "../hooks/useCart";
+import "../components/ResponsiveProducts.css";
 
 const Allproducts = () => {
   // State Management
@@ -22,7 +24,7 @@ const Allproducts = () => {
   const [category, setCategory] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
+  const { addToCart, removeFromCart, isInCart, refreshCart } = useCart();
   const [notif, setNotif] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,7 +74,7 @@ const Allproducts = () => {
       setHasMoreProducts(newProducts.length === limit);
 
       // Fetch wishlist and cart data
-      await Promise.allSettled([fetchWishlist(), fetchCart()]);
+      await Promise.allSettled([fetchWishlist(), refreshCart()]);
     } catch (error) {
       console.error("Error fetching products:", error);
       setHasMoreProducts(false);
@@ -112,17 +114,14 @@ const Allproducts = () => {
   };
 
   // Fetch Cart
-  const fetchCart = async () => {
-    try {
-      const cartResponse = await axiosInstance.get("/api/v1/user/getcarts");
-      setCartItems(cartResponse.data?.data?.item ?? []);
-    } catch (error) {
-      setCartItems([]);
-    }
-  };
+
 
   // Fetch Wishlist
   const fetchWishlist = async () => {
+    if (!userDetails) {
+      setWishlistItems([]);
+      return;
+    }
     try {
       const wishlistResponse = await axiosInstance.get(
         "/api/v1/user/getwishlist",
@@ -257,35 +256,16 @@ const Allproducts = () => {
 
   // Cart Actions
   const addCart = async (proId) => {
-    if (!userDetails) {
-      navigate("/login");
-      return;
-    }
-    try {
-      await axiosInstance.patch(`/api/v1/user/addToCart/${proId}`);
-      await fetchCart();
+    const product = products.find(p => p._id === proId);
+    if (product) {
+      await addToCart(product);
       setNotif((prev) => !prev);
-    } catch (error) {
-      console.error("Error adding to cart:", error);
     }
   };
 
   const removeCart = async (proId) => {
-    if (!userDetails) {
-      navigate("/login");
-      return;
-    }
-    try {
-      const found = cartItems.find((item) => item.productId?._id === proId);
-      if (!found) return;
-
-      const itemId = found._id;
-      await axiosInstance.patch(`/api/v1/user/removeFromCart/${itemId}`);
-      await fetchCart();
-      setNotif((prev) => !prev);
-    } catch (error) {
-      console.error("Error removing from cart:", error);
-    }
+    await removeFromCart(proId);
+    setNotif((prev) => !prev);
   };
 
   // Check if product is in wishlist/cart
@@ -296,19 +276,14 @@ const Allproducts = () => {
     );
   };
 
-  const isInCart = (productId) => {
-    return (
-      Array.isArray(cartItems) &&
-      cartItems.some((item) => item.productId?._id === productId)
-    );
-  };
+
 
   return (
     <>
       <TopNav />
       <MiddleNav notification={notif} />
       <MainNav />
-      
+
       {/* Free Delivery Banner */}
       <FreeDeliveryBanner />
 
@@ -468,8 +443,8 @@ const Allproducts = () => {
                 >
                   <option value="">All Categories</option>
                   {category &&
-                  Array.isArray(category) &&
-                  category.length > 0 ? (
+                    Array.isArray(category) &&
+                    category.length > 0 ? (
                     category.map((cat) => (
                       <option key={cat._id} value={cat._id}>
                         {cat.name}
@@ -580,7 +555,7 @@ const Allproducts = () => {
                 <div className="row g-4">
                   {Array.isArray(products) && products.length > 0 ? (
                     products.map((item) => (
-                      <div key={item._id} className="col-12 col-md-6 col-xl-4">
+                      <div key={item._id} className="col-6 col-md-6 col-xl-4">
                         <div
                           className="card-cluster h-100"
                           style={{
@@ -603,13 +578,11 @@ const Allproducts = () => {
                             to={`/product/${item._id}/${item.category}`}
                             style={{ textDecoration: "none" }}
                           >
-                            <div
-                              style={{ height: "280px", overflow: "hidden" }}
-                            >
+                            <div className="product-image-container-responsive">
                               <img
                                 src={
                                   Array.isArray(item.image) &&
-                                  item.image.length > 0
+                                    item.image.length > 0
                                     ? `${ServerURL}/uploads/${item.image[0]}`
                                     : "https://via.placeholder.com/350x350?text=No+Image"
                                 }
@@ -628,8 +601,9 @@ const Allproducts = () => {
                               />
                             </div>
                           </Link>
-                          <div className="p-4">
+                          <div className="p-4 mobile-card-padding">
                             <h5
+                              className="responsive-product-title"
                               style={{
                                 fontFamily: "var(--font-serif)",
                                 fontWeight: "600",
@@ -644,6 +618,7 @@ const Allproducts = () => {
                             <div className="mb-3">
                               <div className="d-flex align-items-center justify-content-between mb-2">
                                 <span
+                                  className="responsive-price"
                                   style={{
                                     fontFamily: "var(--font-sans)",
                                     fontWeight: "700",
@@ -704,7 +679,7 @@ const Allproducts = () => {
                             <div className="d-flex justify-content-between align-items-center gap-2">
                               {!isInWishlist(item._id) ? (
                                 <button
-                                  className="btn btn-outline-cluster"
+                                  className="btn btn-outline-cluster mobile-wishlist-btn"
                                   onClick={() => addWishlist(item._id)}
                                   style={{
                                     width: "45px",
@@ -735,7 +710,7 @@ const Allproducts = () => {
                                 </button>
                               ) : (
                                 <button
-                                  className="btn btn-cluster"
+                                  className="btn btn-cluster mobile-wishlist-btn"
                                   onClick={() => removeWishlist(item._id)}
                                   style={{
                                     width: "45px",
@@ -757,7 +732,7 @@ const Allproducts = () => {
 
                               {!isInCart(item._id) ? (
                                 <button
-                                  className="btn btn-cluster flex-grow-1"
+                                  className="btn btn-cluster flex-grow-1 mobile-btn-responsive"
                                   onClick={() => addCart(item._id)}
                                   style={{
                                     fontFamily: "var(--font-sans)",
@@ -771,7 +746,7 @@ const Allproducts = () => {
                                 </button>
                               ) : (
                                 <button
-                                  className="btn btn-outline-cluster flex-grow-1"
+                                  className="btn btn-outline-cluster flex-grow-1 mobile-btn-responsive"
                                   onClick={() => removeCart(item._id)}
                                   style={{
                                     fontFamily: "var(--font-sans)",

@@ -11,12 +11,13 @@ import './Products.css';
 import { ServerURL } from '../services/baseUrl';
 import { SectionDivider, FlowerAccent } from './DecorativeElements';
 import Preloader from './Preloader';
+import useCart from '../hooks/useCart';
 
 function Products({ setNotification }) {
   const [products, setProducts] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { addToCart, removeFromCart, isInCart } = useCart();
   const navigate = useNavigate();
 
   const userDetails = useSelector(state => state.userDetails);
@@ -37,12 +38,17 @@ function Products({ setNotification }) {
         );
 
         setProducts(uniqueProducts);
-        const wishlistResponse = await axiosInstance.get('/api/v1/user/getwishlist');
-        setWishlistItems(wishlistResponse.data.data || []);
-        const cartResponse = await axiosInstance.get('/api/v1/user/getcarts');
-        setCartItems(cartResponse.data.data.item || []);
+
+        if (userDetails) {
+          try {
+            const wishlistResponse = await axiosInstance.get('/api/v1/user/getwishlist');
+            setWishlistItems(wishlistResponse.data?.data || []);
+          } catch (err) {
+            console.log('Error fetching user specific data in products');
+          }
+        }
       } catch (error) {
-        console.log(error);
+        console.log('Error fetching products:', error.message);
       } finally {
         setIsLoading(false);
       }
@@ -51,21 +57,16 @@ function Products({ setNotification }) {
     fetchData();
   }, []);
 
-  const fetchCart = async () => {
-    try {
-      const cartResponse = await axiosInstance.get('/api/v1/user/getcarts');
-      setCartItems(cartResponse.data.data.item || []);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
 
   const fetchWishlist = async () => {
+    if (!userDetails) return;
     try {
       const wishlistResponse = await axiosInstance.get('/api/v1/user/getwishlist');
-      setWishlistItems(wishlistResponse.data.data || []);
+      setWishlistItems(wishlistResponse.data?.data || []);
     } catch (error) {
-      console.log(error);
+      console.log('Wishlist fetch error');
+      setWishlistItems([]);
     }
   };
 
@@ -99,48 +100,24 @@ function Products({ setNotification }) {
     }
   };
 
-  const addCart = async (proId) => {
-    if (!userDetails) {
-      navigate('/login');
-    } else {
-      try {
-        urlQuery = `/api/v1/user/addToCart/${proId}`;
-        const response = await axiosInstance.patch(urlQuery);
-        await fetchCart();
-        setNotification(prev => !prev);
-      } catch (error) {
-        console.log(error);
-      }
+  const handleAddToCart = async (proId) => {
+    const product = products.find(p => p._id === proId);
+    if (product) {
+      await addToCart(product);
+      setNotification(prev => !prev);
     }
   };
 
-  const removeCart = async (proId) => {
-    if (!userDetails) {
-      navigate('/login');
-    } else {
-      try {
-        const ItemId = cartItems.filter((item) => item.productId._id === proId);
-        if (ItemId.length > 0) {
-          urlQuery = `/api/v1/user/removeFromCart/${ItemId[0]._id}`;
-        } else {
-          return;
-        }
-        const response = await axiosInstance.patch(urlQuery);
-        await fetchCart();
-        setNotification(prev => !prev);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+  const handleRemoveFromCart = async (proId) => {
+    await removeFromCart(proId);
+    setNotification(prev => !prev);
   };
 
   const isInWishlist = (productId) => {
     return wishlistItems && wishlistItems.some((item) => item._id === productId);
   };
 
-  const isInCart = (productId) => {
-    return cartItems && cartItems.some((item) => item.productId._id === productId);
-  };
+
 
   // Dynamic settings based on products count
   const getSettings = () => {
@@ -278,7 +255,7 @@ function Products({ setNotification }) {
                             {!isInCart(item._id) ? (
                               <Button
                                 className="btn-add-cart"
-                                onClick={() => addCart(item._id)}
+                                onClick={() => handleAddToCart(item._id)}
                               >
                                 <i className="fas fa-shopping-cart me-2"></i>
                                 Add to Cart
@@ -286,7 +263,7 @@ function Products({ setNotification }) {
                             ) : (
                               <Button
                                 className="btn-add-cart active"
-                                onClick={() => removeCart(item._id)}
+                                onClick={() => handleRemoveFromCart(item._id)}
                               >
                                 <i className="fas fa-shopping-cart me-2"></i>
                                 In Cart
