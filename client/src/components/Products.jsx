@@ -125,7 +125,7 @@ function Products({ setNotification }) {
     const hasEnoughProducts = productCount > 4;
 
     return {
-      dots: true,
+      dots: false,
       infinite: hasEnoughProducts,
       speed: 500,
       slidesToShow: Math.min(4, productCount),

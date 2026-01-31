@@ -25,6 +25,8 @@ import { ServerURL } from "../services/baseUrl";
 import { ProductContext } from "../components/WhatsAppButton";
 import WhatsAppButton from "../components/WhatsAppButton";
 import useCart from "../hooks/useCart";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "../components/Products.css";
 import "../components/ProductGallery.css";
 

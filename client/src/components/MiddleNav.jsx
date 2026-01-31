@@ -75,15 +75,15 @@ function MiddleNav({ notification }) {
       <div className="watercolor-spot spot-mint" style={{ width: '300px', height: '300px', top: '-100px', right: '10%' }}></div>
       <div className="watercolor-spot spot-beige" style={{ width: '250px', height: '250px', bottom: '-50px', left: '5%' }}></div>
 
-      <div className='container p-3 py-4'>
+      <div className='container p-3 py-1'>
         <div className='d-flex justify-content-between align-items-center'>
           <Link to={'/'}>
             <div className='floating-element'>
-              <img src={logo} className='img-fluid' width={150} alt="Cluster Fascination Logo" style={{ filter: 'drop-shadow(0 2px 8px rgba(185, 234, 216, 0.3))' }} />
+              <img src={logo} className='img-fluid' width={90} alt="Cluster Fascination Logo" style={{ filter: 'drop-shadow(0 2px 8px rgba(185, 234, 216, 0.3))' }} />
             </div>
           </Link>
           <div>
-            <p className='d-none d-md-block elegant-script mb-0' style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-dark)' }}>
+            <p className='d-none d-md-block elegant-script mb-0' style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-dark)' }}>
               Curating fashion jewellery & accessories experiences     {/* changed from boutique wellness experiences to fashion jewellery & accessories experiences */}
             </p>
           </div>
@@ -94,15 +94,15 @@ function MiddleNav({ notification }) {
                   background: 'white',
                   border: '2px solid var(--primary-mint)',
                   borderRadius: '50%',
-                  width: '50px',
-                  height: '50px',
+                  width: '40px',
+                  height: '40px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   boxShadow: '0 3px 10px rgba(185, 234, 216, 0.3)',
                   transition: 'all 0.3s ease'
                 }} onMouseOver={(e) => e.currentTarget.style.background = 'var(--primary-mint)'} onMouseOut={(e) => e.currentTarget.style.background = 'white'}>
-                  <i className="fa-solid fa-cart-shopping" style={{ color: 'var(--text-dark)', fontSize: '18px' }}></i>
+                  <i className="fa-solid fa-cart-shopping" style={{ color: 'var(--text-dark)', fontSize: '16px' }}></i>
                   {cartCount > 0 && (
                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill" style={{ background: 'var(--accent-pink)', color: 'var(--text-dark)' }}>
                       {cartCount}
@@ -117,15 +117,15 @@ function MiddleNav({ notification }) {
                   background: 'white',
                   border: '2px solid var(--accent-pink)',
                   borderRadius: '50%',
-                  width: '50px',
-                  height: '50px',
+                  width: '40px',
+                  height: '40px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   boxShadow: '0 3px 10px rgba(245, 213, 216, 0.3)',
                   transition: 'all 0.3s ease'
                 }} onMouseOver={(e) => e.currentTarget.style.background = 'var(--accent-pink)'} onMouseOut={(e) => e.currentTarget.style.background = 'white'}>
-                  <i className="fa-solid fa-heart" style={{ color: 'var(--text-dark)', fontSize: '18px' }}></i>
+                  <i className="fa-solid fa-heart" style={{ color: 'var(--text-dark)', fontSize: '16px' }}></i>
                   {wishListData > 0 && (
                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill" style={{ background: 'var(--primary-mint)', color: 'var(--text-dark)' }}>
                       {wishListData}

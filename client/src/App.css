@@ -137,7 +137,7 @@ a:hover {
 /* Top Navigation Bar */
 .top-nav-cluster {
   background: var(--light-mint);
-  padding: 12px 0;
+  padding: 5px 0;
   border-bottom: 1px solid rgba(185, 234, 216, 0.3);
 }
 
@@ -177,8 +177,15 @@ a:hover {
 
 /* Loading and Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .floating-element {
@@ -231,4 +238,3 @@ a:hover {
 .nav-link-cluster:hover {
   color: var(--success-green) !important;
 }
-

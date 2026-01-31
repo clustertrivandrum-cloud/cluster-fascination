@@ -139,7 +139,7 @@ function MainNav() {
               style={{
                 gap: "0",
                 alignItems: "stretch",
-                minHeight: "56px",
+                minHeight: "40px",
               }}
             >
               <Link
@@ -209,7 +209,7 @@ function MainNav() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    minHeight: "56px",
+                    minHeight: "40px",
                     borderBottom:
                       window.innerWidth >= 992 && showDropdown
                         ? "2px solid var(--primary-mint)"
