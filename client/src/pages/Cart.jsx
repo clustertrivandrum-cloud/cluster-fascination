@@ -296,6 +296,23 @@ function Cart() {
                         >
                           {item.productId.name}
                         </h5>
+                        {(item.productId.stock < 2 || item.productId.isAvailable === false) && (
+                          <div className="mb-2">
+                            <span
+                              className="badge"
+                              style={{
+                                background: '#dc3545',
+                                color: 'white',
+                                fontSize: '0.8rem',
+                                padding: '4px 12px',
+                                borderRadius: '15px',
+                              }}
+                            >
+                              <i className="fas fa-exclamation-triangle me-1"></i>
+                              Out of Stock
+                            </span>
+                          </div>
+                        )}
                         {item.productId.brand && (
                           <p
                             className="mb-2"
@@ -642,14 +659,45 @@ function Cart() {
                     </div>
                   </div>
 
+                  {/* Out of Stock Warning */}
+                  {cartQuantity && cartItems.item?.some(item => item.productId.stock < 2 || item.productId.isAvailable === false) && (
+                    <div
+                      className="mb-3 p-3"
+                      style={{
+                        background: '#f8d7da',
+                        border: '1px solid #f5c2c7',
+                        borderRadius: '10px',
+                        color: '#842029',
+                      }}
+                    >
+                      <i className="fas fa-exclamation-circle me-2"></i>
+                      <strong>Some items are out of stock.</strong> Please remove them to proceed.
+                    </div>
+                  )}
+
                   <button
                     className="btn btn-cluster w-100"
-                    onClick={() => userDetails ? navigate('/checkout') : navigate('/login', { state: { from: '/checkout' } })}
+                    onClick={() => {
+                      // Check if any item is out of stock
+                      const hasOutOfStock = cartItems.item?.some(item =>
+                        item.productId.stock < 2 || item.productId.isAvailable === false
+                      );
+
+                      if (hasOutOfStock) {
+                        alert('Cannot proceed to checkout. Some items in your cart are out of stock. Please remove them first.');
+                        return;
+                      }
+
+                      userDetails ? navigate('/checkout') : navigate('/login', { state: { from: '/checkout' } });
+                    }}
+                    disabled={cartItems.item?.some(item => item.productId.stock < 2 || item.productId.isAvailable === false)}
                     style={{
                       padding: '14px 30px',
                       fontSize: '1rem',
                       fontWeight: '600',
                       marginTop: '10px',
+                      opacity: cartItems.item?.some(item => item.productId.stock < 2 || item.productId.isAvailable === false) ? 0.6 : 1,
+                      cursor: cartItems.item?.some(item => item.productId.stock < 2 || item.productId.isAvailable === false) ? 'not-allowed' : 'pointer',
                     }}
                   >
                     <i className="fas fa-arrow-right me-2"></i>Proceed to Checkout

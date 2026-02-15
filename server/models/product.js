@@ -65,4 +65,29 @@ const productSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+// Pre-save middleware to automatically set isAvailable based on stock
+productSchema.pre('save', function (next) {
+  // If stock is less than 2, mark as unavailable
+  if (this.stock < 2) {
+    this.isAvailable = false;
+  } else {
+    this.isAvailable = true;
+  }
+  next();
+});
+
+// Pre-update middleware to handle updates
+productSchema.pre('findOneAndUpdate', function (next) {
+  const update = this.getUpdate();
+  if (update.stock !== undefined) {
+    if (update.stock < 2) {
+      update.isAvailable = false;
+    } else {
+      update.isAvailable = true;
+    }
+  }
+  next();
+});
+
 module.exports = mongoose.model("Product", productSchema);

@@ -12,11 +12,21 @@ export const setGuestCart = (cart) => {
 };
 
 export const addToGuestCart = (product) => {
+    // Check if product is out of stock
+    if (product.stock < 2 || product.isAvailable === false) {
+        return { error: 'This product is out of stock and cannot be added to cart.' };
+    }
+
     const cart = getGuestCart();
     const existingIndex = cart.item.findIndex(item => item.productId._id === product._id);
 
     if (existingIndex >= 0) {
-        cart.item[existingIndex].qty += 1;
+        // Check if incrementing would exceed available stock
+        const newQty = cart.item[existingIndex].qty + 1;
+        if (newQty > product.stock) {
+            return { error: `Only ${product.stock} items available in stock.` };
+        }
+        cart.item[existingIndex].qty = newQty;
     } else {
         cart.item.push({
             _id: Date.now().toString(), // Dummy ID for guest items
@@ -40,6 +50,14 @@ export const updateGuestCartQty = (productId, qty) => {
     const cart = getGuestCart();
     const index = cart.item.findIndex(item => item.productId._id === productId);
     if (index >= 0) {
+        const product = cart.item[index].productId;
+        // Check stock availability
+        if (product.stock < 2 || product.isAvailable === false) {
+            return { error: 'This product is out of stock.' };
+        }
+        if (qty > product.stock) {
+            return { error: `Only ${product.stock} items available in stock.` };
+        }
         cart.item[index].qty = qty;
         setGuestCart(cart);
     }

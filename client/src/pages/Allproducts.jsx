@@ -730,7 +730,25 @@ const Allproducts = () => {
                                 </button>
                               )}
 
-                              {!isInCart(item._id) ? (
+                              {(item.stock < 2 || item.isAvailable === false) ? (
+                                <button
+                                  className="btn flex-grow-1 mobile-btn-responsive"
+                                  style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontWeight: "500",
+                                    fontSize: "0.9rem",
+                                    padding: "10px 15px",
+                                    background: "#ccc",
+                                    color: "#666",
+                                    border: "none",
+                                    cursor: "not-allowed"
+                                  }}
+                                  disabled
+                                >
+                                  <i className="fas fa-ban me-2"></i>
+                                  Out of Stock
+                                </button>
+                              ) : !isInCart(item._id) ? (
                                 <button
                                   className="btn btn-cluster flex-grow-1 mobile-btn-responsive"
                                   onClick={() => addCart(item._id)}

@@ -5,6 +5,46 @@ import MainNav from "../components/MainNav";
 import Footer from "../components/Footer";
 
 const About = () => {
+  React.useEffect(() => {
+    // 1. Dynamic Title
+    document.title = "About Us | Cluster Fascination - Fashion Jewellery & Accessories in Thiruvananthapuram";
+
+    // 2. Dynamic Meta Description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.name = "description";
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.content = "Discover Cluster Fascination, a student-led fashion jewellery startup in Thiruvananthapuram founded by Arya Suresh S. We offer premium, affordable accessories blending tradition with modern trends.";
+
+    // 3. Structured Data (JSON-LD)
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Cluster Fascination",
+      "founder": "Arya Suresh S",
+      "foundingDate": "2024",
+      "description": "Premium fashion jewellery and accessories store in Thiruvananthapuram.",
+      "url": window.location.origin,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kazhakkoottam",
+        "addressRegion": "Thiruvananthapuram",
+        "addressCountry": "IN"
+      },
+      "priceRange": "₹₹"
+    });
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+      // Optional: Reset title/meta when leaving (if needed)
+    };
+  }, []);
+
   return (
     <>
       <TopNav />
@@ -38,7 +78,7 @@ const About = () => {
             className="elegant-script"
             style={{ fontSize: "3rem", color: "var(--text-dark)" }}
           >
-            About Us
+            About Cluster Fascination
           </h1>
           <p
             style={{
@@ -48,46 +88,53 @@ const About = () => {
               fontStyle: "italic",
             }}
           >
-            <span className="flower-accent">✿</span> Our Story{" "}
-            <span className="flower-accent">✿</span>
+            <span className="flower-accent">✿</span> Curating Elegance in Thiruvananthapuram <span className="flower-accent">✿</span>
           </p>
           <div className="section-divider"></div>
         </div>
 
-        <div className="row align-items-center">
-          <div className="col-md-12">
-            <div className="card-cluster p-4">
+        <div className="row align-items-center justify-content-center">
+          <div className="col-lg-10">
+            <div className="card-cluster p-5 border-0">
               <h2
-                className="mb-4"
+                className="mb-4 text-center"
                 style={{
                   fontFamily: "var(--font-elegant-script)",
-                  fontSize: "2rem",
+                  fontSize: "2.2rem",
                   color: "var(--dark-mint)",
                 }}
               >
-                Welcome to Cluster Fascination
+                Our Journey
               </h2>
               <p
                 style={{
                   fontFamily: "var(--font-serif)",
-                  fontSize: "1.05rem",
+                  fontSize: "1.1rem",
                   lineHeight: "1.8",
                   color: "var(--text-dark)",
+                  textAlign: "justify"
                 }}
               >
-                Cluster Fascination, founded in 2024 as an online store and expanded offline in 2025, is a passionate student start-up by Arya Suresh S, a young entrepreneur driven by her love for business and creativity. Located in Kazhakkoottam, Thiruvananthapuram, the brand aims to grow as a trusted destination for those who value both trend and affordability.
+                <strong>Cluster Fascination</strong> started as a dream in 2024. What began as a passionate online store for <em>fashion jewellery</em> expanded into a physical presence in 2025, driven by the vision of <strong>Arya Suresh S</strong>. As a student entrepreneur based in <strong>Kazhakkoottam, Thiruvananthapuram</strong>, Arya aimed to create a brand that bridges the gap between high-end trends and affordability. Today, we are proud to be a trusted destination for accessory lovers across Kerala and beyond.
               </p>
               <p
                 style={{
                   fontFamily: "var(--font-serif)",
-                  fontSize: "1.05rem",
+                  fontSize: "1.1rem",
                   lineHeight: "1.8",
                   color: "var(--text-dark)",
-                  marginTop: "1.2em"
+                  marginTop: "1.5rem",
+                  textAlign: "justify"
                 }}
               >
-                At Cluster Fascination, we believe jewellery is more than just an accessory. It reflects your style and your cherished moments. Our handpicked collections blend tradition with modern trends, offering timeless classics and statement pieces for both men and women. From everyday wear to festive occasions, each piece is crafted to bring you elegance, confidence, and shine.
+                We believe that <strong>jewellery is personal</strong>; it disrupts the ordinary and adds a touch of magic to your everyday life. Our collections are carefully curated to blend <em>timeless tradition with modern aesthetics</em>. Whether you are looking for statement necklaces, elegant earrings for work, or festive accessories, every piece at Cluster Fascination is chosen to make you feel confident and radiant.
               </p>
+
+              <div className="text-center mt-5">
+                <a href="/#/allproducts" className="btn btn-cluster px-5 py-3 rounded-pill text-decoration-none">
+                  Explore Our Collection <i className="fas fa-arrow-right ms-2"></i>
+                </a>
+              </div>
             </div>
           </div>
         </div>

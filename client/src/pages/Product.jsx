@@ -155,7 +155,7 @@ function Product() {
 
 
   const sliderSettings = {
-    dots: products.length > 1,
+    dots: false,
     infinite: products.length > 1,
     speed: 500,
     slidesToShow: products.length < 4 ? products.length : 4,
@@ -285,33 +285,74 @@ function Product() {
 
                 <p className="text-muted small mb-4">(inclusive of all taxes)</p>
 
-                <div className="product-actions d-flex gap-3">
-                  <Button
-                    className="btn-add-cart flex-grow-1"
-                    style={{ background: 'var(--primary-mint)', color: 'var(--text-dark)', border: 'none' }}
-                    onClick={() => buyNow(productData._id)}
-                  >
-                    Buy Now
-                  </Button>
+                {/* Out of Stock Badge */}
+                {(productData.stock < 2 || productData.isAvailable === false) && (
+                  <div className="mb-3">
+                    <span
+                      className="badge"
+                      style={{
+                        background: '#dc3545',
+                        color: 'white',
+                        padding: '8px 16px',
+                        fontSize: '0.9rem',
+                        borderRadius: '20px',
+                        fontWeight: '600'
+                      }}
+                    >
+                      <i className="fas fa-times-circle me-2"></i>Out of Stock
+                    </span>
+                  </div>
+                )}
 
-                  {!isInCart(proId) ? (
-                    <Button
-                      variant="outline-success"
-                      className="flex-grow-1"
-                      style={{ borderRadius: '25px', borderColor: 'var(--success-green)', color: 'var(--success-green)' }}
-                      onClick={() => handleAddToCart(proId)}
-                    >
-                      Add to Cart
-                    </Button>
+                <div className="product-actions d-flex gap-3">
+                  {(productData.stock < 2 || productData.isAvailable === false) ? (
+                    <>
+                      <Button
+                        className="btn-add-cart flex-grow-1"
+                        style={{ background: '#ccc', color: '#666', border: 'none', cursor: 'not-allowed' }}
+                        disabled
+                      >
+                        Out of Stock
+                      </Button>
+                      <Button
+                        variant="outline-secondary"
+                        className="flex-grow-1"
+                        style={{ borderRadius: '25px', cursor: 'not-allowed' }}
+                        disabled
+                      >
+                        Unavailable
+                      </Button>
+                    </>
                   ) : (
-                    <Button
-                      variant="outline-danger"
-                      className="flex-grow-1"
-                      style={{ borderRadius: '25px' }}
-                      onClick={() => handleRemoveFromCart(proId)}
-                    >
-                      Remove from Cart
-                    </Button>
+                    <>
+                      <Button
+                        className="btn-add-cart flex-grow-1"
+                        style={{ background: 'var(--primary-mint)', color: 'var(--text-dark)', border: 'none' }}
+                        onClick={() => buyNow(productData._id)}
+                      >
+                        Buy Now
+                      </Button>
+
+                      {!isInCart(proId) ? (
+                        <Button
+                          variant="outline-success"
+                          className="flex-grow-1"
+                          style={{ borderRadius: '25px', borderColor: 'var(--success-green)', color: 'var(--success-green)' }}
+                          onClick={() => handleAddToCart(proId)}
+                        >
+                          Add to Cart
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outline-danger"
+                          className="flex-grow-1"
+                          style={{ borderRadius: '25px' }}
+                          onClick={() => handleRemoveFromCart(proId)}
+                        >
+                          Remove from Cart
+                        </Button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

@@ -12,14 +12,14 @@
   --wreath-black: #1A1A1A;
   --cream-white: #FFF9F5;
   --success-green: #7BC8A4;
-  
+
   /* Typography */
   --font-script: 'Pacifico', cursive;
   --font-elegant-script: 'Dancing Script', cursive;
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Montserrat', sans-serif;
   --font-signature: 'Great Vibes', cursive;
-  
+
   font-family: var(--font-sans);
   line-height: 1.6;
   font-weight: 400;
@@ -74,3 +74,23 @@ body {
   z-index: -1;
 }
 
+/* Hide watercolor effects on mobile for cleaner UI */
+@media (max-width: 768px) {
+
+  .watercolor-bg::before,
+  .watercolor-bg::after {
+    display: none;
+  }
+
+  /* Simplify backgrounds on mobile - no gradients or patterns */
+  body {
+    background: var(--cream-white) !important;
+    background-image: none !important;
+  }
+
+  .watercolor-bg,
+  .products-section {
+    background: var(--cream-white) !important;
+    background-image: none !important;
+  }
+}

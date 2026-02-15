@@ -315,6 +315,9 @@ const updateProduct = async (req, res) => {
     // Get the old product data to check if category/subcategory changed
     const oldProduct = await Product.findById(_id);
 
+    // Automatically set isAvailable based on stock
+    const computedAvailability = stock >= 2;
+
     const updateData = {
       name,
       subheading,
@@ -324,7 +327,7 @@ const updateProduct = async (req, res) => {
       discount,
       sale_rate,
       description,
-      isAvailable,
+      isAvailable: computedAvailability,
       image: images,
     };
 

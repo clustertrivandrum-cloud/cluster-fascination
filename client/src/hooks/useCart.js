@@ -32,8 +32,18 @@ const useCart = () => {
     }, [fetchCart, trigger]);
 
     const addToCart = async (product) => {
+        // Check if product is out of stock
+        if (product.stock < 2 || product.isAvailable === false) {
+            alert('This product is out of stock and cannot be added to cart.');
+            return false;
+        }
+
         if (!userDetails) {
-            addToGuestCart(product);
+            const result = addToGuestCart(product);
+            if (result.error) {
+                alert(result.error);
+                return false;
+            }
             setTrigger(prev => prev + 1);
             return true;
         } else {
@@ -45,6 +55,9 @@ const useCart = () => {
                 return true;
             } catch (error) {
                 console.error('Error adding to cart:', error);
+                if (error.response?.data?.message) {
+                    alert(error.response.data.message);
+                }
                 return false;
             }
         }
@@ -76,8 +89,13 @@ const useCart = () => {
 
     const updateQuantity = async (productId, qty) => {
         if (!userDetails) {
-            updateGuestCartQty(productId, qty);
+            const result = updateGuestCartQty(productId, qty);
+            if (result.error) {
+                alert(result.error);
+                return false;
+            }
             setTrigger(prev => prev + 1);
+            return true;
         } else {
             try {
                 await axiosInstance.patch('/api/v1/user/updateQty', {
@@ -85,8 +103,13 @@ const useCart = () => {
                     qty: qty
                 });
                 setTrigger(prev => prev + 1);
+                return true;
             } catch (error) {
                 console.error('Error updating quantity:', error);
+                if (error.response?.data?.message) {
+                    alert(error.response.data.message);
+                }
+                return false;
             }
         }
     }

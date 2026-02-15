@@ -163,7 +163,7 @@ function Products({ setNotification }) {
             slidesToShow: 1,
             slidesToScroll: 1,
             arrows: false,
-            dots: true,
+            dots: false,
           }
         }
       ]
@@ -218,6 +218,11 @@ function Products({ setNotification }) {
                           <div className="product-badge">
                             <span className="badge-cluster">{item.discount}% off</span>
                           </div>
+                          {(item.stock < 2 || item.isAvailable === false) && (
+                            <div className="product-badge" style={{ background: '#dc3545', top: '50px' }}>
+                              <span style={{ color: 'white' }}>Out of Stock</span>
+                            </div>
+                          )}
                         </div>
 
                         <div className="product-info">
@@ -252,7 +257,16 @@ function Products({ setNotification }) {
                               </Button>
                             )}
 
-                            {!isInCart(item._id) ? (
+                            {(item.stock < 2 || item.isAvailable === false) ? (
+                              <Button
+                                className="btn-add-cart"
+                                style={{ background: '#ccc', color: '#666', cursor: 'not-allowed' }}
+                                disabled
+                              >
+                                <i className="fas fa-ban me-2"></i>
+                                Out of Stock
+                              </Button>
+                            ) : !isInCart(item._id) ? (
                               <Button
                                 className="btn-add-cart"
                                 onClick={() => handleAddToCart(item._id)}

@@ -238,3 +238,10 @@ a:hover {
 .nav-link-cluster:hover {
   color: var(--success-green) !important;
 }
+
+/* Hide decorative watercolor spots on mobile for cleaner UI */
+@media (max-width: 768px) {
+  .watercolor-spot {
+    display: none !important;
+  }
+}
